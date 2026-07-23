@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,13 +42,21 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard
+| Dashboard Admin
 |--------------------------------------------------------------------------
 */
 
 Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| User
+|--------------------------------------------------------------------------
+*/
+
+Route::resource('users', UserController::class);
 
 /*
 |--------------------------------------------------------------------------
