@@ -1,101 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Toko Buku</title>
 
-    <style>
-        body{
-            font-family:Arial;
-            background:#f5f5f5;
-        }
-
-        .card{
-            width:400px;
-            margin:50px auto;
-            background:white;
-            padding:20px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,.1);
-        }
-
-        input{
-            width:100%;
-            padding:10px;
-            margin-top:5px;
-            margin-bottom:15px;
-        }
-
-        button{
-            width:100%;
-            padding:10px;
-            background:#0d6efd;
-            color:white;
-            border:none;
-            cursor:pointer;
-        }
-
-        .error{
-            color:red;
-            margin-bottom:10px;
-        }
-    </style>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="card">
+<div class="container mt-5">
 
-<h2>Daftar Akun</h2>
+    <div class="row justify-content-center">
 
-@if($errors->any())
-<div class="error">
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+        <div class="col-md-6">
 
-<form action="/register" method="POST">
+            <div class="card shadow">
 
-@csrf
+                <div class="card-header text-center">
+                    <h3>Register</h3>
+                </div>
 
-<label>Nama</label>
+                <div class="card-body">
 
-<input
-type="text"
-name="name"
-value="{{ old('name') }}"
->
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-<label>Email</label>
+                    <form action="{{ route('register') }}" method="POST">
 
-<input
-type="email"
-name="email"
-value="{{ old('email') }}"
->
+                        @csrf
 
-<label>Password</label>
+                        <div class="mb-3">
+                            <label class="form-label">Nama</label>
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="{{ old('name') }}"
+                                required>
+                        </div>
 
-<input
-type="password"
-name="password"
->
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ old('email') }}"
+                                required>
+                        </div>
 
-<label>Konfirmasi Password</label>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                required>
+                        </div>
 
-<input
-type="password"
-name="password_confirmation"
->
+                        <div class="mb-3">
+                            <label class="form-label">Konfirmasi Password</label>
+                            <input
+                                type="password"
+                                name="password_confirmation"
+                                class="form-control"
+                                required>
+                        </div>
 
-<button type="submit">
-Daftar
-</button>
+                        <button class="btn btn-primary w-100">
+                            Register
+                        </button>
 
-</form>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        Sudah punya akun?
+                        <a href="{{ route('login') }}">
+                            Login
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

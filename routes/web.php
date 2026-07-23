@@ -7,35 +7,46 @@ use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Authentication
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-/*
-|--------------------------------------------------------------------------
 | Home
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [DashboardController::class, 'home'])->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Guest
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+
 });
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Admin
+| Auth
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
+    ->middleware(['auth', 'role:admin'])
     ->name('admin.dashboard');
 
 /*

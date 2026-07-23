@@ -12,4 +12,16 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('totalUser'));
     }
+
+    public function admin()
+{
+    $totalUser = User::count();
+
+    return view('admin.dashboard', compact('totalUser'));
+}
+
+    public function home()
+    {
+        return view('home');
+    }
 }
