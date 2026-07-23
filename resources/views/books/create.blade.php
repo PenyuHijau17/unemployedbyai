@@ -13,7 +13,7 @@
     <h2 class="mb-4">Tambah Buku</h2>
 
 
-    <form action="{{ route('books.store') }}" method="POST">
+    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
 
         @csrf
 
@@ -119,6 +119,18 @@
             class="form-control">
 
         </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Gambar Buku
+            </label>
+
+            <input
+                type="file"
+                name="gambar"
+                class="form-control"
+                accept="image/*">
+</div>
 
 
 

@@ -10,157 +10,180 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">
-        Edit Buku
-    </h2>
+    <div class="card shadow">
 
+        <div class="card-header bg-warning">
 
-    <form action="{{ route('books.update',$book->id) }}" method="POST">
-
-        @csrf
-        @method('PUT')
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Kategori
-            </label>
-
-            <select name="category_id" class="form-control">
-
-                @foreach($categories as $category)
-
-                    <option value="{{ $category->id }}"
-                    {{ $book->category_id == $category->id ? 'selected' : '' }}>
-
-                        {{ $category->nama_kategori }}
-
-                    </option>
-
-                @endforeach
-
-            </select>
+            <h3>Edit Buku</h3>
 
         </div>
 
+        <div class="card-body">
 
+            <form action="{{ route('books.update',$book->id) }}"
+                  method="POST"
+                  enctype="multipart/form-data">
 
-        <div class="mb-3">
+                @csrf
+                @method('PUT')
 
-            <label class="form-label">
-                Judul Buku
-            </label>
+                <div class="mb-3">
 
-            <input type="text"
-            name="judul"
-            class="form-control"
-            value="{{ $book->judul }}">
+                    <label class="form-label">Kategori</label>
+
+                    <select name="category_id" class="form-control">
+
+                        @foreach($categories as $category)
+
+                            <option value="{{ $category->id }}"
+                                {{ $book->category_id == $category->id ? 'selected' : '' }}>
+
+                                {{ $category->nama_kategori }}
+
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Judul Buku</label>
+
+                    <input type="text"
+                           name="judul"
+                           class="form-control"
+                           value="{{ $book->judul }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Penulis</label>
+
+                    <input type="text"
+                           name="penulis"
+                           class="form-control"
+                           value="{{ $book->penulis }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Penerbit</label>
+
+                    <input type="text"
+                           name="penerbit"
+                           class="form-control"
+                           value="{{ $book->penerbit }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Tahun Terbit</label>
+
+                    <input type="number"
+                           name="tahun_terbit"
+                           class="form-control"
+                           value="{{ $book->tahun_terbit }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Harga</label>
+
+                    <input type="number"
+                           name="harga"
+                           class="form-control"
+                           value="{{ $book->harga }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Stok</label>
+
+                    <input type="number"
+                           name="stok"
+                           class="form-control"
+                           value="{{ $book->stok }}">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Gambar Saat Ini
+                    </label>
+
+                    <br>
+
+                    @if($book->gambar)
+
+                        <img
+                            src="{{ asset('storage/'.$book->gambar) }}"
+                            width="150"
+                            class="img-thumbnail mb-2">
+
+                    @else
+
+                        <p class="text-muted">
+                            Belum ada gambar.
+                        </p>
+
+                    @endif
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Ganti Gambar
+                    </label>
+
+                    <input
+                        type="file"
+                        name="gambar"
+                        class="form-control"
+                        accept="image/*">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Deskripsi
+                    </label>
+
+                    <textarea
+                        name="deskripsi"
+                        class="form-control"
+                        rows="4">{{ $book->deskripsi }}</textarea>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    Update Buku
+
+                </button>
+
+                <a href="{{ route('books.index') }}"
+                   class="btn btn-secondary">
+
+                    Kembali
+
+                </a>
+
+            </form>
 
         </div>
 
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Penulis
-            </label>
-
-            <input type="text"
-            name="penulis"
-            class="form-control"
-            value="{{ $book->penulis }}">
-
-        </div>
-
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Penerbit
-            </label>
-
-            <input type="text"
-            name="penerbit"
-            class="form-control"
-            value="{{ $book->penerbit }}">
-
-        </div>
-
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Tahun Terbit
-            </label>
-
-            <input type="number"
-            name="tahun_terbit"
-            class="form-control"
-            value="{{ $book->tahun_terbit }}">
-
-        </div>
-
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Harga
-            </label>
-
-            <input type="number"
-            name="harga"
-            class="form-control"
-            value="{{ $book->harga }}">
-
-        </div>
-
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Stok
-            </label>
-
-            <input type="number"
-            name="stok"
-            class="form-control"
-            value="{{ $book->stok }}">
-
-        </div>
-
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Deskripsi
-            </label>
-
-            <textarea name="deskripsi"
-            class="form-control">{{ $book->deskripsi }}</textarea>
-
-        </div>
-
-
-
-        <button class="btn btn-success">
-            Update
-        </button>
-
-
-        <a href="{{ route('books.index') }}"
-        class="btn btn-secondary">
-            Kembali
-        </a>
-
-
-    </form>
+    </div>
 
 </div>
 
