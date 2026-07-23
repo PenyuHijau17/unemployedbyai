@@ -1,15 +1,20 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
 
-        <a class="navbar-brand" href="/">
-            Toko Buku
+        <a class="navbar-brand fw-bold" href="/">
+            📚 Toko Buku
         </a>
 
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -17,19 +22,15 @@
             <ul class="navbar-nav me-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link active" href="/">Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Lowongan</a>
+                    <a class="nav-link" href="#">Daftar Buku</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">Kategori</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Tentang</a>
                 </li>
 
             </ul>
@@ -39,7 +40,7 @@
                 <input
                     class="form-control me-2"
                     type="search"
-                    placeholder="Cari pekerjaan...">
+                    placeholder="Cari buku">
 
                 <button class="btn btn-light">
                     Cari
