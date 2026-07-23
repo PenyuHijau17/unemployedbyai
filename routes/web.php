@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard Admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])
     ->name('admin.dashboard');
+
+// User
+Route::resource('users', UserController::class);
 
 // CRUD Buku
 Route::resource('books', BookController::class);
