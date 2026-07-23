@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -16,3 +17,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Buku
+Route::get('/books', [HomeController::class, 'books'])->name('books.index');
