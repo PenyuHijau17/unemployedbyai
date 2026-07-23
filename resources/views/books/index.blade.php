@@ -4,108 +4,266 @@
     <title>Daftar Buku</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
-<body>
+<body class="bg-light">
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">Daftar Buku</h2>
+    <div class="card shadow">
 
-    <a href="{{ route('books.create') }}" class="btn btn-primary mb-3">
-        Tambah Buku
-    </a>
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
 
+            <h3 class="mb-0">
+                <i class="bi bi-book-half"></i>
+                Daftar Buku
+            </h3>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+            <a href="{{ route('books.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Tambah Buku
+            </a>
+
         </div>
-    @endif
+
+        <div class="card-body">
+
+            @if(session('success'))
+
+                <div class="alert alert-success">
+
+                    {{ session('success') }}
+
+                </div>
+
+            @endif
 
 
-    <table class="table table-bordered table-striped">
+            <form action="{{ route('books.index') }}" method="GET" class="mb-3">
 
-        <thead class="table-dark">
+                <div class="input-group">
 
-            <tr>
-                <th>No</th>
-                <th>Judul</th>
-                <th>Kategori</th>
-                <th>Penulis</th>
-                <th>Penerbit</th>
-                <th>Harga</th>
-                <th>Stok</th>
-                <th>Aksi</th>
-            </tr>
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Cari judul buku..."
+                        value="{{ request('search') }}">
 
-        </thead>
+                    <button class="btn btn-primary">
 
+                        <i class="bi bi-search"></i>
 
-        <tbody>
+                        Cari
 
-            @foreach($books as $book)
+                    </button>
 
-            <tr>
+                </div>
 
-                <td>{{ $loop->iteration }}</td>
-
-                <td>{{ $book->judul }}</td>
-
-                <td>
-                    {{ $book->category->nama_kategori ?? '-' }}
-                </td>
-
-                <td>{{ $book->penulis }}</td>
-
-                <td>{{ $book->penerbit }}</td>
-
-                <td>
-                    Rp {{ number_format($book->harga,0,',','.') }}
-                </td>
-
-                <td>{{ $book->stok }}</td>
+            </form>
 
 
-                <td>
+            <div class="table-responsive">
 
-                    <a href="{{ route('books.show',$book->id) }}"
-                    class="btn btn-info btn-sm">
-                        Detail
-                    </a>
+                <table class="table table-bordered table-hover align-middle">
 
+                    <thead class="table-dark text-center">
 
-                    <a href="{{ route('books.edit',$book->id) }}"
-                    class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
+                        <tr>
 
+                            <th>No</th>
 
-                    <form action="{{ route('books.destroy',$book->id) }}"
-                    method="POST"
-                    class="d-inline">
+                            <th>Gambar</th>
 
-                        @csrf
-                        @method('DELETE')
+                            <th>Judul</th>
 
-                        <button type="submit"
-                        class="btn btn-danger btn-sm"
-                        onclick="return confirm('Yakin hapus buku?')">
-                            Hapus
-                        </button>
+                            <th>Kategori</th>
 
-                    </form>
+                            <th>Penulis</th>
 
+                            <th>Penerbit</th>
 
-                </td>
+                            <th>Harga</th>
 
-            </tr>
+                            <th>Stok</th>
 
-            @endforeach
+                            <th>Aksi</th>
 
-        </tbody>
+                        </tr>
 
-    </table>
+                    </thead>
+
+                    <tbody>
+
+                    @forelse($books as $book)
+
+                        <tr>
+
+                            <td class="text-center">
+
+                                {{ $loop->iteration }}
+
+                            </td>
+
+                            <td class="text-center">
+
+                                @if($book->gambar)
+
+                                    <img
+                                        src="{{ asset('storage/'.$book->gambar) }}"
+                                        width="80"
+                                        height="110"
+                                        style="
+                                        object-fit:cover;
+                                        border-radius:10px;
+                                        border:1px solid #ddd;
+                                        box-shadow:0 2px 6px rgba(0,0,0,.2);
+                                        ">
+
+                                @else
+
+                                    <span class="badge bg-secondary">
+
+                                        No Image
+
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td>
+
+                                <strong>
+
+                                    {{ $book->judul }}
+
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                {{ $book->category->nama_kategori ?? '-' }}
+
+                            </td>
+
+                            <td>
+
+                                {{ $book->penulis }}
+
+                            </td>
+
+                            <td>
+
+                                {{ $book->penerbit }}
+
+                            </td>
+
+                            <td>
+
+                                <strong class="text-success">
+
+                                    Rp {{ number_format($book->harga,0,',','.') }}
+
+                                </strong>
+
+                            </td>
+
+                            <td class="text-center">
+
+                                @if($book->stok > 10)
+
+                                    <span class="badge bg-success">
+
+                                        {{ $book->stok }}
+
+                                    </span>
+
+                                @elseif($book->stok > 0)
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        {{ $book->stok }}
+
+                                    </span>
+
+                                @else
+
+                                    <span class="badge bg-danger">
+
+                                        Habis
+
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <a href="{{ route('books.show',$book->id) }}"
+                                   class="btn btn-info btn-sm">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+                                <a href="{{ route('books.edit',$book->id) }}"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </a>
+
+                                <form action="{{ route('books.destroy',$book->id) }}"
+                                      method="POST"
+                                      class="d-inline">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Yakin hapus buku?')">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td colspan="9" class="text-center text-muted">
+
+                                Belum ada data buku.
+
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

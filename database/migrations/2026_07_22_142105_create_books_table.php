@@ -1,44 +1,40 @@
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
+public function store(Request $request)
 {
-    public function up(): void
-    {
-        Schema::create('books', function (Blueprint $table) {
+    $request->validate([
 
-            $table->id();
+        'category_id'   => 'required',
 
-            $table->foreignId('category_id')
-                ->constrained()
-                ->cascadeOnDelete();
+        'judul'         => 'required',
 
-            $table->string('judul');
+        'penulis'       => 'required',
 
-            $table->string('penulis');
+        'penerbit'      => 'required',
 
-            $table->string('penerbit');
+        'tahun_terbit'  => 'required',
 
-            $table->year('tahun_terbit');
+        'harga'         => 'required|numeric',
 
-            $table->integer('harga');
+        'stok'          => 'required|integer',
 
-            $table->integer('stok');
+        'deskripsi'     => 'nullable',
 
-            $table->string('gambar')->nullable();
+        'gambar'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
-            $table->text('deskripsi')->nullable();
+    ]);
 
-            $table->timestamps();
-        });
+    $data = $request->all();
+
+    if ($request->hasFile('gambar')) {
+
+        $data['gambar'] = $request
+            ->file('gambar')
+            ->store('books', 'public');
+
     }
 
+    Book::create($data);
 
-    public function down(): void
-    {
-        Schema::dropIfExists('books');
-    }
-};
+    return redirect()
+        ->route('books.index')
+        ->with('success', 'Buku berhasil ditambahkan');
+}
