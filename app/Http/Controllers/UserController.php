@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    // Menampilkan semua user
     public function index()
     {
         $users = User::all();
@@ -15,39 +14,54 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    // Menampilkan form tambah user
+
     public function create()
     {
         return view('admin.users.create');
     }
 
-    // Menyimpan user baru
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role'     => 'required|in:admin,customer',
+        ]);
+
+
+        User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => $request->password,
+            'role'     => $request->role,
+        ]);
+
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User berhasil ditambahkan');
     }
 
-    // Menampilkan detail user
+
     public function show(User $user)
     {
-        //
+        return view('admin.users.show', compact('user'));
     }
 
-    // Menampilkan form edit user
+
     public function edit(User $user)
     {
-        //
+        return view('admin.users.edit', compact('user'));
     }
 
-    // Update data user
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    // Hapus user
     public function destroy(User $user)
     {
-        //
+    $user->delete();
+
+    return redirect()
+        ->route('users.index')
+        ->with('success','User berhasil dihapus');
     }
 }
