@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
+use Illuminate\Http\Request;
 use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        $totalUser = User::count();
-
-        return view('admin.dashboard', compact('totalUser'));
-=======
-class DashboardController extends Controller
-{
+    // Dashboard admin dengan data total user
     public function admin()
     {
-        return view('admin.dashboard');
+        $totalUser = User::count(); // hitung jumlah user dari tabel users
+        return view('admin.dashboard', compact('totalUser'));
     }
 
+    // Halaman home umum
     public function home()
     {
         return view('home');
->>>>>>> origin/auth
+    }
+
+    // Kalau mau pakai index untuk dashboard juga
+    public function index()
+    {
+        $totalUser = User::count();
+        return view('admin.dashboard', compact('totalUser'));
     }
 }

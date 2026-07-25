@@ -5,35 +5,34 @@
     <ul class="nav flex-column">
 
         <li class="nav-item">
-            <a href="/admin/dashboard" class="nav-link text-white">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link text-white">
                 Dashboard
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="#" class="nav-link text-white">
-                Kategori
-            </a>
+             <a href="{{ route('categories.index') }}" class="nav-link text-white">
+              Kategori
+             </a>
         </li>
 
         <li class="nav-item">
-            <a href="#" class="nav-link text-white">
+            <a href="{{ route('users.index') }}" class="nav-link text-white">
                 User
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="#" class="nav-link text-white">
+            <a href="{{ route('orders.index') }}" class="nav-link text-white">
                 Pesanan
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="#" class="nav-link text-white">
+            <a href="{{ route('reports.index') }}" class="nav-link text-white">
                 Laporan
             </a>
         </li>
 
     </ul>
-
 </div>
