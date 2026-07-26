@@ -12,7 +12,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+<<<<<<< HEAD
             CategorySeeder::class,
+=======
+            AdminSeeder::class,
+>>>>>>> auth
         ]);
     }
 }

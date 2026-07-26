@@ -26,6 +26,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'customer',
         ]);
 
         return redirect('/login')->with('success', 'Registrasi berhasil.');
@@ -47,7 +48,11 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('/dashboard');
+            if (Auth::user()->role === 'admin') {
+                return redirect('/admin/dashboard');
+            }
+
+            return redirect('/');
         }
 
         return back()->withErrors([
