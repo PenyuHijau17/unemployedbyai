@@ -16,7 +16,7 @@
             Temukan berbagai koleksi buku terbaik dengan harga terjangkau.
         </p>
 
-        <a href="#" class="btn btn-warning btn-lg mt-3">
+        <a href="{{ route('books.index') }}" class="btn btn-warning btn-lg px-4 py-3">
             Jelajahi Buku
         </a>
 

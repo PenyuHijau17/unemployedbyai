@@ -7,23 +7,27 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
-    // Dashboard admin dengan data total user
+    // Dashboard Admin
     public function admin()
     {
-        $totalUser = User::count(); // hitung jumlah user dari tabel users
+        $totalUser = User::count();
+
         return view('admin.dashboard', compact('totalUser'));
     }
 
-    // Halaman home umum
+
+    // Halaman Home
     public function home()
     {
         return view('home');
     }
 
-    // Kalau mau pakai index untuk dashboard juga
+
+    // Backup index kalau masih dipakai route lama
     public function index()
     {
         $totalUser = User::count();
+
         return view('admin.dashboard', compact('totalUser'));
     }
 }

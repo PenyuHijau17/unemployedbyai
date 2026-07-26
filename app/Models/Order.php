@@ -16,14 +16,23 @@ class Order extends Model
         'status',
     ];
 
-    // relasi ke user
+
+    // Relasi ke user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // relasi ke detail pesanan
+
+    // Relasi ke detail pesanan
     public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+
+    // Alias jika controller lama memakai details()
+    public function details()
     {
         return $this->hasMany(OrderDetail::class);
     }
