@@ -1,67 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Detail Buku</title>
+@extends('layouts.app')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('title', 'Detail Buku')
 
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-</head>
+@section('content')
 
-<body class="bg-light">
 
-<div class="container py-5">
+<div class="container mt-5">
 
-    <div class="card shadow-lg border-0">
+
+    <div class="card shadow">
+
 
         <div class="card-header bg-primary text-white">
 
             <h3 class="mb-0">
-                <i class="bi bi-book-half"></i>
+
+                <i class="bi bi-book"></i>
+
                 Detail Buku
+
             </h3>
 
         </div>
 
+
+
         <div class="card-body">
+
 
             <div class="row">
 
-                <!-- Gambar Buku -->
+
+                <!-- GAMBAR -->
 
                 <div class="col-md-4 text-center">
 
+
                     @if($book->gambar)
 
-                        <img
+
+                        <img 
                             src="{{ asset('storage/'.$book->gambar) }}"
                             class="img-fluid rounded shadow"
-                            style="max-height:450px; object-fit:cover;">
+                            style="max-height:400px"
+                        >
+
 
                     @else
 
-                        <div class="border rounded p-5 bg-light">
 
-                            <i class="bi bi-image text-secondary"
-                            style="font-size:90px;"></i>
+                        <div class="alert alert-secondary">
 
-                            <p class="mt-3 text-muted">
-
-                                Tidak Ada Gambar
-
-                            </p>
+                            Tidak ada gambar
 
                         </div>
 
+
                     @endif
+
 
                 </div>
 
-                <!-- Detail Buku -->
+
+
+
+                <!-- DETAIL -->
 
                 <div class="col-md-8">
+
 
                     <h2 class="fw-bold">
 
@@ -69,199 +76,223 @@
 
                     </h2>
 
+
+
                     <hr>
 
-                    <table class="table table-borderless">
 
-                        <tr>
 
-                            <th width="180">
+                    <p>
 
-                                <i class="bi bi-tags-fill text-primary"></i>
+                        <strong>Kategori :</strong>
 
-                                Kategori
+                        {{ $book->category->nama_kategori ?? '-' }}
 
-                            </th>
+                    </p>
 
-                            <td>
 
-                                <span class="badge bg-primary fs-6">
 
-                                    {{ $book->category->nama_kategori ?? '-' }}
+                    <p>
 
-                                </span>
+                        <strong>Penulis :</strong>
 
-                            </td>
+                        {{ $book->penulis }}
 
-                        </tr>
+                    </p>
 
-                        <tr>
 
-                            <th>
 
-                                <i class="bi bi-person-fill text-success"></i>
+                    <p>
 
-                                Penulis
+                        <strong>Penerbit :</strong>
 
-                            </th>
+                        {{ $book->penerbit }}
 
-                            <td>
+                    </p>
 
-                                {{ $book->penulis }}
 
-                            </td>
 
-                        </tr>
+                    <p>
 
-                        <tr>
+                        <strong>Tahun Terbit :</strong>
 
-                            <th>
+                        {{ $book->tahun_terbit }}
 
-                                <i class="bi bi-building text-warning"></i>
+                    </p>
 
-                                Penerbit
 
-                            </th>
 
-                            <td>
+                    <p>
 
-                                {{ $book->penerbit }}
+                        <strong>Harga :</strong>
 
-                            </td>
 
-                        </tr>
+                        <span class="text-success fw-bold">
 
-                        <tr>
+                            Rp {{ number_format($book->harga,0,',','.') }}
 
-                            <th>
+                        </span>
 
-                                <i class="bi bi-calendar-event text-danger"></i>
 
-                                Tahun Terbit
+                    </p>
 
-                            </th>
 
-                            <td>
 
-                                {{ $book->tahun_terbit }}
 
-                            </td>
+                    <p>
 
-                        </tr>
+                        <strong>Stok :</strong>
 
-                        <tr>
 
-                            <th>
+                        @if($book->stok > 0)
 
-                                <i class="bi bi-cash-stack text-success"></i>
 
-                                Harga
+                            <span class="badge bg-success">
 
-                            </th>
+                                {{ $book->stok }}
 
-                            <td>
+                            </span>
 
-                                <h3 class="text-success fw-bold">
 
-                                    Rp {{ number_format($book->harga,0,',','.') }}
+                        @else
 
-                                </h3>
 
-                            </td>
+                            <span class="badge bg-danger">
 
-                        </tr>
+                                Habis
 
-                        <tr>
+                            </span>
 
-                            <th>
 
-                                <i class="bi bi-box-seam text-info"></i>
+                        @endif
 
-                                Stok
 
-                            </th>
+                    </p>
 
-                            <td>
 
-                                @if($book->stok > 10)
 
-                                    <span class="badge bg-success fs-6">
 
-                                        {{ $book->stok }} Tersedia
+                    <p>
 
-                                    </span>
+                        <strong>Deskripsi :</strong>
 
-                                @elseif($book->stok > 0)
+                    </p>
 
-                                    <span class="badge bg-warning text-dark fs-6">
 
-                                        Stok Tinggal {{ $book->stok }}
+                    <p>
 
-                                    </span>
+                        {{ $book->deskripsi ?? 'Tidak ada deskripsi' }}
 
-                                @else
+                    </p>
 
-                                    <span class="badge bg-danger fs-6">
 
-                                        Stok Habis
 
-                                    </span>
 
-                                @endif
+                    <hr>
 
-                            </td>
 
-                        </tr>
 
-                    </table>
+                    @if($book->stok > 0)
+
+
+                    <!-- TAMBAH KERANJANG -->
+
+
+                    <form action="{{ route('cart.add',$book->id) }}" method="POST">
+
+
+                        @csrf
+
+
+
+                        <div class="mb-3">
+
+
+                            <label class="form-label fw-bold">
+
+                                Jumlah Pembelian
+
+                            </label>
+
+
+
+                            <input 
+                                type="number"
+                                name="jumlah"
+                                class="form-control"
+                                value="1"
+                                min="1"
+                                max="{{ $book->stok }}"
+                            >
+
+
+                        </div>
+
+
+
+
+                        <button class="btn btn-success">
+
+
+                            <i class="bi bi-cart-plus"></i>
+
+
+                            Tambahkan ke Keranjang
+
+
+                        </button>
+
+
+
+                    </form>
+
+
+                    @else
+
+
+                        <button class="btn btn-secondary" disabled>
+
+                            Stok Habis
+
+                        </button>
+
+
+                    @endif
+
+
+
+                    <br>
+
+
+
+                    <a href="{{ route('books.index') }}" 
+                       class="btn btn-dark mt-3">
+
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Kembali
+
+
+                    </a>
+
+
 
                 </div>
 
-            </div>
-
-            <hr>
-
-            <h4>
-
-                <i class="bi bi-card-text"></i>
-
-                Deskripsi Buku
-
-            </h4>
-
-            <div class="p-3 bg-light rounded border">
-
-                {{ $book->deskripsi ?? 'Belum ada deskripsi.' }}
 
             </div>
 
-            <div class="mt-4">
-
-                <a href="{{ route('books.index') }}"
-                class="btn btn-secondary">
-
-                    <i class="bi bi-arrow-left"></i>
-
-                    Kembali
-
-                </a>
-
-                <a href="{{ route('books.edit',$book->id) }}"
-                class="btn btn-warning">
-
-                    <i class="bi bi-pencil-square"></i>
-
-                    Edit Buku
-
-                </a>
-
-            </div>
 
         </div>
 
+
     </div>
+
+
 
 </div>
 
-</body>
-</html>
+
+
+@endsection

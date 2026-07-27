@@ -1,79 +1,83 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+
+@section('title','Login')
 
 @section('content')
 
-<div class="container mt-5">
+<div class="row justify-content-center mt-5">
 
-    <div class="row justify-content-center">
+    <div class="col-md-5">
 
-        <div class="col-md-5">
+        <div class="card shadow">
 
-            <div class="card shadow">
-
-                <div class="card-header text-center">
-                    <h4>Login</h4>
-                </div>
-
-                <div class="card-body">
-
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+            <div class="card-header bg-primary text-white text-center">
+                <h3>
+                    📚 Login Toko Buku
+                </h3>
+            </div>
 
 
-                    @if($errors->any())
-                        <div class="alert alert-danger">
-                            {{ $errors->first() }}
-                        </div>
-                    @endif
+            <div class="card-body">
 
 
-                    <form action="{{ route('login') }}" method="POST">
+                @if($errors->any())
 
-                        @csrf
+                    <div class="alert alert-danger">
+                        {{ $errors->first() }}
+                    </div>
 
-                        <div class="mb-3">
-                            <label>Email</label>
-
-                            <input 
-                                type="email"
-                                name="email"
-                                class="form-control"
-                                required>
-                        </div>
+                @endif
 
 
-                        <div class="mb-3">
-                            <label>Password</label>
+                <form action="{{ route('login') }}" method="POST">
 
-                            <input 
-                                type="password"
-                                name="password"
-                                class="form-control"
-                                required>
-                        </div>
+                    @csrf
 
 
-                        <button type="submit" class="btn btn-primary w-100">
-                            Login
-                        </button>
+                    <div class="mb-3">
 
-                    </form>
+                        <label>Email</label>
 
-
-                    <div class="text-center mt-3">
-
-                        Belum punya akun?
-
-                        <a href="{{ route('register') }}">
-                            Register
-                        </a>
+                        <input 
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            required>
 
                     </div>
 
+
+                    <div class="mb-3">
+
+                        <label>Password</label>
+
+                        <input 
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+
+                    <button class="btn btn-primary w-100">
+                        Login
+                    </button>
+
+
+                </form>
+
+
+                <div class="text-center mt-3">
+
+                    Belum punya akun?
+
+                    <a href="{{ route('register') }}">
+                        Register
+                    </a>
+
                 </div>
+
 
             </div>
 
@@ -82,5 +86,6 @@
     </div>
 
 </div>
+
 
 @endsection
