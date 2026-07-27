@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -25,12 +26,12 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'customer',
         ]);
 
         return redirect('/login')->with('success', 'Registrasi berhasil.');
     }
-    
-    
+
     public function showLogin()
     {
         return view('auth.login');
@@ -47,7 +48,11 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('/dashboard');
+            if (Auth::user()->role === 'admin') {
+                return redirect('/admin/dashboard');
+            }
+
+            return redirect('/');
         }
 
         return back()->withErrors([
