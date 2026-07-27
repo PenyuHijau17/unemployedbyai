@@ -8,6 +8,7 @@ use App\Models\Order;
 
 class DashboardController extends Controller
 {
+    // Halaman dashboard admin
     public function admin()
     {
         $totalBook = Book::count();       // hitung jumlah buku
@@ -21,5 +22,20 @@ class DashboardController extends Controller
             'totalOrder',
             'totalIncome'
         ));
+    }
+
+    // Halaman home (frontend user)
+    public function home()
+    {
+        // misalnya tampilkan daftar buku di halaman depan
+        $books = Book::latest()->paginate(10);
+
+        return view('home.index', compact('books'));
+    }
+
+    // Halaman index umum (misalnya redirect ke home)
+    public function index()
+    {
+        return redirect()->route('home');
     }
 }
