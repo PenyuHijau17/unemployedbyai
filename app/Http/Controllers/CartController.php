@@ -33,7 +33,10 @@ class CartController extends Controller
         ]);
 
         if ($request->jumlah > $book->stok) {
-            return back()->with('error', 'Jumlah buku melebihi stok yang tersedia.');
+            return back()->with(
+                'error',
+                'Jumlah buku melebihi stok yang tersedia.'
+            );
         }
 
         $cart = Cart::where('user_id', Auth::id())
@@ -44,7 +47,10 @@ class CartController extends Controller
             $jumlahBaru = $cart->jumlah + $request->jumlah;
 
             if ($jumlahBaru > $book->stok) {
-                return back()->with('error', 'Jumlah buku di keranjang melebihi stok yang tersedia.');
+                return back()->with(
+                    'error',
+                    'Jumlah buku di keranjang melebihi stok yang tersedia.'
+                );
             }
 
             $cart->jumlah = $jumlahBaru;
@@ -78,7 +84,10 @@ class CartController extends Controller
         }
 
         if ($request->jumlah > $cart->book->stok) {
-            return back()->with('error', 'Jumlah melebihi stok buku yang tersedia.');
+            return back()->with(
+                'error',
+                'Jumlah melebihi stok buku yang tersedia.'
+            );
         }
 
         $cart->jumlah = $request->jumlah;

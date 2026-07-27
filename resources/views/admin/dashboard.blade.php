@@ -8,11 +8,14 @@
 
     <h2>Dashboard Admin</h2>
 
-    <p>Selamat datang, <strong>{{ Auth::user()->name }}</strong></p>
+    <p>
+        Selamat datang, <strong>{{ Auth::user()->name }}</strong>
+    </p>
 
     <form action="{{ route('logout') }}" method="POST" class="mb-4">
         @csrf
-        <button class="btn btn-danger">
+
+        <button type="submit" class="btn btn-danger">
             Logout
         </button>
     </form>

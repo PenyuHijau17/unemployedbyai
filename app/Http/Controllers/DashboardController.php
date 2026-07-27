@@ -14,11 +14,11 @@ class DashboardController extends Controller
     }
 
     public function admin()
-{
-    $totalUser = User::count();
+    {
+        $totalUser = User::count();
 
-    return view('admin.dashboard', compact('totalUser'));
-}
+        return view('admin.dashboard', compact('totalUser'));
+    }
 
     public function home()
     {

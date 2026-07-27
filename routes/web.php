@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
@@ -14,7 +16,8 @@ use App\Http\Controllers\OrderController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [DashboardController::class, 'home'])->name('home');
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +40,7 @@ Route::middleware('guest')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Auth
+| Logout
 |--------------------------------------------------------------------------
 */
 
@@ -47,7 +50,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Admin
+| Admin Dashboard
 |--------------------------------------------------------------------------
 */
 
@@ -79,7 +82,7 @@ Route::resource('books', BookController::class);
 
 Route::middleware('auth')->group(function () {
 
-    // Keranjang
+    // Cart
     Route::get('/cart', [CartController::class, 'index'])
         ->name('cart.index');
 

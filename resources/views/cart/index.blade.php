@@ -19,23 +19,19 @@
         </a>
     </div>
 
-    {{-- Pesan sukses --}}
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
 
-        <button type="button" class="btn-close" data-bs-dismiss="alert">
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     @endif
 
-    {{-- Pesan error --}}
     @if (session('error'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ session('error') }}
 
-        <button type="button" class="btn-close" data-bs-dismiss="alert">
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     @endif
 
@@ -64,15 +60,19 @@
                         <div class="col-md-2">
 
                             @if ($cart->book->gambar)
+
                             <img src="{{ asset('storage/' . $cart->book->gambar) }}" alt="{{ $cart->book->judul }}"
                                 class="img-fluid rounded" style="height: 100px; width: 75px; object-fit: cover;">
+
                             @else
+
                             <div class="bg-light rounded d-flex align-items-center justify-content-center"
                                 style="height: 100px; width: 75px;">
                                 <small class="text-muted">
                                     No Image
                                 </small>
                             </div>
+
                             @endif
 
                         </div>
@@ -139,9 +139,7 @@
 
                                 <button type="submit" class="btn btn-sm btn-outline-danger"
                                     onclick="return confirm('Hapus buku ini dari keranjang?')">
-
                                     Hapus
-
                                 </button>
 
                             </form>
@@ -157,7 +155,6 @@
             </div>
 
         </div>
-
 
         {{-- RINGKASAN BELANJA --}}
         <div class="col-lg-4">
@@ -199,9 +196,7 @@
                     </div>
 
                     <a href="{{ route('checkout') }}" class="btn btn-primary w-100">
-
                         Lanjut ke Checkout
-
                     </a>
 
                 </div>
@@ -232,9 +227,7 @@
             </p>
 
             <a href="{{ route('books.index') }}" class="btn btn-primary">
-
                 Mulai Belanja
-
             </a>
 
         </div>
