@@ -3,13 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Book;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function admin()
     {
-        $totalUser = User::count();
+        $totalBook = Book::count();       // hitung jumlah buku
+        $totalUser = User::count();       // hitung jumlah user
+        $totalOrder = Order::count();     // hitung jumlah pesanan
+        $totalIncome = Order::sum('total'); // jumlahkan pendapatan (kolom total di tabel orders)
 
-        return view('admin.dashboard', compact('totalUser'));
+        return view('admin.dashboard', compact(
+            'totalBook',
+            'totalUser',
+            'totalOrder',
+            'totalIncome'
+        ));
     }
 }

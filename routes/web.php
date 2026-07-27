@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-
-// Controller
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 
@@ -23,38 +24,41 @@ Route::get('/', [HomeController::class, 'index'])
 
 
 
-
 // ==========================
 // AUTH
 // ==========================
 
-Route::get('/register', 
-    [AuthController::class, 'showRegister']
-)
-->name('register');
+Route::middleware('guest')->group(function () {
 
 
-Route::post('/register',
-    [AuthController::class, 'register']
-);
+    Route::get('/register',
+        [AuthController::class,'showRegister']
+    )->name('register');
 
 
-
-Route::get('/login',
-    [AuthController::class, 'showLogin']
-)
-->name('login');
+    Route::post('/register',
+        [AuthController::class,'register']
+    );
 
 
-Route::post('/login',
-    [AuthController::class, 'login']
-);
+    Route::get('/login',
+        [AuthController::class,'showLogin']
+    )->name('login');
+
+
+    Route::post('/login',
+        [AuthController::class,'login']
+    );
+
+
+});
 
 
 
 Route::post('/logout',
-    [AuthController::class, 'logout']
+    [AuthController::class,'logout']
 )
+->middleware('auth')
 ->name('logout');
 
 
@@ -64,28 +68,56 @@ Route::post('/logout',
 // ADMIN DASHBOARD
 // ==========================
 
+
 Route::get('/admin/dashboard',
-    [DashboardController::class, 'index']
+    [DashboardController::class,'admin']
 )
+->middleware(['auth','role:admin'])
 ->name('admin.dashboard');
 
 
 
 
 // ==========================
-// USER CRUD
+// ADMIN CRUD
 // ==========================
 
-Route::resource('users', UserController::class);
+
+Route::resource('users', UserController::class)
+->middleware(['auth','role:admin']);
+
+
+Route::resource('categories', CategoryController::class)
+->middleware(['auth','role:admin']);
+
+
+Route::resource('books', BookController::class)
+->middleware(['auth','role:admin']);
+
+
+Route::resource('orders', AdminOrderController::class)
+->middleware(['auth','role:admin']);
+
+
+
+Route::get('/reports',
+    [ReportController::class,'index']
+)
+->middleware(['auth','role:admin'])
+->name('reports.index');
 
 
 
 
 // ==========================
-// BOOK CRUD
+// CUSTOMER BOOK
 // ==========================
 
-Route::resource('books', BookController::class);
+
+Route::get('/books-list',
+    [HomeController::class,'books']
+)
+->name('frontend.books');
 
 
 
@@ -94,22 +126,21 @@ Route::resource('books', BookController::class);
 // CART
 // ==========================
 
+
 Route::get('/cart',
-    [CartController::class, 'index']
+    [CartController::class,'index']
 )
 ->name('cart.index');
 
 
-
 Route::post('/cart/add/{book}',
-    [CartController::class, 'add']
+    [CartController::class,'add']
 )
 ->name('cart.add');
 
 
-
 Route::delete('/cart/remove/{id}',
-    [CartController::class, 'remove']
+    [CartController::class,'remove']
 )
 ->name('cart.remove');
 
@@ -120,14 +151,14 @@ Route::delete('/cart/remove/{id}',
 // PAYMENT
 // ==========================
 
+
 Route::get('/payment',
-    [PaymentController::class, 'index']
+    [PaymentController::class,'index']
 )
 ->name('payment.index');
 
 
-
 Route::post('/payment/process',
-    [PaymentController::class, 'process']
+    [PaymentController::class,'process']
 )
 ->name('payment.process');
