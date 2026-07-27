@@ -7,29 +7,28 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 
 
+// ==========================
+// Home
+// ==========================
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
 
-
-// Auth Guest
+// ==========================
+// Guest (Register & Login)
+// ==========================
 
 Route::middleware('guest')->group(function () {
-
-
-    // Register
 
     Route::get('/register', [AuthController::class, 'showRegister'])
         ->name('register');
 
     Route::post('/register', [AuthController::class, 'register']);
 
-
-
-    // Login
 
     Route::get('/login', [AuthController::class, 'showLogin'])
         ->name('login');
@@ -39,32 +38,59 @@ Route::middleware('guest')->group(function () {
 });
 
 
-
+// ==========================
 // Logout
+// ==========================
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
 
-
-// Books
+// ==========================
+// Books CRUD
+// ==========================
 
 Route::resource('books', BookController::class);
 
 
-
+// ==========================
 // Cart
+// ==========================
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('cart', CartController::class);
+
+    Route::get('/cart', [CartController::class, 'index'])
+        ->name('cart.index');
+
+
+    Route::post('/cart', [CartController::class, 'store'])
+        ->name('cart.store');
+
+
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])
+        ->name('cart.destroy');
+
+
+
+    // ==========================
+    // Payment
+    // ==========================
+
+    Route::get('/payment', [PaymentController::class, 'index'])
+        ->name('payment.index');
+
+
+    Route::post('/payment', [PaymentController::class, 'store'])
+        ->name('payment.store');
 
 });
 
 
-
-// Dashboard Admin
+// ==========================
+// Admin
+// ==========================
 
 Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
     ->middleware(['auth', 'role:admin'])
