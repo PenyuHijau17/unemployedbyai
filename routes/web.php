@@ -10,7 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\ReportController;
 
-// Halaman utama
+// Halaman utama (frontend)
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
 Route::get('/home', [DashboardController::class, 'home'])->name('home');
 
@@ -33,22 +33,22 @@ Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.dashboard');
 
-// User CRUD
+// User CRUD (Admin)
 Route::resource('users', UserController::class)->middleware(['auth','role:admin']);
 
-// Categories CRUD
+// Categories CRUD (Admin)
 Route::resource('categories', CategoryController::class)->middleware(['auth','role:admin']);
 
-// Book CRUD
-Route::resource('books', BookController::class);
+// Book CRUD (Admin) → otomatis ada books.index, books.create, dll
+Route::resource('books', BookController::class)->middleware(['auth','role:admin']);
 
 // Orders CRUD (Admin)
 Route::resource('orders', AdminOrderController::class)->middleware(['auth','role:admin']);
 
-// Reports
+// Reports (Admin)
 Route::get('/reports', [ReportController::class, 'index'])
     ->middleware(['auth','role:admin'])
     ->name('reports.index');
 
-// Halaman buku untuk frontend
-Route::get('/books', [HomeController::class, 'books'])->name('books.index');
+// Halaman buku untuk frontend (user biasa) → pakai nama beda biar nggak bentrok
+Route::get('/books-list', [HomeController::class, 'books'])->name('frontend.books');

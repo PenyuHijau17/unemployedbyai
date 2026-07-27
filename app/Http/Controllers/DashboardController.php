@@ -2,28 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Book;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
-    // Dashboard admin dengan data total user
     public function admin()
     {
-        $totalUser = User::count(); // hitung jumlah user dari tabel users
-        return view('admin.dashboard', compact('totalUser'));
-    }
+        $totalBook = Book::count();       // hitung jumlah buku
+        $totalUser = User::count();       // hitung jumlah user
+        $totalOrder = Order::count();     // hitung jumlah pesanan
+        $totalIncome = Order::sum('total'); // jumlahkan pendapatan (kolom total di tabel orders)
 
-    // Halaman home umum
-    public function home()
-    {
-        return view('home');
-    }
-
-    // Kalau mau pakai index untuk dashboard juga
-    public function index()
-    {
-        $totalUser = User::count();
-        return view('admin.dashboard', compact('totalUser'));
+        return view('admin.dashboard', compact(
+            'totalBook',
+            'totalUser',
+            'totalOrder',
+            'totalIncome'
+        ));
     }
 }
