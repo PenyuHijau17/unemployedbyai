@@ -14,12 +14,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 
 
-
 // ==========================
 // HOME
 // ==========================
 
-Route::get('/', [HomeController::class, 'index'])
+Route::get('/', [HomeController::class,'index'])
     ->name('home');
 
 
@@ -28,7 +27,7 @@ Route::get('/', [HomeController::class, 'index'])
 // AUTH
 // ==========================
 
-Route::middleware('guest')->group(function () {
+Route::middleware('guest')->group(function(){
 
 
     Route::get('/register',
@@ -54,7 +53,6 @@ Route::middleware('guest')->group(function () {
 });
 
 
-
 Route::post('/logout',
     [AuthController::class,'logout']
 )
@@ -63,49 +61,47 @@ Route::post('/logout',
 
 
 
-
 // ==========================
-// ADMIN DASHBOARD
-// ==========================
-
-
-Route::get('/admin/dashboard',
-    [DashboardController::class,'admin']
-)
-->middleware(['auth','role:admin'])
-->name('admin.dashboard');
-
-
-
-
-// ==========================
-// ADMIN CRUD
+// ADMIN
 // ==========================
 
 
-Route::resource('users', UserController::class)
-->middleware(['auth','role:admin']);
+Route::middleware(['auth','role:admin'])->group(function(){
 
 
-Route::resource('categories', CategoryController::class)
-->middleware(['auth','role:admin']);
+    Route::get('/admin/dashboard',
+        [DashboardController::class,'admin']
+    )
+    ->name('admin.dashboard');
 
 
-Route::resource('books', BookController::class)
-->middleware(['auth','role:admin']);
+    Route::resource('users',
+        UserController::class
+    );
 
 
-Route::resource('orders', AdminOrderController::class)
-->middleware(['auth','role:admin']);
+    Route::resource('categories',
+        CategoryController::class
+    );
 
 
+    Route::resource('books',
+        BookController::class
+    );
 
-Route::get('/reports',
-    [ReportController::class,'index']
-)
-->middleware(['auth','role:admin'])
-->name('reports.index');
 
+    Route::resource('orders',
+        AdminOrderController::class
+    );
+
+
+    Route::get('/reports',
+        [ReportController::class,'index']
+    )
+    ->name('reports.index');
+
+
+});
 
 
 
@@ -115,10 +111,15 @@ Route::get('/reports',
 
 
 Route::get('/books-list',
-    [HomeController::class,'books']
+    [BookController::class,'customerIndex']
 )
-->name('frontend.books');
+->name('books.customer');
 
+
+Route::get('/books-list/{book}',
+    [BookController::class,'customerShow']
+)
+->name('books.customer.show');
 
 
 
@@ -143,7 +144,6 @@ Route::delete('/cart/remove/{id}',
     [CartController::class,'remove']
 )
 ->name('cart.remove');
-
 
 
 

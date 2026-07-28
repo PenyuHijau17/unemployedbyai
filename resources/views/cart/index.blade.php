@@ -5,264 +5,312 @@
 
 @section('content')
 
+
 <div class="container mt-5">
 
 
-    <div class="card shadow">
+<div class="card shadow border-0 rounded-4">
 
 
-        <div class="card-header bg-primary text-white">
+<div class="card-header bg-primary text-white">
 
-            <h3 class="mb-0">
-                🛒 Keranjang Belanja
-            </h3>
+<h3 class="mb-0">
 
-        </div>
+🛒 Keranjang Belanja
 
+</h3>
 
+</div>
 
-        <div class="card-body">
 
 
-        @if(empty($cart) || count($cart) == 0)
 
+<div class="card-body">
 
-            <div class="text-center p-5">
 
 
-                <h4 class="text-muted">
+@if(empty($cart) || count($cart) == 0)
 
-                    Keranjang masih kosong
 
-                </h4>
 
+<div class="text-center p-5">
 
-                <p>
 
-                    Silahkan pilih buku terlebih dahulu.
+<h4 class="text-muted">
 
-                </p>
+Keranjang masih kosong
 
+</h4>
 
 
-                <a href="{{ route('books.index') }}"
-                   class="btn btn-primary btn-lg">
 
-                    📚 Pilih Buku
+<p>
 
-                </a>
+Silahkan pilih buku terlebih dahulu.
 
+</p>
 
-            </div>
 
 
 
-        @else
+<a href="{{ route('books.customer') }}"
+class="btn btn-primary btn-lg">
 
 
+📚 Pilih Buku
 
-            <div class="table-responsive">
 
+</a>
 
-                <table class="table table-bordered align-middle">
 
 
-                    <thead class="table-dark">
+</div>
 
 
-                        <tr>
 
-                            <th>
-                                Buku
-                            </th>
 
+@else
 
-                            <th>
-                                Harga
-                            </th>
 
 
-                            <th>
-                                Jumlah
-                            </th>
 
+<div class="table-responsive">
 
-                            <th>
-                                Subtotal
-                            </th>
 
+<table class="table table-bordered align-middle">
 
-                            <th>
-                                Aksi
-                            </th>
 
+<thead class="table-dark">
 
-                        </tr>
 
+<tr>
 
-                    </thead>
 
+<th>
+Buku
+</th>
 
 
-                    <tbody>
+<th>
+Harga
+</th>
 
 
+<th>
+Jumlah
+</th>
 
-                    @php
-                        $total = 0;
-                    @endphp
 
+<th>
+Subtotal
+</th>
 
 
-                    @foreach($cart as $id => $item)
+<th>
+Aksi
+</th>
 
 
+</tr>
 
-                    @php
 
-                        $subtotal = $item['harga'] * $item['jumlah'];
+</thead>
 
-                        $total += $subtotal;
 
-                    @endphp
 
+<tbody>
 
 
-                    <tr>
 
+@php
 
-                        <td>
+$total = 0;
 
-                            <strong>
+@endphp
 
-                                {{ $item['judul'] }}
 
-                            </strong>
 
-                        </td>
 
+@foreach($cart as $id => $item)
 
 
-                        <td>
 
-                            Rp {{ number_format($item['harga'],0,',','.') }}
+@php
 
-                        </td>
+$subtotal = $item['harga'] * $item['jumlah'];
 
+$total += $subtotal;
 
+@endphp
 
-                        <td>
 
-                            {{ $item['jumlah'] }}
 
-                        </td>
 
+<tr>
 
 
-                        <td>
+<td>
 
-                            Rp {{ number_format($subtotal,0,',','.') }}
 
-                        </td>
+<strong>
 
+{{ $item['judul'] }}
 
+</strong>
 
-                        <td>
 
+</td>
 
-                            <form action="{{ route('cart.remove',$id) }}"
-                                  method="POST">
 
 
-                                @csrf
 
-                                @method('DELETE')
+<td>
 
+Rp {{ number_format($item['harga'],0,',','.') }}
 
-                                <button class="btn btn-danger btn-sm">
+</td>
 
-                                    Hapus
 
-                                </button>
 
 
-                            </form>
+<td>
 
+{{ $item['jumlah'] }}
 
-                        </td>
+</td>
 
 
-                    </tr>
 
 
+<td>
 
-                    @endforeach
+Rp {{ number_format($subtotal,0,',','.') }}
 
+</td>
 
 
-                    </tbody>
 
 
-                </table>
+<td>
 
 
-            </div>
+<form action="{{ route('cart.remove',$id) }}"
+method="POST">
 
 
+@csrf
 
-            <div class="d-flex justify-content-between align-items-center">
+@method('DELETE')
 
 
-                <a href="{{ route('books.index') }}"
-                   class="btn btn-primary">
 
-                    📚 Tambah Buku Lagi
+<button class="btn btn-danger btn-sm">
 
-                </a>
+Hapus
 
+</button>
 
 
-                <div>
+</form>
 
 
-                    <h4>
+</td>
 
-                        Total:
 
-                        <span class="text-success">
 
-                            Rp {{ number_format($total,0,',','.') }}
+</tr>
 
-                        </span>
 
 
-                    </h4>
 
+@endforeach
 
 
-                    <a href="{{ route('payment.index') }}"
-                       class="btn btn-success btn-lg">
 
-                        Lanjut Payment
+</tbody>
 
-                    </a>
 
+</table>
 
-                </div>
 
+</div>
 
-            </div>
 
 
 
-        @endif
 
 
+<div class="d-flex justify-content-between align-items-center mt-4">
 
-        </div>
 
 
-    </div>
+
+
+<a href="{{ route('books.customer') }}"
+class="btn btn-primary">
+
+
+📚 Tambah Buku Lagi
+
+
+</a>
+
+
+
+
+
+
+
+<div class="text-end">
+
+
+<h4>
+
+Total :
+
+<span class="text-success">
+
+Rp {{ number_format($total,0,',','.') }}
+
+</span>
+
+
+</h4>
+
+
+
+
+
+<a href="{{ route('payment.index') }}"
+class="btn btn-success btn-lg">
+
+
+💳 Lanjut Payment
+
+
+</a>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+@endif
+
+
+
+
+</div>
+
+
+
+</div>
 
 
 </div>
