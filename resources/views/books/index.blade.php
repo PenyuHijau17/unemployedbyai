@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Daftar Buku</title>
+@extends('admin.layouts.app')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('title','Data Buku')
 
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+@section('content')
 
-</head>
+<div class="container-fluid">
 
-<body class="bg-light">
-
-<div class="container mt-5">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="card shadow">
 
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center">
 
-            <h3 class="mb-0">
-                <i class="bi bi-book-half"></i>
-                Daftar Buku
-            </h3>
+            <h4 class="mb-0">
+                <i class="bi bi-book"></i>
+                Data Buku
+            </h4>
 
             <a href="{{ route('books.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i>
@@ -32,18 +30,7 @@
 
         <div class="card-body">
 
-            @if(session('success'))
-
-                <div class="alert alert-success">
-
-                    {{ session('success') }}
-
-                </div>
-
-            @endif
-
-
-            <form action="{{ route('books.index') }}" method="GET" class="mb-3">
+            <form action="{{ route('books.index') }}" method="GET" class="mb-4">
 
                 <div class="input-group">
 
@@ -51,47 +38,34 @@
                         type="text"
                         name="search"
                         class="form-control"
-                        placeholder="Cari judul buku..."
+                        placeholder="Cari judul, penulis, penerbit..."
                         value="{{ request('search') }}">
 
                     <button class="btn btn-primary">
-
                         <i class="bi bi-search"></i>
-
                         Cari
-
                     </button>
 
                 </div>
 
             </form>
 
-
             <div class="table-responsive">
 
                 <table class="table table-bordered table-hover align-middle">
 
-                    <thead class="table-dark text-center">
+                    <thead class="table-dark">
 
                         <tr>
 
-                            <th>No</th>
-
-                            <th>Gambar</th>
-
+                            <th width="70">Cover</th>
                             <th>Judul</th>
-
                             <th>Kategori</th>
-
                             <th>Penulis</th>
-
                             <th>Penerbit</th>
-
                             <th>Harga</th>
-
                             <th>Stok</th>
-
-                            <th>Aksi</th>
+                            <th width="220">Aksi</th>
 
                         </tr>
 
@@ -105,106 +79,39 @@
 
                             <td class="text-center">
 
-                                {{ $loop->iteration }}
-
-                            </td>
-
-                            <td class="text-center">
-
                                 @if($book->gambar)
 
-                                    <img
-                                        src="{{ asset('storage/'.$book->gambar) }}"
-                                        width="80"
-                                        height="110"
-                                        style="
-                                        object-fit:cover;
-                                        border-radius:10px;
-                                        border:1px solid #ddd;
-                                        box-shadow:0 2px 6px rgba(0,0,0,.2);
-                                        ">
+                                    <img src="{{ asset('storage/'.$book->gambar) }}"
+                                         width="60"
+                                         height="80"
+                                         style="object-fit:cover"
+                                         class="rounded">
 
                                 @else
 
-                                    <span class="badge bg-secondary">
-
-                                        No Image
-
+                                    <span class="text-muted">
+                                        -
                                     </span>
 
                                 @endif
 
                             </td>
 
-                            <td>
+                            <td>{{ $book->judul }}</td>
 
-                                <strong>
+                            <td>{{ $book->category->nama_kategori ?? '-' }}</td>
 
-                                    {{ $book->judul }}
+                            <td>{{ $book->penulis }}</td>
 
-                                </strong>
-
-                            </td>
+                            <td>{{ $book->penerbit }}</td>
 
                             <td>
-
-                                {{ $book->category->nama_kategori ?? '-' }}
-
+                                Rp {{ number_format($book->harga,0,',','.') }}
                             </td>
+
+                            <td>{{ $book->stok }}</td>
 
                             <td>
-
-                                {{ $book->penulis }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $book->penerbit }}
-
-                            </td>
-
-                            <td>
-
-                                <strong class="text-success">
-
-                                    Rp {{ number_format($book->harga,0,',','.') }}
-
-                                </strong>
-
-                            </td>
-
-                            <td class="text-center">
-
-                                @if($book->stok > 10)
-
-                                    <span class="badge bg-success">
-
-                                        {{ $book->stok }}
-
-                                    </span>
-
-                                @elseif($book->stok > 0)
-
-                                    <span class="badge bg-warning text-dark">
-
-                                        {{ $book->stok }}
-
-                                    </span>
-
-                                @else
-
-                                    <span class="badge bg-danger">
-
-                                        Habis
-
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-                            <td class="text-center">
 
                                 <a href="{{ route('books.show',$book->id) }}"
                                    class="btn btn-info btn-sm">
@@ -229,7 +136,7 @@
 
                                     <button
                                         class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Yakin hapus buku?')">
+                                        onclick="return confirm('Hapus buku ini?')">
 
                                         <i class="bi bi-trash"></i>
 
@@ -245,7 +152,7 @@
 
                         <tr>
 
-                            <td colspan="9" class="text-center text-muted">
+                            <td colspan="8" class="text-center text-muted">
 
                                 Belum ada data buku.
 
@@ -267,5 +174,4 @@
 
 </div>
 
-</body>
-</html>
+@endsection
