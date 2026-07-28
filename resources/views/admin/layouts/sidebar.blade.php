@@ -5,6 +5,9 @@
     <a href="{{ route('categories.index') }}" class="list-group-item list-group-item-action bg-dark text-white">
         <i class="bi bi-tags"></i> Kategori
     </a>
+    <a href="{{ route('books.index') }}" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="bi bi-book"></i> Buku
+    </a>
     <a href="{{ route('users.index') }}" class="list-group-item list-group-item-action bg-dark text-white">
         <i class="bi bi-people"></i> User
     </a>
