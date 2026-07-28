@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
             📚 Toko Buku
         </a>
 
@@ -17,16 +17,16 @@
 
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse pt-3 pt-lg-0" id="navbarNav">
 
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto mb-3 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Home</a>
+                    <a class="nav-link active" href="{{ url('/') }}">Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Daftar Buku</a>
+                    <a class="nav-link" href="{{ route('books.index') }}">Daftar Buku</a>
                 </li>
 
                 <li class="nav-item">
@@ -35,26 +35,37 @@
 
             </ul>
 
-            <form class="d-flex me-3">
+            <form action="{{ route('books.index') }}"
+            method="GET"
+            class="d-flex mt-3 mt-lg-0 me-lg-3">
 
-                <input
-                    class="form-control me-2"
-                    type="search"
-                    placeholder="Cari buku">
+          <input
+              type="search"
+              name="search"
+              class="form-control form-control-sm"
+              placeholder="Cari buku">
 
-                <button class="btn btn-light">
-                    Cari
-                </button>
+          <button class="btn btn-light btn-sm ms-2 px-3">
+              Cari
+          </button>
 
-            </form>
+      </form>
 
-            <a href="#" class="btn btn-outline-light me-2">
-                Login
-            </a>
+      <div class="d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
 
-            <a href="#" class="btn btn-warning">
-                Register
-            </a>
+          <a href="{{ route('login') }}"
+             class="btn btn-outline-light btn-sm">
+              Login
+          </a>
+
+          <a href="{{ route('register') }}"
+             class="btn btn-warning btn-sm">
+              Register
+          </a>
+
+      </div>
+            
+            </div>
 
         </div>
 
