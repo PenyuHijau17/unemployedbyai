@@ -3,61 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 class PaymentController extends Controller
 {
-
     public function index()
     {
-
         $cart = session()->get('cart', []);
 
-
         $total = 0;
-
-
         foreach ($cart as $item) {
-
             $total += $item['harga'] * $item['jumlah'];
-
         }
 
-
-        return view('payment.index', compact(
-            'cart',
-            'total'
-        ));
-
+        return view('payment.index', compact('cart','total'));
     }
-
-
 
     public function process(Request $request)
     {
-
         $request->validate([
-
             'metode' => 'required'
-
         ]);
 
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Keranjang kosong');
+        }
 
+        // hitung total
+        $total = collect($cart)->sum(fn($item) => $item['harga'] * $item['jumlah']);
 
-        $metode = $request->metode;
+        // buat order
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'tanggal' => now(),
+            'total'   => $total,
+            'status'  => 'pending',
+            'metode'  => $request->metode,
+        ]);
 
+        // buat order_details
+        foreach ($cart as $item) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'book_id'  => $item['id'],
+                'jumlah'   => $item['jumlah'],
+                'harga'    => $item['harga'],
+                'subtotal' => $item['harga'] * $item['jumlah'],
+            ]);
+        }
 
-
-        // kosongkan keranjang setelah bayar
-
+        // kosongkan keranjang
         session()->forget('cart');
 
-
-
-        return view('payment.success', compact(
-            'metode'
-        ));
-
+        return view('payment.success', [
+            'metode' => $request->metode,
+            'order'  => $order
+        ]);
     }
-
-
 }

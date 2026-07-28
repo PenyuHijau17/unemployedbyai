@@ -29,35 +29,16 @@ Route::get('/', [HomeController::class,'index'])
 
 Route::middleware('guest')->group(function(){
 
+    Route::get('/register', [AuthController::class,'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class,'register']);
 
-    Route::get('/register',
-        [AuthController::class,'showRegister']
-    )->name('register');
-
-
-    Route::post('/register',
-        [AuthController::class,'register']
-    );
-
-
-    Route::get('/login',
-        [AuthController::class,'showLogin']
-    )->name('login');
-
-
-    Route::post('/login',
-        [AuthController::class,'login']
-    );
-
-
+    Route::get('/login', [AuthController::class,'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class,'login']);
 });
 
-
-Route::post('/logout',
-    [AuthController::class,'logout']
-)
-->middleware('auth')
-->name('logout');
+Route::post('/logout', [AuthController::class,'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 
 
@@ -65,42 +46,22 @@ Route::post('/logout',
 // ADMIN
 // ==========================
 
-
 Route::middleware(['auth','role:admin'])->group(function(){
 
+    Route::get('/admin/dashboard', [DashboardController::class,'admin'])
+        ->name('admin.dashboard');
 
-    Route::get('/admin/dashboard',
-        [DashboardController::class,'admin']
-    )
-    ->name('admin.dashboard');
+    Route::resource('users', UserController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('books', BookController::class);
+    Route::resource('orders', AdminOrderController::class);
 
+    // route khusus update status pesanan
+    Route::put('/orders/{order}/status', [AdminOrderController::class,'updateStatus'])
+        ->name('orders.updateStatus');
 
-    Route::resource('users',
-        UserController::class
-    );
-
-
-    Route::resource('categories',
-        CategoryController::class
-    );
-
-
-    Route::resource('books',
-        BookController::class
-    );
-
-
-    Route::resource('orders',
-        AdminOrderController::class
-    );
-
-
-    Route::get('/reports',
-        [ReportController::class,'index']
-    )
-    ->name('reports.index');
-
-
+    Route::get('/reports', [ReportController::class,'index'])
+        ->name('reports.index');
 });
 
 
@@ -109,17 +70,11 @@ Route::middleware(['auth','role:admin'])->group(function(){
 // CUSTOMER BOOK
 // ==========================
 
+Route::get('/books-list', [BookController::class,'customerIndex'])
+    ->name('books.customer');
 
-Route::get('/books-list',
-    [BookController::class,'customerIndex']
-)
-->name('books.customer');
-
-
-Route::get('/books-list/{book}',
-    [BookController::class,'customerShow']
-)
-->name('books.customer.show');
+Route::get('/books-list/{book}', [BookController::class,'customerShow'])
+    ->name('books.customer.show');
 
 
 
@@ -127,23 +82,14 @@ Route::get('/books-list/{book}',
 // CART
 // ==========================
 
+Route::get('/cart', [CartController::class,'index'])
+    ->name('cart.index');
 
-Route::get('/cart',
-    [CartController::class,'index']
-)
-->name('cart.index');
+Route::post('/cart/add/{book}', [CartController::class,'add'])
+    ->name('cart.add');
 
-
-Route::post('/cart/add/{book}',
-    [CartController::class,'add']
-)
-->name('cart.add');
-
-
-Route::delete('/cart/remove/{id}',
-    [CartController::class,'remove']
-)
-->name('cart.remove');
+Route::delete('/cart/remove/{id}', [CartController::class,'remove'])
+    ->name('cart.remove');
 
 
 
@@ -151,14 +97,8 @@ Route::delete('/cart/remove/{id}',
 // PAYMENT
 // ==========================
 
+Route::get('/payment', [PaymentController::class,'index'])
+    ->name('payment.index');
 
-Route::get('/payment',
-    [PaymentController::class,'index']
-)
-->name('payment.index');
-
-
-Route::post('/payment/process',
-    [PaymentController::class,'process']
-)
-->name('payment.process');
+Route::post('/payment/process', [PaymentController::class,'process'])
+    ->name('payment.process');
