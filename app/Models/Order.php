@@ -18,6 +18,7 @@ class Order extends Model
 
     protected $casts = [
         'tanggal' => 'date',
+        'total' => 'decimal:2',
     ];
 
     public function user()

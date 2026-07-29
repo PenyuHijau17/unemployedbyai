@@ -9,307 +9,143 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-
-    // ==========================
-    // ADMIN LIST BOOK
-    // ==========================
-
-    public function index(Request $request)
+    /**
+     * ADMIN - Menampilkan semua buku
+     */
+    public function index()
     {
+        $books = Book::with('category')->latest()->get();
 
-        $search = $request->search;
-
-
-        $books = Book::with('category')
-
-            ->when($search, function ($query) use ($search) {
-
-                $query->where('judul','like','%'.$search.'%')
-                    ->orWhere('penulis','like','%'.$search.'%')
-                    ->orWhere('penerbit','like','%'.$search.'%');
-
-            })
-
-            ->get();
-
-
-
-        return view('books.index', compact('books'));
-
+        return view('admin.books.index', compact('books'));
     }
 
-
-
-
-    // ==========================
-    // CUSTOMER LIST BOOK
-    // ==========================
-
-    public function customerIndex(Request $request)
-    {
-
-
-        $search = $request->search;
-
-
-        $books = Book::with('category')
-
-            ->when($search, function($query) use ($search){
-
-                $query->where('judul','like','%'.$search.'%')
-                ->orWhere('penulis','like','%'.$search.'%');
-
-            })
-
-            ->get();
-
-
-
-        return view(
-            'books.customer',
-            compact('books')
-        );
-
-    }
-
-
-
-
-    // ==========================
-    // CUSTOMER DETAIL BOOK
-    // ==========================
-
-    public function customerShow(Book $book)
-    {
-
-        return view(
-            'books.customer-show',
-            compact('book')
-        );
-
-    }
-
-
-
-
-    // ==========================
-    // ADMIN CREATE
-    // ==========================
-
+    /**
+     * ADMIN - Form tambah buku
+     */
     public function create()
     {
-
         $categories = Category::all();
 
-
-        return view(
-            'books.create',
-            compact('categories')
-        );
-
+        return view('admin.books.create', compact('categories'));
     }
 
-
-
-
-
-    // ==========================
-    // ADMIN STORE
-    // ==========================
-
+    /**
+     * ADMIN - Simpan buku
+     */
     public function store(Request $request)
     {
-
-
-        $request->validate([
-
-            'category_id'=>'required',
-            'judul'=>'required',
-            'penulis'=>'required',
-            'penerbit'=>'required',
-            'tahun_terbit'=>'required',
-            'harga'=>'required|numeric',
-            'stok'=>'required|integer',
-            'deskripsi'=>'nullable',
-            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-
+        $validated = $request->validate([
+            'category_id'   => 'required|exists:categories,id',
+            'judul'         => 'required|string|max:255',
+            'penulis'       => 'required|string|max:255',
+            'penerbit'      => 'required|string|max:255',
+            'tahun_terbit'  => 'required|integer|min:1900|max:' . date('Y'),
+            'harga'         => 'required|numeric|min:0',
+            'stok'          => 'required|integer|min:0',
+            'gambar'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'deskripsi'     => 'nullable|string',
         ]);
 
-
-
-        $data=$request->all();
-
-
-
-        if($request->hasFile('gambar')){
-
-
-            $data['gambar'] =
-            $request->file('gambar')
-            ->store('books','public');
-
-
+        if ($request->hasFile('gambar')) {
+            $validated['gambar'] = $request->file('gambar')->store('books', 'public');
         }
 
-
-
-        Book::create($data);
-
-
+        Book::create($validated);
 
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil ditambahkan');
-
-
+            ->route('admin.books.index')
+            ->with('success', 'Buku berhasil ditambahkan.');
     }
 
-
-
-
-
-    // ==========================
-    // ADMIN SHOW
-    // ==========================
-
+    /**
+     * ADMIN - Detail buku
+     */
     public function show(Book $book)
     {
+        $book->load('category');
 
-        return view(
-            'books.show',
-            compact('book')
-        );
-
+        return view('admin.books.show', compact('book'));
     }
 
-
-
-
-
-    // ==========================
-    // ADMIN EDIT
-    // ==========================
-
+    /**
+     * ADMIN - Form edit
+     */
     public function edit(Book $book)
     {
-
-
         $categories = Category::all();
 
-
-
-        return view(
-            'books.edit',
-            compact(
-                'book',
-                'categories'
-            )
-        );
-
-
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
-
-
-
-
-    // ==========================
-    // ADMIN UPDATE
-    // ==========================
-
+    /**
+     * ADMIN - Update buku
+     */
     public function update(Request $request, Book $book)
     {
-
-
-        $request->validate([
-
-            'category_id'=>'required',
-            'judul'=>'required',
-            'penulis'=>'required',
-            'penerbit'=>'required',
-            'tahun_terbit'=>'required',
-            'harga'=>'required|numeric',
-            'stok'=>'required|integer',
-            'deskripsi'=>'nullable',
-            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-
+        $validated = $request->validate([
+            'category_id'   => 'required|exists:categories,id',
+            'judul'         => 'required|string|max:255',
+            'penulis'       => 'required|string|max:255',
+            'penerbit'      => 'required|string|max:255',
+            'tahun_terbit'  => 'required|integer|min:1900|max:' . date('Y'),
+            'harga'         => 'required|numeric|min:0',
+            'stok'          => 'required|integer|min:0',
+            'gambar'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'deskripsi'     => 'nullable|string',
         ]);
 
+        if ($request->hasFile('gambar')) {
 
-
-        $data=$request->all();
-
-
-
-        if($request->hasFile('gambar')){
-
-
-            if($book->gambar &&
-            Storage::disk('public')->exists($book->gambar)){
-
-
-                Storage::disk('public')
-                ->delete($book->gambar);
-
-
+            if ($book->gambar && Storage::disk('public')->exists($book->gambar)) {
+                Storage::disk('public')->delete($book->gambar);
             }
 
-
-
-            $data['gambar'] =
-            $request->file('gambar')
-            ->store('books','public');
-
-
+            $validated['gambar'] = $request->file('gambar')->store('books', 'public');
         }
 
-
-
-        $book->update($data);
-
-
+        $book->update($validated);
 
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil diperbarui');
-
-
+            ->route('admin.books.index')
+            ->with('success', 'Buku berhasil diperbarui.');
     }
 
-
-
-
-
-    // ==========================
-    // ADMIN DELETE
-    // ==========================
-
+    /**
+     * ADMIN - Hapus buku
+     */
     public function destroy(Book $book)
     {
-
-
-        if($book->gambar &&
-        Storage::disk('public')->exists($book->gambar)){
-
-
-            Storage::disk('public')
-            ->delete($book->gambar);
-
-
+        if ($book->gambar && Storage::disk('public')->exists($book->gambar)) {
+            Storage::disk('public')->delete($book->gambar);
         }
-
-
 
         $book->delete();
 
-
-
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil dihapus');
-
-
+            ->route('admin.books.index')
+            ->with('success', 'Buku berhasil dihapus.');
     }
 
+    /**
+     * CUSTOMER - Daftar buku
+     */
+    public function customerIndex()
+    {
+        $books = Book::with('category')
+            ->where('stok', '>', 0)
+            ->latest()
+            ->get();
 
+        return view('books.index', compact('books'));
+    }
+
+    /**
+     * CUSTOMER - Detail buku
+     */
+    public function customerShow(Book $book)
+    {
+        $book->load('category');
+
+        return view('books.show', compact('book'));
+    }
 }

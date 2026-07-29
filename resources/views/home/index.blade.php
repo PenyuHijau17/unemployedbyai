@@ -16,7 +16,7 @@
             Temukan berbagai koleksi buku terbaik dengan harga terjangkau.
         </p>
 
-        <a href="{{ route('books.index') }}" class="btn btn-warning btn-lg px-4 py-3">
+        <a href="{{ route('books.customer') }}" class="btn btn-warning btn-lg px-4 py-3">
             Jelajahi Buku
         </a>
 
@@ -71,9 +71,7 @@
 
 <div class="row">
 
-    @for($i = 1; $i <= 4; $i++)
-
-    <div class="col-lg-3 col-md-6 mb-4">
+    @for($i = 1; $i <= 4; $i++) <div class="col-lg-3 col-md-6 mb-4">
 
         <div class="card shadow h-100">
 
@@ -101,9 +99,9 @@
 
         </div>
 
-    </div>
+</div>
 
-    @endfor
+@endfor
 
 </div>
 

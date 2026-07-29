@@ -31,7 +31,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Menyimpan pesanan dari proses checkout.
+     * Proses checkout.
      */
     public function store()
     {
@@ -48,35 +48,34 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
+
             foreach ($carts as $cart) {
+
                 if ($cart->jumlah > $cart->book->stok) {
+
                     DB::rollBack();
 
                     return redirect()
                         ->route('cart.index')
-                        ->with(
-                            'error',
-                            'Stok buku "' . $cart->book->judul . '" tidak mencukupi.'
-                        );
+                        ->with('error', 'Stok buku "' . $cart->book->judul . '" tidak mencukupi.');
                 }
             }
 
-            $total = $carts->sum('subtotal');
-
             $order = Order::create([
-                'user_id' => Auth::id(),
-                'tanggal' => now()->toDateString(),
-                'total' => $total,
-                'status' => 'Menunggu',
+                'user_id'  => Auth::id(),
+                'tanggal'  => now()->toDateString(),
+                'total'    => $carts->sum('subtotal'),
+                'status'   => 'Menunggu',
             ]);
 
             foreach ($carts as $cart) {
+
                 OrderDetail::create([
-                    'order_id' => $order->id,
-                    'book_id' => $cart->book_id,
-                    'jumlah' => $cart->jumlah,
-                    'harga' => $cart->book->harga,
-                    'subtotal' => $cart->subtotal,
+                    'order_id'  => $order->id,
+                    'book_id'   => $cart->book_id,
+                    'jumlah'    => $cart->jumlah,
+                    'harga'     => $cart->book->harga,
+                    'subtotal'  => $cart->subtotal,
                 ]);
 
                 $cart->book->decrement('stok', $cart->jumlah);
@@ -87,22 +86,20 @@ class OrderController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('orders.show', $order->id)
+                ->route('orders.show', $order)
                 ->with('success', 'Pesanan berhasil dibuat.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+
             DB::rollBack();
 
             return redirect()
                 ->route('cart.index')
-                ->with(
-                    'error',
-                    'Terjadi kesalahan saat membuat pesanan.'
-                );
+                ->with('error', $e->getMessage());
         }
     }
 
     /**
-     * Menampilkan riwayat pesanan customer.
+     * Riwayat pesanan.
      */
     public function index()
     {
@@ -114,11 +111,11 @@ class OrderController extends Controller
     }
 
     /**
-     * Menampilkan detail pesanan.
+     * Detail pesanan.
      */
     public function show(Order $order)
     {
-        if ($order->user_id !== Auth::id()) {
+        if ($order->user_id != Auth::id()) {
             abort(403);
         }
 

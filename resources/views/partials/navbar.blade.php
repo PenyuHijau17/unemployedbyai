@@ -1,17 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand fw-bold" href="{{ route('home') }}">
             📚 Toko Buku
         </a>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 
             <span class="navbar-toggler-icon"></span>
 
@@ -22,39 +17,44 @@
             <ul class="navbar-nav me-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Home</a>
+                    <a class="nav-link" href="{{ route('home') }}">
+                        Home
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Daftar Buku</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Kategori</a>
+                    <a class="nav-link" href="{{ route('books.customer') }}">
+                        Daftar Buku
+                    </a>
                 </li>
 
             </ul>
 
-            <form class="d-flex me-3">
+            @auth
 
-                <input
-                    class="form-control me-2"
-                    type="search"
-                    placeholder="Cari buku">
+            <a href="{{ route('cart.index') }}" class="btn btn-outline-light me-2">
+                Keranjang
+            </a>
 
-                <button class="btn btn-light">
-                    Cari
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+
+                <button type="submit" class="btn btn-warning">
+                    Logout
                 </button>
-
             </form>
 
-            <a href="#" class="btn btn-outline-light me-2">
+            @else
+
+            <a href="{{ route('login') }}" class="btn btn-outline-light me-2">
                 Login
             </a>
 
-            <a href="#" class="btn btn-warning">
+            <a href="{{ route('register') }}" class="btn btn-warning">
                 Register
             </a>
+
+            @endauth
 
         </div>
 

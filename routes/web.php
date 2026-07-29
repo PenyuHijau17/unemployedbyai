@@ -10,18 +10,20 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 
+
 /*
 |--------------------------------------------------------------------------
-| Home
+| HOME
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
+
 /*
 |--------------------------------------------------------------------------
-| Guest
+| GUEST
 |--------------------------------------------------------------------------
 */
 
@@ -36,11 +38,13 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('/login', [AuthController::class, 'login']);
+
 });
+
 
 /*
 |--------------------------------------------------------------------------
-| Logout
+| LOGOUT
 |--------------------------------------------------------------------------
 */
 
@@ -48,41 +52,57 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
+
 /*
 |--------------------------------------------------------------------------
-| Admin Dashboard
+| ADMIN
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
+        ->name('admin.dashboard');
+
+    Route::resource('/admin/books', BookController::class)
+        ->names([
+            'index'   => 'admin.books.index',
+            'create'  => 'books.create',
+            'store'   => 'books.store',
+            'show'    => 'books.show',
+            'edit'    => 'books.edit',
+            'update'  => 'books.update',
+            'destroy' => 'books.destroy',
+        ]);
+
+    Route::resource('/users', UserController::class);
+
+});
+
 
 /*
 |--------------------------------------------------------------------------
-| User
+| CUSTOMER - BOOKS
 |--------------------------------------------------------------------------
 */
 
-Route::resource('users', UserController::class);
+Route::get('/books', [BookController::class, 'customerIndex'])
+    ->name('books.customer');
+
+Route::get('/books/{book}', [BookController::class, 'customerShow'])
+    ->name('books.customer.show');
+
 
 /*
 |--------------------------------------------------------------------------
-| Books
-|--------------------------------------------------------------------------
-*/
-
-Route::resource('books', BookController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Cart & Checkout
+| CUSTOMER - CART & ORDER
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth')->group(function () {
 
-    // Cart
+    // CART
+
     Route::get('/cart', [CartController::class, 'index'])
         ->name('cart.index');
 
@@ -95,17 +115,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/{cart}', [CartController::class, 'destroy'])
         ->name('cart.destroy');
 
-    // Checkout
+
+    // CHECKOUT
+
     Route::get('/checkout', [OrderController::class, 'checkout'])
         ->name('checkout');
 
     Route::post('/checkout', [OrderController::class, 'store'])
         ->name('checkout.store');
 
-    // Riwayat Pesanan
+
+    // RIWAYAT PESANAN
+
     Route::get('/orders', [OrderController::class, 'index'])
         ->name('orders.index');
 
     Route::get('/orders/{order}', [OrderController::class, 'show'])
         ->name('orders.show');
+
 });

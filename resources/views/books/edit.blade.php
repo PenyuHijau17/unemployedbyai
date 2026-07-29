@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Edit Buku</title>
 
@@ -8,32 +9,30 @@
 
 <body>
 
-<div class="container mt-5">
+    <div class="container mt-5">
 
-    <div class="card shadow">
+        <div class="card shadow">
 
-        <div class="card-header bg-warning">
+            <div class="card-header bg-warning">
 
-            <h3>Edit Buku</h3>
+                <h3>Edit Buku</h3>
 
-        </div>
+            </div>
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <form action="{{ route('books.update',$book->id) }}"
-                  method="POST"
-                  enctype="multipart/form-data">
+                <form action="{{ route('books.update',$book->id) }}" method="POST" enctype="multipart/form-data">
 
-                @csrf
-                @method('PUT')
+                    @csrf
+                    @method('PUT')
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Kategori</label>
+                        <label class="form-label">Kategori</label>
 
-                    <select name="category_id" class="form-control">
+                        <select name="category_id" class="form-control">
 
-                        @foreach($categories as $category)
+                            @foreach($categories as $category)
 
                             <option value="{{ $category->id }}"
                                 {{ $book->category_id == $category->id ? 'selected' : '' }}>
@@ -42,150 +41,122 @@
 
                             </option>
 
-                        @endforeach
+                            @endforeach
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Judul Buku</label>
+                        <label class="form-label">Judul Buku</label>
 
-                    <input type="text"
-                           name="judul"
-                           class="form-control"
-                           value="{{ $book->judul }}">
+                        <input type="text" name="judul" class="form-control" value="{{ $book->judul }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Penulis</label>
+                        <label class="form-label">Penulis</label>
 
-                    <input type="text"
-                           name="penulis"
-                           class="form-control"
-                           value="{{ $book->penulis }}">
+                        <input type="text" name="penulis" class="form-control" value="{{ $book->penulis }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Penerbit</label>
+                        <label class="form-label">Penerbit</label>
 
-                    <input type="text"
-                           name="penerbit"
-                           class="form-control"
-                           value="{{ $book->penerbit }}">
+                        <input type="text" name="penerbit" class="form-control" value="{{ $book->penerbit }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Tahun Terbit</label>
+                        <label class="form-label">Tahun Terbit</label>
 
-                    <input type="number"
-                           name="tahun_terbit"
-                           class="form-control"
-                           value="{{ $book->tahun_terbit }}">
+                        <input type="number" name="tahun_terbit" class="form-control" value="{{ $book->tahun_terbit }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Harga</label>
+                        <label class="form-label">Harga</label>
 
-                    <input type="number"
-                           name="harga"
-                           class="form-control"
-                           value="{{ $book->harga }}">
+                        <input type="number" name="harga" class="form-control" value="{{ $book->harga }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">Stok</label>
+                        <label class="form-label">Stok</label>
 
-                    <input type="number"
-                           name="stok"
-                           class="form-control"
-                           value="{{ $book->stok }}">
+                        <input type="number" name="stok" class="form-control" value="{{ $book->stok }}">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">
-                        Gambar Saat Ini
-                    </label>
+                        <label class="form-label">
+                            Gambar Saat Ini
+                        </label>
 
-                    <br>
+                        <br>
 
-                    @if($book->gambar)
+                        @if($book->gambar)
 
-                        <img
-                            src="{{ asset('storage/'.$book->gambar) }}"
-                            width="150"
-                            class="img-thumbnail mb-2">
+                        <img src="{{ asset('storage/'.$book->gambar) }}" width="150" class="img-thumbnail mb-2">
 
-                    @else
+                        @else
 
                         <p class="text-muted">
                             Belum ada gambar.
                         </p>
 
-                    @endif
+                        @endif
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">
-                        Ganti Gambar
-                    </label>
+                        <label class="form-label">
+                            Ganti Gambar
+                        </label>
 
-                    <input
-                        type="file"
-                        name="gambar"
-                        class="form-control"
-                        accept="image/*">
+                        <input type="file" name="gambar" class="form-control" accept="image/*">
 
-                </div>
+                    </div>
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label class="form-label">
-                        Deskripsi
-                    </label>
+                        <label class="form-label">
+                            Deskripsi
+                        </label>
 
-                    <textarea
-                        name="deskripsi"
-                        class="form-control"
-                        rows="4">{{ $book->deskripsi }}</textarea>
+                        <textarea name="deskripsi" class="form-control" rows="4">{{ $book->deskripsi }}</textarea>
 
-                </div>
+                    </div>
 
-                <button class="btn btn-success">
+                    <button class="btn btn-success">
 
-                    Update Buku
+                        Update Buku
 
-                </button>
+                    </button>
 
-                <a href="{{ route('books.index') }}"
-                   class="btn btn-secondary">
+                    <a href="{{ route('books.customer') }}" class="btn btn-secondary">
 
-                    Kembali
+                        Kembali
 
-                </a>
+                    </a>
 
-            </form>
+                </form>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

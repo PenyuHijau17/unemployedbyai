@@ -10,21 +10,20 @@
 <div class="container mt-5">
 
 
-<div class="card shadow border-0 rounded-4">
+    <div class="card shadow border-0 rounded-4">
 
 
-<div class="row g-0">
+        <div class="row g-0">
 
 
 
-<div class="col-md-5 p-4 text-center">
+            <div class="col-md-5 p-4 text-center">
 
 
-@if($book->gambar)
+                @if($book->gambar)
 
 
-<img src="{{ asset('storage/'.$book->gambar) }}"
-style="
+                <img src="{{ asset('storage/'.$book->gambar) }}" style="
 width:100%;
 height:420px;
 object-fit:contain;
@@ -34,134 +33,129 @@ border-radius:15px;
 
 
 
-@else
+                @else
 
 
-<div class="bg-light rounded p-5">
+                <div class="bg-light rounded p-5">
 
-📖
+                    📖
 
-</div>
+                </div>
 
 
-@endif
+                @endif
 
 
 
-</div>
+            </div>
 
 
 
 
 
-<div class="col-md-7">
+            <div class="col-md-7">
 
 
-<div class="p-5">
+                <div class="p-5">
 
 
-<h2 class="fw-bold">
+                    <h2 class="fw-bold">
 
-{{ $book->judul }}
+                        {{ $book->judul }}
 
-</h2>
+                    </h2>
 
 
 
-<p>
+                    <p>
 
-✍️ Penulis :
+                        ✍️ Penulis :
 
-{{ $book->penulis }}
+                        {{ $book->penulis }}
 
-</p>
+                    </p>
 
 
 
-<p>
+                    <p>
 
-🏢 Penerbit :
+                        🏢 Penerbit :
 
-{{ $book->penerbit }}
+                        {{ $book->penerbit }}
 
-</p>
+                    </p>
 
 
 
-<p>
+                    <p>
 
-📅 Tahun :
+                        📅 Tahun :
 
-{{ $book->tahun_terbit }}
+                        {{ $book->tahun_terbit }}
 
-</p>
+                    </p>
 
 
 
 
-<h3 class="text-primary">
+                    <h3 class="text-primary">
 
-Rp {{ number_format($book->harga,0,',','.') }}
+                        Rp {{ number_format($book->harga,0,',','.') }}
 
-</h3>
+                    </h3>
 
 
 
 
-<p>
+                    <p>
 
-{{ $book->deskripsi }}
+                        {{ $book->deskripsi }}
 
-</p>
+                    </p>
 
 
 
 
-<form action="{{ route('cart.add',$book->id) }}"
-method="POST">
+                    <form action="{{ route('cart.store',$book->id) }}" method="POST">
 
 
-@csrf
+                        @csrf
 
 
 
-<label>
+                        <label>
 
-Jumlah
+                            Jumlah
 
-</label>
+                        </label>
 
 
-<input type="number"
-name="jumlah"
-value="1"
-min="1"
-max="{{ $book->stok }}"
-class="form-control mb-3">
+                        <input type="number" name="jumlah" value="1" min="1" max="{{ $book->stok }}"
+                            class="form-control mb-3">
 
 
-<button class="btn btn-success">
+                        <button class="btn btn-success">
 
-🛒 Tambahkan Keranjang
+                            🛒 Tambahkan Keranjang
 
-</button>
+                        </button>
 
 
-</form>
+                    </form>
 
 
 
 
-</div>
+                </div>
 
 
-</div>
+            </div>
 
 
-</div>
+        </div>
 
 
-</div>
+    </div>
 
 
 </div>

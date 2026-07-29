@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('layouts.app')
 
 @section('title','Data Buku')
 
@@ -7,9 +7,9 @@
 <div class="container-fluid">
 
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
 
     <div class="card shadow">
@@ -30,15 +30,11 @@
 
         <div class="card-body">
 
-            <form action="{{ route('books.index') }}" method="GET" class="mb-4">
+            <form action="{{ route('books.customer') }}" method="GET" class="mb-4">
 
                 <div class="input-group">
 
-                    <input
-                        type="text"
-                        name="search"
-                        class="form-control"
-                        placeholder="Cari judul, penulis, penerbit..."
+                    <input type="text" name="search" class="form-control" placeholder="Cari judul, penulis, penerbit..."
                         value="{{ request('search') }}">
 
                     <button class="btn btn-primary">
@@ -73,7 +69,7 @@
 
                     <tbody>
 
-                    @forelse($books as $book)
+                        @forelse($books as $book)
 
                         <tr>
 
@@ -81,17 +77,14 @@
 
                                 @if($book->gambar)
 
-                                    <img src="{{ asset('storage/'.$book->gambar) }}"
-                                         width="60"
-                                         height="80"
-                                         style="object-fit:cover"
-                                         class="rounded">
+                                <img src="{{ asset('storage/'.$book->gambar) }}" width="60" height="80"
+                                    style="object-fit:cover" class="rounded">
 
                                 @else
 
-                                    <span class="text-muted">
-                                        -
-                                    </span>
+                                <span class="text-muted">
+                                    -
+                                </span>
 
                                 @endif
 
@@ -113,30 +106,24 @@
 
                             <td>
 
-                                <a href="{{ route('books.show',$book->id) }}"
-                                   class="btn btn-info btn-sm">
+                                <a href="{{ route('books.show',$book->id) }}" class="btn btn-info btn-sm">
 
                                     <i class="bi bi-eye"></i>
 
                                 </a>
 
-                                <a href="{{ route('books.edit',$book->id) }}"
-                                   class="btn btn-warning btn-sm">
+                                <a href="{{ route('books.edit',$book->id) }}" class="btn btn-warning btn-sm">
 
                                     <i class="bi bi-pencil"></i>
 
                                 </a>
 
-                                <form action="{{ route('books.destroy',$book->id) }}"
-                                      method="POST"
-                                      class="d-inline">
+                                <form action="{{ route('books.destroy',$book->id) }}" method="POST" class="d-inline">
 
                                     @csrf
                                     @method('DELETE')
 
-                                    <button
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Hapus buku ini?')">
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus buku ini?')">
 
                                         <i class="bi bi-trash"></i>
 
@@ -148,7 +135,7 @@
 
                         </tr>
 
-                    @empty
+                        @empty
 
                         <tr>
 
@@ -160,7 +147,7 @@
 
                         </tr>
 
-                    @endforelse
+                        @endforelse
 
                     </tbody>
 
