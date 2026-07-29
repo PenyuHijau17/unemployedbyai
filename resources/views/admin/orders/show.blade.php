@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container">
@@ -7,6 +7,7 @@
     <p><strong>Tanggal:</strong> {{ $order->tanggal }}</p>
     <p><strong>Total:</strong> Rp{{ number_format($order->total,0,',','.') }}</p>
     <p><strong>Status:</strong> {{ $order->status }}</p>
+    <p><strong>Metode:</strong> {{ $order->metode }}</p>
 
     <h3>Detail Item</h3>
     <table class="table table-bordered">
@@ -29,5 +30,19 @@
             @endforeach
         </tbody>
     </table>
+
+    <h3>Ubah Status Pesanan</h3>
+    <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <div class="mb-3">
+            <select name="status" class="form-select">
+                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
 </div>
 @endsection

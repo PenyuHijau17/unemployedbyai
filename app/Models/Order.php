@@ -14,6 +14,7 @@ class Order extends Model
         'tanggal',
         'total',
         'status',
+        'metode', // tambahkan ini biar field metode tersimpan
     ];
 
     // relasi ke user

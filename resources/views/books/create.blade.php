@@ -10,13 +10,22 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">Tambah Buku</h2>
+    {{-- Menampilkan Error Validasi --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
+    <h2 class="mb-4">Tambah Buku</h2>
 
     <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
 
         @csrf
-
 
         <div class="mb-3">
             <label class="form-label">
@@ -36,8 +45,6 @@
             </select>
         </div>
 
-
-
         <div class="mb-3">
 
             <label class="form-label">
@@ -49,8 +56,6 @@
             class="form-control">
 
         </div>
-
-
 
         <div class="mb-3">
 
@@ -64,8 +69,6 @@
 
         </div>
 
-
-
         <div class="mb-3">
 
             <label class="form-label">
@@ -77,8 +80,6 @@
             class="form-control">
 
         </div>
-
-
 
         <div class="mb-3">
 
@@ -92,8 +93,6 @@
 
         </div>
 
-
-
         <div class="mb-3">
 
             <label class="form-label">
@@ -105,8 +104,6 @@
             class="form-control">
 
         </div>
-
-
 
         <div class="mb-3">
 
@@ -130,9 +127,7 @@
                 name="gambar"
                 class="form-control"
                 accept="image/*">
-</div>
-
-
+        </div>
 
         <div class="mb-3">
 
@@ -140,28 +135,24 @@
                 Deskripsi
             </label>
 
-            <textarea name="deskripsi"
-            class="form-control"></textarea>
+            <textarea
+                name="deskripsi"
+                class="form-control"></textarea>
 
         </div>
-
-
 
         <button class="btn btn-success">
             Simpan
         </button>
-
 
         <a href="{{ route('books.index') }}"
         class="btn btn-secondary">
             Kembali
         </a>
 
-
     </form>
 
 </div>
-
 
 </body>
 </html>
