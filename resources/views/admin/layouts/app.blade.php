@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title','UnemployedByAI Admin')</title>
 
-    <!-- Bootstrap CSS -->
+    <title>@yield('title', 'Admin Dashboard')</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
 
-    <!-- CSS custom admin -->
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
-<body class="bg-light">
 
-    {{-- Navbar Admin --}}
-    @include('admin.layouts.navbar')
+<body>
 
-    <div class="container-fluid">
-        <div class="row">
-            {{-- Sidebar Admin --}}
-            <div class="col-md-2 bg-dark text-white min-vh-100">
-                @include('admin.layouts.sidebar')
-            </div>
+<div class="wrapper">
 
-            {{-- Konten Utama --}}
-            <div class="col-md-10 py-4">
-                @yield('content')
-            </div>
-        </div>
+    {{-- Sidebar --}}
+    @include('admin.layouts.sidebar')
+
+    <div class="main-content">
+
+        {{-- Navbar --}}
+        @include('admin.layouts.navbar')
+
+        <main class="content">
+            @yield('content')
+        </main>
+
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
