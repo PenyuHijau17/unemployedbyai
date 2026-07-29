@@ -1,38 +1,335 @@
 @extends('layouts.app')
 
-@section('title','Daftar Buku')
-
+@section('title','Koleksi Buku')
 
 @section('content')
 
 
-<div class="container mt-5">
+<style>
+
+body{
+    background:#F8F6F2;
+}
 
 
-<h2 class="text-center fw-bold mb-5">
+.catalog-header{
 
-📚 Koleksi Buku
+    background:#F2ECE2;
 
-</h2>
+    border-radius:25px;
+
+    padding:45px;
+
+    margin-bottom:40px;
+
+}
+
+
+.catalog-header h1{
+
+    color:#4E392B;
+
+    font-weight:700;
+
+}
+
+
+.catalog-header p{
+
+    color:#777;
+
+}
+
+
+
+
+
+.search-box{
+
+    background:white;
+
+    border-radius:50px;
+
+    padding:8px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+
+
+
+.search-box input{
+
+    border:none;
+
+    padding:14px 20px;
+
+    border-radius:50px;
+
+}
+
+
+
+.search-box input:focus{
+
+    box-shadow:none;
+
+}
+
+
+
+
+.btn-search{
+
+    background:#6A513B;
+
+    color:white;
+
+    border-radius:50px;
+
+    padding:12px 30px;
+
+    border:none;
+
+}
+
+
+
+.btn-search:hover{
+
+    background:#523E2E;
+
+    color:white;
+
+}
+
+
+
+
+
+.book-card{
+
+    background:white;
+
+    border:none;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    height:100%;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+}
+
+
+
+.book-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+
+
+
+
+.book-image{
+
+    height:280px;
+
+    background:#F5EFE6;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+}
+
+
+
+.book-image img{
+
+    max-height:250px;
+
+    max-width:100%;
+
+    object-fit:contain;
+
+}
+
+
+
+
+
+.no-image{
+
+    font-size:70px;
+
+    color:#A8844F;
+
+}
+
+
+
+
+
+.book-body{
+
+    padding:25px;
+
+}
+
+
+
+.book-title{
+
+    color:#4E392B;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    height:50px;
+
+    overflow:hidden;
+
+}
+
+
+
+
+.book-author{
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+
+
+
+.book-price{
+
+    color:#A8844F;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+
+
+.btn-detail{
+
+    background:#6A513B;
+
+    color:white;
+
+    border-radius:30px;
+
+    padding:10px;
+
+    border:none;
+
+}
+
+
+
+.btn-detail:hover{
+
+    background:#523E2E;
+
+    color:white;
+
+}
+
+
+
+
+.category-tag{
+
+    background:#E8DCC8;
+
+    color:#6A513B;
+
+    font-size:13px;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    display:inline-block;
+
+    margin-bottom:10px;
+
+}
+
+
+
+</style>
+
+
+
+
+<div class="container py-5">
+
+
+
+<div class="catalog-header text-center">
+
+
+<h1>
+
+<i class="bi bi-bookshelf me-2"></i>
+
+Koleksi Buku
+
+</h1>
+
+
+<p>
+
+Temukan buku favoritmu dari berbagai kategori pilihan.
+
+</p>
 
 
 
 <form action="{{ route('books.customer') }}"
-method="GET"
-class="mb-4">
+method="GET">
 
 
-<div class="input-group">
+<div class="search-box d-flex">
 
 
-<input type="text"
+<input
+
+type="text"
+
 name="search"
+
 value="{{ request('search') }}"
+
 class="form-control"
-placeholder="Cari buku...">
+
+placeholder="Cari judul, penulis, atau penerbit...">
 
 
-<button class="btn btn-primary">
+<button class="btn btn-search">
+
+<i class="bi bi-search me-2"></i>
 
 Cari
 
@@ -45,53 +342,48 @@ Cari
 </form>
 
 
+</div>
+
+
+
 
 
 <div class="row g-4">
 
 
 
-@foreach($books as $book)
+@forelse($books as $book)
 
 
 
-<div class="col-lg-3 col-md-4 col-sm-6">
+<div class="col-xl-3 col-lg-4 col-md-6">
 
 
 
-<div class="card shadow border-0 rounded-4 h-100">
+<div class="book-card">
 
 
 
-<div class="text-center p-3">
+<div class="book-image">
 
 
 @if($book->gambar)
 
 
-<img src="{{ asset('storage/'.$book->gambar) }}"
-style="
-width:160px;
-height:220px;
-object-fit:contain;
-">
+<img
+
+src="{{ asset('storage/'.$book->gambar) }}"
+
+alt="{{ $book->judul }}">
+
 
 
 @else
 
 
-<div style="
-width:160px;
-height:220px;
-margin:auto;
-background:#eee;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:50px;
-">
+<div class="no-image">
 
-📖
+<i class="bi bi-book"></i>
 
 </div>
 
@@ -105,45 +397,59 @@ font-size:50px;
 
 
 
-<div class="card-body">
+
+<div class="book-body">
 
 
-<h5 class="fw-bold">
+
+<span class="category-tag">
+
+{{ $book->category->nama_kategori ?? 'Umum' }}
+
+</span>
+
+
+
+
+<h5 class="book-title">
 
 {{ $book->judul }}
 
 </h5>
 
 
-<p class="text-muted">
-
-✍️ {{ $book->penulis }}
-
-</p>
 
 
+<p class="book-author">
 
-<p>
+<i class="bi bi-person"></i>
 
-{{ $book->category->nama_kategori ?? '-' }}
+{{ $book->penulis }}
 
 </p>
 
 
 
-<h5 class="text-primary fw-bold">
+
+<div class="book-price mb-3">
 
 Rp {{ number_format($book->harga,0,',','.') }}
 
-</h5>
+</div>
+
 
 
 
 
 <a href="{{ route('books.customer.show',$book->id) }}"
-class="btn btn-warning w-100">
+
+class="btn btn-detail w-100">
+
+
+<i class="bi bi-eye me-2"></i>
 
 Lihat Detail
+
 
 </a>
 
@@ -155,14 +461,35 @@ Lihat Detail
 </div>
 
 
+
+</div>
+
+
+
+@empty
+
+
+
+<div class="col-12">
+
+
+<div class="alert alert-warning text-center">
+
+Buku tidak ditemukan.
+
 </div>
 
 
-@endforeach
+</div>
+
+
+@endforelse
+
 
 
 
 </div>
+
 
 
 </div>

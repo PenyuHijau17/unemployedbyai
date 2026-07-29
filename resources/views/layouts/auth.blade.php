@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
 
@@ -7,30 +7,76 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     <title>
-        @yield('title')
+        @yield('title','Pustaka Nusantara')
     </title>
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+    <!-- Bootstrap -->
+    <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet">
+
+
+    <!-- Bootstrap Icon -->
+    <link 
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link 
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+
+
+    <style>
+
+        *{
+            font-family:'Inter',sans-serif;
+        }
+
+
+        h1,h2,h3,h4{
+
+            font-family:'Playfair Display',serif;
+
+        }
+
+
+        body{
+
+            margin:0;
+
+            min-height:100vh;
+
+        }
+
+
+    </style>
+
 
 </head>
 
 
-<body class="bg-light">
+<body>
 
 
-<div class="container">
-
-    @yield('content')
-
-</div>
+@yield('content')
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script 
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 
 </body>
+
 
 </html>
