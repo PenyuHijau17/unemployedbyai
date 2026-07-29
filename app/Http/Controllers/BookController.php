@@ -231,7 +231,7 @@ class BookController extends Controller
             'harga'=>'required|numeric',
             'stok'=>'required|integer',
             'deskripsi'=>'nullable',
-            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:2048',
 
         ]);
 
