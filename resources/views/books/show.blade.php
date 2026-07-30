@@ -4,89 +4,162 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="page-header fade-up">
 
-    <div class="card shadow">
+    <div>
 
-        <div class="card-header">
-            <h4>Detail Buku</h4>
+        <h2>Detail Buku</h2>
+
+        <p>Informasi lengkap mengenai buku.</p>
+
+    </div>
+
+    <a href="{{ route('books.index') }}" class="btn btn-light">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Kembali
+
+    </a>
+
+</div>
+
+<div class="detail-card fade-up">
+
+    <div class="row align-items-start">
+
+        <div class="col-lg-4 text-center">
+
+            @if($book->gambar)
+
+                <img
+                    src="{{ asset('storage/'.$book->gambar) }}"
+                    class="book-detail-cover">
+
+            @else
+
+                <div class="book-placeholder-detail">
+
+                    <i class="bi bi-book-half"></i>
+
+                </div>
+
+            @endif
+
         </div>
 
-        <div class="card-body">
+        <div class="col-lg-8">
 
-            <div class="row">
+            <h3 class="mb-3 fw-bold">
 
-                <div class="col-md-4 text-center">
+                {{ $book->judul }}
 
-                    @if($book->gambar)
-                        <img src="{{ asset('storage/'.$book->gambar) }}"
-                             class="img-fluid rounded"
-                             style="max-height:350px;object-fit:contain;">
-                    @else
-                        <div class="alert alert-secondary">
-                            Tidak ada gambar
-                        </div>
-                    @endif
+            </h3>
 
-                </div>
+            <table class="table table-borderless detail-table">
 
-                <div class="col-md-8">
+                <tr>
+                    <th width="180">Kategori</th>
+                    <td>
+                        <span class="badge-category">
+                            {{ $book->category->nama_kategori ?? '-' }}
+                        </span>
+                    </td>
+                </tr>
 
-                    <table class="table">
+                <tr>
+                    <th>Penulis</th>
+                    <td>{{ $book->penulis }}</td>
+                </tr>
 
-                        <tr>
-                            <th width="180">Judul</th>
-                            <td>{{ $book->judul }}</td>
-                        </tr>
+                <tr>
+                    <th>Penerbit</th>
+                    <td>{{ $book->penerbit }}</td>
+                </tr>
 
-                        <tr>
-                            <th>Kategori</th>
-                            <td>{{ $book->category->nama_kategori ?? '-' }}</td>
-                        </tr>
+                <tr>
+                    <th>Tahun Terbit</th>
+                    <td>{{ $book->tahun_terbit }}</td>
+                </tr>
 
-                        <tr>
-                            <th>Penulis</th>
-                            <td>{{ $book->penulis }}</td>
-                        </tr>
+                <tr>
+                    <th>Harga</th>
+                    <td>
 
-                        <tr>
-                            <th>Penerbit</th>
-                            <td>{{ $book->penerbit }}</td>
-                        </tr>
+                        <strong class="text-primary">
 
-                        <tr>
-                            <th>Tahun</th>
-                            <td>{{ $book->tahun_terbit }}</td>
-                        </tr>
+                            Rp {{ number_format($book->harga,0,',','.') }}
 
-                        <tr>
-                            <th>Harga</th>
-                            <td>Rp {{ number_format($book->harga,0,',','.') }}</td>
-                        </tr>
+                        </strong>
 
-                        <tr>
-                            <th>Stok</th>
-                            <td>{{ $book->stok }}</td>
-                        </tr>
+                    </td>
+                </tr>
 
-                        <tr>
-                            <th>Deskripsi</th>
-                            <td>{{ $book->deskripsi }}</td>
-                        </tr>
+                <tr>
 
-                    </table>
+                    <th>Stok</th>
 
-                    <a href="{{ route('books.edit',$book->id) }}"
-                       class="btn btn-warning">
-                        Edit
-                    </a>
+                    <td>
 
-                    <a href="{{ route('books.index') }}"
-                       class="btn btn-secondary">
-                        Kembali
-                    </a>
+                        @if($book->stok > 10)
 
-                </div>
+                            <span class="badge-stock success">
+
+                                {{ $book->stok }}
+
+                            </span>
+
+                        @elseif($book->stok > 0)
+
+                            <span class="badge-stock warning">
+
+                                {{ $book->stok }}
+
+                            </span>
+
+                        @else
+
+                            <span class="badge-stock danger">
+
+                                Habis
+
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Deskripsi</th>
+
+                    <td>{{ $book->deskripsi ?: '-' }}</td>
+
+                </tr>
+
+            </table>
+
+            <div class="mt-4">
+
+                <a href="{{ route('books.edit',$book->id) }}"
+                    class="btn btn-warning">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Edit Buku
+
+                </a>
+
+                <a href="{{ route('books.index') }}"
+                    class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Kembali
+
+                </a>
 
             </div>
 
