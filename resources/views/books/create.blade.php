@@ -13,138 +13,180 @@
 
         <h2 class="mb-4">Tambah Buku</h2>
 
+        {{-- Menampilkan Error Validasi --}}
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+
+        <h2 class="mb-4">Tambah Buku</h2>
 
         <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
 
             @csrf
-
 
             <div class="mb-3">
                 <label class="form-label">
                     Kategori
                 </label>
 
-                <select name="category_id" class="form-control">
-
-                    @foreach($categories as $category)
-
-                    <option value="{{ $category->id }}">
-                        {{ $category->nama_kategori }}
-                    </option>
-
-                    @endforeach
-
-                </select>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">
+                        Kategori
+                    </label>
 
 
+                    <select name="category_id" class="form-control">
 
-            <div class="mb-3">
+                        @foreach($categories as $category)
 
-                <label class="form-label">
-                    Judul Buku
-                </label>
+                        <option value="{{ $category->id }}">
+                            {{ $category->nama_kategori }}
+                        </option>
 
-                <input type="text" name="judul" class="form-control">
+                        @endforeach
 
-            </div>
+                    </select>
+                </div>
 
+                <div class="mb-3">
 
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Penulis
-                </label>
-
-                <input type="text" name="penulis" class="form-control">
-
-            </div>
+                    <div class="mb-3">
 
 
+                        <label class="form-label">
+                            Judul Buku
+                        </label>
 
-            <div class="mb-3">
+                        <input type="text" name="judul" class="form-control">
 
-                <label class="form-label">
-                    Penerbit
-                </label>
+                    </div>
 
-                <input type="text" name="penerbit" class="form-control">
+                    <div class="mb-3">
 
-            </div>
-
-
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Tahun Terbit
-                </label>
-
-                <input type="number" name="tahun_terbit" class="form-control">
-
-            </div>
+                        <div class="mb-3">
 
 
+                            <label class="form-label">
+                                Penulis
+                            </label>
 
-            <div class="mb-3">
+                            <input type="text" name="penulis" class="form-control">
 
-                <label class="form-label">
-                    Harga
-                </label>
+                        </div>
 
-                <input type="number" name="harga" class="form-control">
+                        <div class="mb-3">
 
-            </div>
+                            <div class="mb-3">
+
+
+                                <label class="form-label">
+                                    Penerbit
+                                </label>
+
+                                <input type="text" name="penerbit" class="form-control">
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <div class="mb-3">
+
+
+                                    <label class="form-label">
+                                        Tahun Terbit
+                                    </label>
+
+                                    <input type="number" name="tahun_terbit" class="form-control">
+
+                                </div>
 
 
 
-            <div class="mb-3">
 
-                <label class="form-label">
-                    Stok
-                </label>
+                                <div class="mb-3">
 
-                <input type="number" name="stok" class="form-control">
-
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">
-                    Gambar Buku
-                </label>
-
-                <input type="file" name="gambar" class="form-control" accept="image/*">
-            </div>
+                                    <div class="mb-3">
 
 
+                                        <label class="form-label">
+                                            Harga
+                                        </label>
 
-            <div class="mb-3">
+                                        <input type="number" name="harga" class="form-control">
 
-                <label class="form-label">
-                    Deskripsi
-                </label>
+                                    </div>
 
-                <textarea name="deskripsi" class="form-control"></textarea>
+                                    <div class="mb-3">
 
-            </div>
-
-
-
-            <button class="btn btn-success">
-                Simpan
-            </button>
+                                        <div class="mb-3">
 
 
-            <a href="{{ route('books.customer') }}" class="btn btn-secondary">
-                Kembali
-            </a>
+                                            <label class="form-label">
+                                                Stok
+                                            </label>
+
+                                            <input type="number" name="stok" class="form-control">
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Gambar Buku
+                                            </label>
+
+                                            <input type="file" name="gambar" class="form-control" accept="image/*">
+                                        </div>
+
+
+
+                                        <input type="file" name="gambar" class="form-control" accept="image/*">
+                                    </div>
+
+
+                                    <div class="mb-3">
+
+                                        <label class="form-label">
+                                            Deskripsi
+                                        </label>
+
+                                        <textarea name="deskripsi" class="form-control"></textarea>
+
+                                        <textarea name="deskripsi" class="form-control"></textarea>
+
+
+                                    </div>
+
+                                    <button class="btn btn-success">
+                                        Simpan
+                                    </button>
+
+
+                                    <a href="{{ route('books.customer') }}" class="btn btn-secondary">
+                                        Kembali
+                                    </a>
 
 
         </form>
 
-    </div>
+        <button class="btn btn-success">
+            Simpan
+        </button>
 
+        <a href="{{ route('books.index') }}" class="btn btn-secondary">
+            Kembali
+        </a>
+
+        </form>
+
+
+    </div>
 
 </body>
 

@@ -2,20 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
+    // HOME CUSTOMER
     public function index()
     {
         return view('home.index');
     }
 
-    public function books()
-    {
-        $books = Book::latest()->get();
 
-        return view('books.index', compact('books'));
+
+    // CUSTOMER JELAJAH BUKU
+    public function books(Request $request)
+    {
+
+        $search = $request->search;
+
+
+        $books = Book::with('category')
+
+            ->when($search, function($query) use ($search){
+
+                $query->where('judul','like','%'.$search.'%')
+                ->orWhere('penulis','like','%'.$search.'%')
+                ->orWhere('penerbit','like','%'.$search.'%');
+
+            })
+
+            ->get();
+
+
+
+        return view(
+            'books.customer',
+            compact('books')
+        );
+
     }
+
 }

@@ -19,143 +19,248 @@
 
             </div>
 
-            <div class="card-body">
+            {{-- Menampilkan Error Validasi --}}
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
 
-                <form action="{{ route('books.update',$book->id) }}" method="POST" enctype="multipart/form-data">
+            <div class="card shadow">
 
-                    @csrf
-                    @method('PUT')
+                <div class="card-header bg-warning">
+                    <h3>Edit Buku</h3>
+                </div>
 
-                    <div class="mb-3">
 
-                        <label class="form-label">Kategori</label>
+                <div class="card-body">
 
-                        <select name="category_id" class="form-control">
+                    <form action="{{ route('books.update',$book->id) }}" method="POST" enctype="multipart/form-data">
 
-                            @foreach($categories as $category)
+                        <form action="{{ route('books.update', $book) }}" method="POST" enctype="multipart/form-data">
 
-                            <option value="{{ $category->id }}"
-                                {{ $book->category_id == $category->id ? 'selected' : '' }}>
 
-                                {{ $category->nama_kategori }}
+                            @csrf
+                            @method('PUT')
 
-                            </option>
+                            <div class="mb-3">
 
-                            @endforeach
+                                <label class="form-label">Kategori</label>
 
-                        </select>
+                                <div class="mb-3">
+                                    <label class="form-label">Kategori</label>
 
-                    </div>
 
-                    <div class="mb-3">
+                                    <select name="category_id" class="form-control">
 
-                        <label class="form-label">Judul Buku</label>
+                                        @foreach($categories as $category)@foreach($categories as
+                                        $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ $book->category_id == $category->id ? 'selected' : '' }}>
+                                            {{ $category->nama_kategori }}
+                                        </option>
+                                        @endforeach
+                                    </select>
 
-                        <input type="text" name="judul" class="form-control" value="{{ $book->judul }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Judul Buku</label>
 
-                        <label class="form-label">Penulis</label>
+                                    <input type="text" name="judul" class="form-control" value="{{ $book->judul }}">
 
-                        <input type="text" name="penulis" class="form-control" value="{{ $book->penulis }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Penulis</label>
 
-                        <label class="form-label">Penerbit</label>
+                                    <input type="text" name="penulis" class="form-control" value="{{ $book->penulis }}">
 
-                        <input type="text" name="penerbit" class="form-control" value="{{ $book->penerbit }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Penerbit</label>
 
-                        <label class="form-label">Tahun Terbit</label>
+                                    <input type="text" name="penerbit" class="form-control"
+                                        value="{{ $book->penerbit }}">
 
-                        <input type="number" name="tahun_terbit" class="form-control" value="{{ $book->tahun_terbit }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Tahun Terbit</label>
 
-                        <label class="form-label">Harga</label>
+                                    <input type="number" name="tahun_terbit" class="form-control"
+                                        value="{{ $book->tahun_terbit }}">
 
-                        <input type="number" name="harga" class="form-control" value="{{ $book->harga }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Harga</label>
 
-                        <label class="form-label">Stok</label>
+                                    <input type="number" name="harga" class="form-control" value="{{ $book->harga }}">
 
-                        <input type="number" name="stok" class="form-control" value="{{ $book->stok }}">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">Stok</label>
 
-                        <label class="form-label">
-                            Gambar Saat Ini
-                        </label>
+                                    <input type="number" name="stok" class="form-control" value="{{ $book->stok }}">
 
-                        <br>
+                                </div>
 
-                        @if($book->gambar)
+                                <div class="mb-3">
 
-                        <img src="{{ asset('storage/'.$book->gambar) }}" width="150" class="img-thumbnail mb-2">
+                                    <label class="form-label">
+                                        Gambar Saat Ini
+                                    </label>
 
-                        @else
+                                    <br>
 
-                        <p class="text-muted">
-                            Belum ada gambar.
-                        </p>
+                                    @if($book->gambar)
 
-                        @endif
+                                    <img src="{{ asset('storage/'.$book->gambar) }}" width="150"
+                                        class="img-thumbnail mb-2">
 
-                    </div>
+                                    @else
 
-                    <div class="mb-3">
+                                    <p class="text-muted">
+                                        Belum ada gambar.
+                                    </p>
 
-                        <label class="form-label">
-                            Ganti Gambar
-                        </label>
+                                    @endif
 
-                        <input type="file" name="gambar" class="form-control" accept="image/*">
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <div class="mb-3">
+                                    <label class="form-label">
+                                        Ganti Gambar
+                                    </label>
 
-                        <label class="form-label">
-                            Deskripsi
-                        </label>
+                                    <input type="file" name="gambar" class="form-control" accept="image/*">
 
-                        <textarea name="deskripsi" class="form-control" rows="4">{{ $book->deskripsi }}</textarea>
+                                </div>
 
-                    </div>
+                                <div class="mb-3">
 
-                    <button class="btn btn-success">
+                                    <label class="form-label">
+                                        Deskripsi
+                                    </label>
 
-                        Update Buku
+                                    <textarea name="deskripsi" class="form-control"
+                                        rows="4">{{ $book->deskripsi }}</textarea>
 
-                    </button>
+                                </div>
 
-                    <a href="{{ route('books.customer') }}" class="btn btn-secondary">
+                                <button class="btn btn-success">
 
-                        Kembali
+                                    Update Buku
 
-                    </a>
+                                </button>
 
-                </form>
+                                <a href="{{ route('books.customer') }}" class="btn btn-secondary">
+
+                                    Kembali
+
+                                </a>
+
+                                @endforeach
+
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Judul Buku</label>
+
+                                <input type="text" name="judul" class="form-control"
+                                    value="{{ old('judul', $book->judul) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Penulis</label>
+
+                                <input type="text" name="penulis" class="form-control"
+                                    value="{{ old('penulis', $book->penulis) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Penerbit</label>
+
+                                <input type="text" name="penerbit" class="form-control"
+                                    value="{{ old('penerbit', $book->penerbit) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tahun Terbit</label>
+
+                                <input type="number" name="tahun_terbit" class="form-control"
+                                    value="{{ old('tahun_terbit', $book->tahun_terbit) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Harga</label>
+
+                                <input type="number" name="harga" class="form-control"
+                                    value="{{ old('harga', $book->harga) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Stok</label>
+
+                                <input type="number" name="stok" class="form-control"
+                                    value="{{ old('stok', $book->stok) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Gambar Saat Ini</label>
+                                <br>
+
+                                @if($book->gambar)
+                                <img src="{{ asset('storage/'.$book->gambar) }}" width="150" class="img-thumbnail mb-2">
+                                @else
+                                <p class="text-muted">Belum ada gambar.</p>
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ganti Gambar</label>
+
+                                <input type="file" name="gambar" class="form-control" accept="image/*">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi</label>
+
+                                <textarea name="deskripsi" class="form-control"
+                                    rows="4">{{ old('deskripsi', $book->deskripsi) }}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">
+                                Update Buku
+                            </button>
+
+                            <a href="{{ route('books.index') }}" class="btn btn-secondary">
+                                Kembali
+                            </a>
+
+
+                        </form>
+
+                </div>
 
             </div>
 
         </div>
-
-    </div>
 
 </body>
 

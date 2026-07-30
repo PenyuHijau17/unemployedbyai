@@ -14,6 +14,7 @@ class Order extends Model
         'tanggal',
         'total',
         'status',
+
     ];
 
     protected $casts = [
@@ -21,13 +22,26 @@ class Order extends Model
         'total' => 'decimal:2',
     ];
 
+
+        'metode', // tambahkan ini biar field metode tersimpan
+    ];
+
+    // relasi ke user
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+
+
+    // relasi ke detail pesanan
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+}
+
 }

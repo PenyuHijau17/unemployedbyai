@@ -25,6 +25,14 @@
                     <div class="alert alert-secondary">
                         Tidak ada gambar
                     </div>
+
+                    <img src="{{ asset('storage/'.$book->gambar) }}" class="img-fluid rounded"
+                        style="max-height:350px;object-fit:contain;">
+                    @else
+                    <div class="alert alert-secondary">
+                        Tidak ada gambar
+                    </div>
+                    origin/books
                     @endif
 
                 </div>
@@ -80,8 +88,15 @@
                     </a>
 
                     <a href="{{ route('books.customer') }}" class="btn btn-secondary">
-                        Kembali
-                    </a>
+
+                        <a href="{{ route('books.edit',$book->id) }}" class="btn btn-warning">
+                            Edit
+                        </a>
+
+                        <a href="{{ route('books.index') }}" class="btn btn-secondary">
+                            origin/books
+                            Kembali
+                        </a>
 
                 </div>
 

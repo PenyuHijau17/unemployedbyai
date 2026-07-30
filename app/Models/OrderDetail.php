@@ -17,18 +17,35 @@ class OrderDetail extends Model
         'subtotal',
     ];
 
+
     protected $casts = [
         'harga' => 'decimal:2',
         'subtotal' => 'decimal:2',
     ];
+
+
+    // relasi ke order
 
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
+
+
+    // relasi ke buku
+
     public function book()
     {
         return $this->belongsTo(Book::class);
+    }
+
+}
+
+
+    // relasi ke user (lewat order)
+    public function user()
+    {
+        return $this->hasOneThrough(User::class, Order::class, 'id', 'id', 'order_id', 'user_id');
     }
 }
