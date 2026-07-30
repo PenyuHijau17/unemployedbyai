@@ -21,7 +21,6 @@ class HomeController extends Controller
         $totalCategories = Category::count();
 
         // Total customer
-        // Kalau role customer belum ada, ganti jadi User::count()
         $totalUsers = User::where('role', 'customer')->count();
 
         return view('home.index', compact(
@@ -37,17 +36,38 @@ class HomeController extends Controller
     public function books(Request $request)
     {
         $search = $request->search;
+        $category = $request->category;
 
         $books = Book::with('category')
+
             ->when($search, function ($query) use ($search) {
 
-                $query->where('judul', 'like', '%' . $search . '%')
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('judul', 'like', '%' . $search . '%')
                       ->orWhere('penulis', 'like', '%' . $search . '%')
                       ->orWhere('penerbit', 'like', '%' . $search . '%');
 
+                });
+
             })
+
+            ->when($category, function ($query) use ($category) {
+
+                $query->where('category_id', $category);
+
+            })
+
             ->get();
 
-        return view('books.customer', compact('books'));
+        $categories = Category::orderBy('nama_kategori')->get();
+
+        return view(
+            'books.customer',
+            compact(
+                'books',
+                'categories'
+            )
+        );
     }
 }
