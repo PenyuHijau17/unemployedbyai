@@ -1,21 +1,299 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<style>
+
+.navbar-bookstore {
+    background: #6A513B;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    padding: 14px 0;
+}
+
+
+/* BUTTON BACK */
+
+.btn-back{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#F5E8C7;
+
+    border:1px solid rgba(245,232,199,.5);
+
+    margin-right:15px;
+
+    transition:.3s;
+
+    font-size:20px;
+
+}
+
+
+.btn-back:hover{
+
+    background:#D4AF6A;
+
+    color:#5A4634;
+
+}
+
+
+
+
+
+.navbar-brand {
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #F5E8C7 !important;
+    letter-spacing: .5px;
+
+}
+
+
+.navbar-brand i{
+
+    color:#D4AF6A;
+
+}
+
+
+.navbar-nav .nav-link{
+
+    color:#F7F4EF !important;
+    font-weight:500;
+    margin:0 10px;
+    transition:.3s;
+    position:relative;
+
+}
+
+
+.navbar-nav .nav-link:hover{
+
+    color:#E8C98B !important;
+
+}
+
+
+.navbar-nav .nav-link::after{
+
+    content:'';
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-4px;
+
+    width:0;
+
+    height:2px;
+
+    background:#D4AF6A;
+
+    transition:.3s;
+
+}
+
+
+.navbar-nav .nav-link:hover::after{
+
+    width:100%;
+
+}
+
+
+
+
+.btn-login{
+
+    border:1px solid #E8C98B;
+
+    color:#F7F4EF;
+
+    border-radius:30px;
+
+    padding:8px 18px;
+
+    transition:.3s;
+
+}
+
+
+.btn-login:hover{
+
+    background:#E8C98B;
+
+    color:#5A4634;
+
+}
+
+
+
+
+
+.btn-register{
+
+    background:#A8844F;
+
+    color:white;
+
+    border-radius:30px;
+
+    padding:8px 18px;
+
+    border:none;
+
+}
+
+
+.btn-register:hover{
+
+    background:#8E6D3D;
+
+    color:white;
+
+}
+
+
+
+
+
+.user-box{
+
+    color:#fff;
+
+    margin-right:15px;
+
+    font-weight:500;
+
+}
+
+
+
+
+.btn-logout{
+
+    background:#A8844F;
+
+    color:white;
+
+    border:none;
+
+    border-radius:30px;
+
+    padding:8px 18px;
+
+}
+
+
+.btn-logout:hover{
+
+    background:#8E6D3D;
+
+    color:white;
+
+}
+
+
+
+
+
+@media(max-width:991px){
+
+
+    .navbar-nav{
+
+        margin-top:20px;
+
+        text-align:center;
+
+    }
+
+
+    .navbar-nav .nav-link{
+
+        margin:10px 0;
+
+    }
+
+
+    .navbar-auth{
+
+        margin-top:20px;
+
+        display:flex;
+
+        justify-content:center;
+
+    }
+
+
+    .btn-back{
+
+        margin-right:10px;
+
+    }
+
+
+}
+
+</style>
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-bookstore">
+
 
 <div class="container">
 
 
-<a class="navbar-brand fw-bold"
-href="{{ route('home') }}">
 
-📚 Toko Buku
+<!-- BACK BUTTON -->
+
+<a href="#"
+onclick="goBack(event)"
+class="btn-back"
+title="Kembali">
+
+
+<i class="bi bi-arrow-left"></i>
+
 
 </a>
 
 
 
 
-<button class="navbar-toggler"
+
+<a class="navbar-brand" href="{{ route('home') }}">
+
+
+<i class="bi bi-book-half"></i>
+
+Pustaka Nusantara
+
+
+</a>
+
+
+
+
+
+<button
+
+class="navbar-toggler border-0"
+
 type="button"
+
 data-bs-toggle="collapse"
+
 data-bs-target="#navbarNav">
 
 
@@ -28,19 +306,16 @@ data-bs-target="#navbarNav">
 
 
 
-<div class="collapse navbar-collapse"
-id="navbarNav">
+<div class="collapse navbar-collapse" id="navbarNav">
 
 
 
-<ul class="navbar-nav me-auto">
-
+<ul class="navbar-nav mx-auto">
 
 
 <li class="nav-item">
 
-<a class="nav-link"
-href="{{ route('home') }}">
+<a class="nav-link" href="{{ route('home') }}">
 
 Home
 
@@ -50,14 +325,11 @@ Home
 
 
 
-
-
 <li class="nav-item">
 
-<a class="nav-link"
-href="{{ route('books.customer') }}">
+<a class="nav-link" href="{{ route('books.customer') }}">
 
-Daftar Buku
+Koleksi Buku
 
 </a>
 
@@ -65,21 +337,17 @@ Daftar Buku
 
 
 
-
-
-
 <li class="nav-item">
 
-<a class="nav-link"
-href="{{ route('cart.index') }}">
+<a class="nav-link" href="{{ route('cart.index') }}">
 
-🛒 Keranjang
+<i class="bi bi-cart3"></i>
+
+Keranjang
 
 </a>
 
 </li>
-
-
 
 
 
@@ -95,25 +363,27 @@ href="{{ route('cart.index') }}">
 
 
 
-<a href="{{ route('login') }}"
-class="btn btn-outline-light me-2">
+<div class="navbar-auth d-flex">
 
-Login
+
+<a href="{{ route('login') }}"
+class="btn btn-login me-2">
+
+Masuk
 
 </a>
-
-
 
 
 
 <a href="{{ route('register') }}"
-class="btn btn-warning">
+class="btn btn-register">
 
-Register
+Daftar
 
 </a>
 
 
+</div>
 
 
 
@@ -121,14 +391,16 @@ Register
 
 
 
+<div class="navbar-auth d-flex align-items-center">
 
 
-<span class="text-white me-3">
+<div class="user-box">
+
+<i class="bi bi-person-circle"></i>
 
 {{ Auth::user()->name }}
 
-</span>
-
+</div>
 
 
 
@@ -140,23 +412,22 @@ method="POST">
 @csrf
 
 
-
-<button class="btn btn-danger">
+<button class="btn btn-logout">
 
 Logout
 
 </button>
 
 
-
 </form>
 
 
 
+</div>
+
 
 
 @endguest
-
 
 
 
@@ -168,3 +439,27 @@ Logout
 
 
 </nav>
+
+
+
+
+<script>
+
+function goBack(event){
+
+    event.preventDefault();
+
+
+    if(document.referrer){
+
+        history.back();
+
+    }else{
+
+        window.location.href="{{ route('home') }}";
+
+    }
+
+}
+
+</script>

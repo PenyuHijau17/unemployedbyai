@@ -9,36 +9,30 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-
     // ==========================
     // ADMIN LIST BOOK
     // ==========================
 
     public function index(Request $request)
     {
-
         $search = $request->search;
 
-
         $books = Book::with('category')
-
             ->when($search, function ($query) use ($search) {
 
-                $query->where('judul','like','%'.$search.'%')
-                    ->orWhere('penulis','like','%'.$search.'%')
-                    ->orWhere('penerbit','like','%'.$search.'%');
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('judul', 'like', '%' . $search . '%')
+                      ->orWhere('penulis', 'like', '%' . $search . '%')
+                      ->orWhere('penerbit', 'like', '%' . $search . '%');
+
+                });
 
             })
-
             ->get();
 
-
-
         return view('books.index', compact('books'));
-
     }
-
-
 
 
     // ==========================
@@ -47,32 +41,41 @@ class BookController extends Controller
 
     public function customerIndex(Request $request)
     {
-
-
         $search = $request->search;
-
+        $category = $request->category;
 
         $books = Book::with('category')
 
-            ->when($search, function($query) use ($search){
+            ->when($search, function ($query) use ($search) {
 
-                $query->where('judul','like','%'.$search.'%')
-                ->orWhere('penulis','like','%'.$search.'%');
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('judul', 'like', '%' . $search . '%')
+                      ->orWhere('penulis', 'like', '%' . $search . '%')
+                      ->orWhere('penerbit', 'like', '%' . $search . '%');
+
+                });
+
+            })
+
+            ->when($category, function ($query) use ($category) {
+
+                $query->where('category_id', $category);
 
             })
 
             ->get();
 
-
+        $categories = Category::orderBy('nama_kategori')->get();
 
         return view(
             'books.customer',
-            compact('books')
+            compact(
+                'books',
+                'categories'
+            )
         );
-
     }
-
-
 
 
     // ==========================
@@ -81,15 +84,11 @@ class BookController extends Controller
 
     public function customerShow(Book $book)
     {
-
         return view(
             'books.customer-show',
             compact('book')
         );
-
     }
-
-
 
 
     // ==========================
@@ -98,19 +97,13 @@ class BookController extends Controller
 
     public function create()
     {
-
         $categories = Category::all();
-
 
         return view(
             'books.create',
             compact('categories')
         );
-
     }
-
-
-
 
 
     // ==========================
@@ -119,53 +112,31 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-
-
         $request->validate([
-
-            'category_id'=>'required',
-            'judul'=>'required',
-            'penulis'=>'required',
-            'penerbit'=>'required',
-            'tahun_terbit'=>'required',
-            'harga'=>'required|numeric',
-            'stok'=>'required|integer',
-            'deskripsi'=>'nullable',
-            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-
+            'category_id' => 'required',
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'tahun_terbit' => 'required',
+            'harga' => 'required|numeric',
+            'stok' => 'required|integer',
+            'deskripsi' => 'nullable',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
+        $data = $request->all();
 
-
-        $data=$request->all();
-
-
-
-        if($request->hasFile('gambar')){
-
-
-            $data['gambar'] =
-            $request->file('gambar')
-            ->store('books','public');
-
-
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')
+                ->store('books', 'public');
         }
-
-
 
         Book::create($data);
 
-
-
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil ditambahkan');
-
-
+            ->route('books.index')
+            ->with('success', 'Buku berhasil ditambahkan');
     }
-
-
-
 
 
     // ==========================
@@ -174,16 +145,11 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-
         return view(
             'books.show',
             compact('book')
         );
-
     }
-
-
-
 
 
     // ==========================
@@ -192,11 +158,7 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-
-
         $categories = Category::all();
-
-
 
         return view(
             'books.edit',
@@ -205,12 +167,7 @@ class BookController extends Controller
                 'categories'
             )
         );
-
-
     }
-
-
-
 
 
     // ==========================
@@ -219,65 +176,39 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
-
-
         $request->validate([
-
-            'category_id'=>'required',
-            'judul'=>'required',
-            'penulis'=>'required',
-            'penerbit'=>'required',
-            'tahun_terbit'=>'required',
-            'harga'=>'required|numeric',
-            'stok'=>'required|integer',
-            'deskripsi'=>'nullable',
-            'gambar'=>'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:2048',
-
+            'category_id' => 'required',
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'tahun_terbit' => 'required',
+            'harga' => 'required|numeric',
+            'stok' => 'required|integer',
+            'deskripsi' => 'nullable',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:2048',
         ]);
 
+        $data = $request->all();
 
+        if ($request->hasFile('gambar')) {
 
-        $data=$request->all();
-
-
-
-        if($request->hasFile('gambar')){
-
-
-            if($book->gambar &&
-            Storage::disk('public')->exists($book->gambar)){
-
-
-                Storage::disk('public')
-                ->delete($book->gambar);
-
-
+            if (
+                $book->gambar &&
+                Storage::disk('public')->exists($book->gambar)
+            ) {
+                Storage::disk('public')->delete($book->gambar);
             }
 
-
-
-            $data['gambar'] =
-            $request->file('gambar')
-            ->store('books','public');
-
-
+            $data['gambar'] = $request->file('gambar')
+                ->store('books', 'public');
         }
-
-
 
         $book->update($data);
 
-
-
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil diperbarui');
-
-
+            ->route('books.index')
+            ->with('success', 'Buku berhasil diperbarui');
     }
-
-
-
 
 
     // ==========================
@@ -286,30 +217,17 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-
-
-        if($book->gambar &&
-        Storage::disk('public')->exists($book->gambar)){
-
-
-            Storage::disk('public')
-            ->delete($book->gambar);
-
-
+        if (
+            $book->gambar &&
+            Storage::disk('public')->exists($book->gambar)
+        ) {
+            Storage::disk('public')->delete($book->gambar);
         }
-
-
 
         $book->delete();
 
-
-
         return redirect()
-        ->route('books.index')
-        ->with('success','Buku berhasil dihapus');
-
-
+            ->route('books.index')
+            ->with('success', 'Buku berhasil dihapus');
     }
-
-
 }
