@@ -540,6 +540,153 @@ body:not(.reveal-ready) .reveal-line{
     transform:translateX(4px);
 }
 
+/* ==========================================================
+   PROMO "BUKU TERBARU"
+========================================================== */
+
+.promo-banner{
+    background:linear-gradient(135deg, var(--gold-light) 0%, #fff 65%);
+    border:1px solid var(--gold);
+    border-radius:16px;
+    padding:16px 30px;
+    text-align:center;
+    margin-bottom:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    box-shadow:var(--shadow);
+}
+
+.promo-banner .promo-icon{
+    font-size:1.3rem;
+}
+
+.promo-banner strong{
+    color:var(--primary-dark);
+}
+
+.promo-banner span.promo-text{
+    color:var(--text);
+    font-weight:500;
+    font-size:.95rem;
+}
+
+.book-card{
+    background:var(--white);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:var(--transition);
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    border-top:4px solid var(--gold);
+}
+
+.book-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-hover);
+}
+
+.book-thumb{
+    position:relative;
+    overflow:hidden;
+    height:230px;
+    background:var(--primary-light);
+}
+
+.book-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .6s cubic-bezier(.19,1,.22,1);
+}
+
+.book-card:hover .book-thumb img{
+    transform:scale(1.07);
+}
+
+.book-badge-new{
+    position:absolute;
+    top:14px;
+    left:14px;
+    background:var(--gold);
+    color:var(--primary-dark);
+    font-size:.7rem;
+    font-weight:700;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    padding:5px 12px;
+    border-radius:30px;
+}
+
+.book-badge-discount{
+    position:absolute;
+    top:14px;
+    right:14px;
+    background:var(--primary-dark);
+    color:#fff;
+    font-size:.7rem;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:30px;
+}
+
+.book-body{
+    padding:20px 22px 22px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+}
+
+.book-category{
+    color:var(--secondary);
+    font-size:.72rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:6px;
+}
+
+.book-body h5{
+    color:var(--primary-dark);
+    font-weight:700;
+    font-size:1rem;
+    margin-bottom:4px;
+    line-height:1.4;
+    min-height:2.8em;
+}
+
+.book-author{
+    color:var(--text-light);
+    font-size:.85rem;
+    margin-bottom:12px;
+}
+
+.book-price{
+    color:var(--primary-dark);
+    font-weight:800;
+    font-size:1.1rem;
+    margin-bottom:14px;
+    margin-top:auto;
+}
+
+.book-price .book-price-old{
+    color:var(--text-light);
+    font-weight:500;
+    font-size:.85rem;
+    text-decoration:line-through;
+    margin-right:8px;
+}
+
+.btn-shop.btn-sm{
+    font-size:.85rem;
+    padding:9px 20px;
+    width:100%;
+}
+
 </style>
 
 <script>document.body.classList.add('reveal-ready');</script>
@@ -651,225 +798,106 @@ class="img-fluid shadow">
 
 <div class="navy-divider reveal reveal-line"></div>
 
-<div class="section-title-wrap reveal">
-<span class="section-eyebrow">Koleksi Kami</span><br>
-<h2 class="section-title">
-Kategori Populer
-</h2>
-</div>
-
-<div class="row g-4 mb-5">
-
-<div class="col-lg-3 reveal reveal-item">
-
-<div class="category-card">
-
-<div class="icon-wrap"><i class="bi bi-book"></i></div>
-
-<h5>Novel</h5>
-
-</div>
-
-</div>
-
-<div class="col-lg-3 reveal reveal-item">
-
-<div class="category-card">
-
-<div class="icon-wrap"><i class="bi bi-mortarboard"></i></div>
-
-<h5>Pendidikan</h5>
-
-</div>
-
-</div>
-
-<div class="col-lg-3 reveal reveal-item">
-
-<div class="category-card">
-
-<div class="icon-wrap"><i class="bi bi-cpu"></i></div>
-
-<h5>Teknologi</h5>
-
-</div>
-
-</div>
-
-<div class="col-lg-3 reveal reveal-item">
-
-<div class="category-card">
-
-<div class="icon-wrap"><i class="bi bi-palette"></i></div>
-
-<h5>Komik</h5>
-
-</div>
-
-</div>
-
-</div>
-
 <div class="navy-divider reveal reveal-line"></div>
 
 <div class="section-title-wrap reveal">
-<span class="section-eyebrow">Kenapa Kami</span><br>
-<h2 class="section-title">
-Mengapa Memilih Kami?
-</h2>
-</div>
+    <span class="section-eyebrow">Buku Terbaru</span><br>
 
-<div class="row g-4 mb-5">
+    <h2 class="section-title">
+        Koleksi Terbaru Kami
+    </h2>
 
-<div class="col-md-4 reveal reveal-item">
-
-<div class="feature-box">
-
-<div class="icon-wrap"><i class="bi bi-patch-check"></i></div>
-
-<h4>Buku Original</h4>
-
-<p>
-
-Kami menyediakan buku original dengan kualitas terbaik
-dari berbagai penerbit terpercaya.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="col-md-4 reveal reveal-item">
-
-<div class="feature-box">
-
-<div class="icon-wrap"><i class="bi bi-wallet2"></i></div>
-
-<h4>Harga Bersahabat</h4>
-
-<p>
-
-Harga kompetitif dengan berbagai promo menarik
-untuk semua pelanggan.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="col-md-4 reveal reveal-item">
-
-<div class="feature-box">
-
-<div class="icon-wrap"><i class="bi bi-truck"></i></div>
-
-<h4>Pengiriman Cepat</h4>
-
-<p>
-
-Pesanan diproses dengan cepat dan dikirim
-ke seluruh Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="navy-divider reveal reveal-line"></div>
-
-<div class="section-title-wrap reveal">
-<span class="section-eyebrow">Blog Kami</span><br>
-<h2 class="section-title">
-Artikel &amp; Tips Membaca
-</h2>
+    <p class="section-subtitle mt-3">
+        Buku yang baru saja ditambahkan ke Pustaka Nusantara.
+    </p>
 </div>
 
 <div class="row g-4 mb-4">
 
-<div class="col-lg-4 col-md-6 mb-4 reveal reveal-item">
+    @forelse($newBooks as $book)
 
-<div class="article-card">
+    <div class="col-lg-3 col-md-6 reveal reveal-item">
 
-<div class="article-thumb">
-<img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&q=80" alt="7 Novel Fiksi Wajib Baca Tahun Ini">
-<span class="article-category">Rekomendasi</span>
-</div>
+        <div class="book-card">
 
-<div class="article-body">
+            <div class="book-thumb">
 
-<div class="article-date"><i class="bi bi-calendar3"></i> 24 Jul 2026</div>
+                @if($book->gambar)
 
-<h5>7 Novel Fiksi Wajib Baca Tahun Ini</h5>
+                    <img src="{{ asset('storage/'.$book->gambar) }}"
+                         alt="{{ $book->judul }}">
 
-<p>Dari kisah keluarga yang menghangatkan hati sampai thriller yang bikin susah berhenti membaca, ini daftar novel pilihan editor kami minggu ini.</p>
+                @else
 
-<a href="#" class="article-link">Baca Selengkapnya <i class="bi bi-arrow-right"></i></a>
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80"
+                         alt="{{ $book->judul }}">
 
-</div>
+                @endif
 
-</div>
+                <span class="book-badge-new">
+                    Baru
+                </span>
 
-</div>
+            </div>
 
-<div class="col-lg-4 col-md-6 mb-4 reveal reveal-item">
+            <div class="book-body">
 
-<div class="article-card">
+                <div class="book-category">
+                    {{ $book->category->nama_kategori ?? '-' }}
+                </div>
 
-<div class="article-thumb">
-<img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80" alt="Cara Menumbuhkan Kebiasaan Membaca Setiap Hari">
-<span class="article-category">Tips</span>
-</div>
+                <h5 class="book-title">
+                    {{ $book->judul }}
+                </h5>
 
-<div class="article-body">
+                <p class="book-author">
+                    <i class="bi bi-person"></i>
+                    {{ $book->penulis }}
+                </p>
 
-<div class="article-date"><i class="bi bi-calendar3"></i> 18 Jul 2026</div>
+                <div class="book-price">
+                    Rp {{ number_format($book->harga,0,',','.') }}
+                </div>
 
-<h5>Cara Menumbuhkan Kebiasaan Membaca Setiap Hari</h5>
+                <a href="{{ route('books.customer.show',$book->id) }}"
+                   class="btn btn-shop w-100 mt-3">
 
-<p>Sering niat baca buku tapi selalu gagal di tengah jalan? Coba beberapa trik sederhana ini supaya membaca jadi rutinitas yang menyenangkan.</p>
+                    <i class="bi bi-eye"></i>
+                    Lihat Detail
 
-<a href="#" class="article-link">Baca Selengkapnya <i class="bi bi-arrow-right"></i></a>
+                </a>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<div class="col-lg-4 col-md-6 mb-4 reveal reveal-item">
+    @empty
 
-<div class="article-card">
+    <div class="col-12">
 
-<div class="article-thumb">
-<img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80" alt="Panduan Memilih Buku Bacaan Sesuai Usia Anak">
-<span class="article-category">Edukasi</span>
-</div>
+        <div class="alert alert-light text-center rounded-4">
 
-<div class="article-body">
+            Belum ada buku terbaru.
 
-<div class="article-date"><i class="bi bi-calendar3"></i> 10 Jul 2026</div>
+        </div>
 
-<h5>Panduan Memilih Buku Bacaan Sesuai Usia Anak</h5>
+    </div>
 
-<p>Memilih buku yang tepat bisa menumbuhkan kecintaan anak pada membaca sejak dini. Ini panduan praktis yang bisa orang tua terapkan di rumah.</p>
-
-<a href="#" class="article-link">Baca Selengkapnya <i class="bi bi-arrow-right"></i></a>
-
-</div>
-
-</div>
-
-</div>
+    @endforelse
 
 </div>
 
 <div class="text-center mb-5 reveal">
-<a href="#" class="btn btn-outline-shop">Lihat Semua Artikel</a>
+
+    <a href="{{ route('books.customer') }}"
+       class="btn btn-outline-shop">
+
+        Lihat Semua Buku
+
+    </a>
+
 </div>
 
 @include('partials.footer')
@@ -880,23 +908,37 @@ document.addEventListener('DOMContentLoaded', function () {
     var revealEls = document.querySelectorAll('.reveal, .reveal-line');
 
     if (!('IntersectionObserver' in window)) {
-        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+        revealEls.forEach(function (el) {
+            el.classList.add('is-visible');
+        });
         return;
     }
 
     var observer = new IntersectionObserver(function (entries, obs) {
+
         entries.forEach(function (entry) {
+
             if (entry.isIntersecting) {
+
                 entry.target.classList.add('is-visible');
                 obs.unobserve(entry.target);
+
             }
+
         });
+
     }, {
+
         threshold: 0.15,
         rootMargin: '0px 0px -60px 0px'
+
     });
 
-    revealEls.forEach(function (el) { observer.observe(el); });
+    revealEls.forEach(function (el) {
+
+        observer.observe(el);
+
+    });
 
 });
 </script>

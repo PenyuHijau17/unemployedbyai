@@ -14,19 +14,22 @@ class HomeController extends Controller
     // =========================
     public function index()
     {
-        // Total buku
+        // Statistik
         $totalBooks = Book::count();
-
-        // Total kategori
         $totalCategories = Category::count();
-
-        // Total customer
         $totalUsers = User::where('role', 'customer')->count();
+
+        // Buku terbaru
+        $newBooks = Book::with('category')
+            ->latest()
+            ->take(8)
+            ->get();
 
         return view('home.index', compact(
             'totalBooks',
             'totalCategories',
-            'totalUsers'
+            'totalUsers',
+            'newBooks'
         ));
     }
 
@@ -58,6 +61,7 @@ class HomeController extends Controller
 
             })
 
+            ->latest()
             ->get();
 
         $categories = Category::orderBy('nama_kategori')->get();
