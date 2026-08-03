@@ -52,13 +52,30 @@
                 <div class="info-item">
                     <span>Status</span>
 
-                    @if($order->status=='pending')
-                        <span class="badge badge-pending">Pending</span>
-                    @elseif($order->status=='diproses')
-                        <span class="badge badge-process">Diproses</span>
-                    @else
-                        <span class="badge badge-success-custom">Selesai</span>
-                    @endif
+
+    <span class="badge badge-pending">
+        Pending
+    </span>
+
+@elseif($order->status=='processing')
+
+    <span class="badge badge-process">
+        Diproses
+    </span>
+
+@elseif($order->status=='shipped')
+
+    <span class="badge bg-info">
+        Dikirim
+    </span>
+
+@elseif($order->status=='completed')
+
+    <span class="badge badge-success-custom">
+        Selesai
+    </span>
+
+@endif
 
                 </div>
 
@@ -122,16 +139,32 @@
 
                             <label class="form-label">Status</label>
 
-                            <select name="status" class="form-select">
+                           <select name="status" class="form-select">
 
-                                <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Pending</option>
+    <option value="pending"
+    {{ $order->status=='pending'?'selected':'' }}>
+        Pending
+    </option>
 
-                                <option value="diproses" {{ $order->status=='diproses'?'selected':'' }}>Diproses</option>
 
-                                <option value="selesai" {{ $order->status=='selesai'?'selected':'' }}>Selesai</option>
+    <option value="processing"
+    {{ $order->status=='processing'?'selected':'' }}>
+        Diproses
+    </option>
 
-                            </select>
 
+    <option value="shipped"
+    {{ $order->status=='shipped'?'selected':'' }}>
+        Dikirim
+    </option>
+
+
+    <option value="completed"
+    {{ $order->status=='completed'?'selected':'' }}>
+        Selesai
+    </option>
+
+</select>
                         </div>
 
                         <div class="col-md-4 d-flex align-items-end">

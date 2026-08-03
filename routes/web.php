@@ -12,6 +12,10 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Customer\AccountController;
+use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\AddressController;
+use App\Http\Controllers\CheckoutController;
 
 
 // ==========================
@@ -102,3 +106,83 @@ Route::get('/payment', [PaymentController::class,'index'])
 
 Route::post('/payment/process', [PaymentController::class,'process'])
     ->name('payment.process');
+
+// ==========================
+// AKUN
+// ==========================
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/account', [AccountController::class, 'index'])
+        ->name('customer.account');
+
+    Route::get('/orders', [OrderController::class, 'index'])
+        ->name('customer.orders');
+
+    Route::get('/address', [AddressController::class, 'index'])
+        ->name('customer.address');
+
+    Route::get('/orders/{id}', [OrderController::class, 'show'])
+    ->name('customer.orders.show');
+
+    Route::put('/address/{address}/primary',
+    [AddressController::class,'setPrimary']
+    )
+    ->name('customer.address.primary');
+
+    Route::middleware('auth')->group(function(){
+
+    Route::get('/account/edit',
+        [AccountController::class,'edit']
+    )->name('customer.account.edit');
+
+
+    Route::put('/account/update',
+        [AccountController::class,'update']
+    )->name('customer.account.update');
+
+});
+});
+
+
+// ==========================
+// checkout
+// ==========================
+
+
+Route::get('/checkout',
+    [CheckoutController::class,'index']
+)
+->middleware('auth')
+->name('checkout.index');
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/alamat',
+        [AddressController::class, 'index']
+    )->name('customer.address.index');
+
+
+    Route::get('/alamat/tambah',
+        [AddressController::class, 'create']
+    )->name('customer.address.create');
+
+
+    Route::post('/alamat',
+        [AddressController::class, 'store']
+    )->name('customer.address.store');
+
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/pesanan',
+        [OrderController::class,'index']
+    )->name('customer.orders.index');
+
+
+    Route::get('/pesanan/{order}',
+        [OrderController::class,'show']
+    )->name('customer.orders.show');
+
+});

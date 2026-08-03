@@ -403,12 +403,12 @@ Rp {{ number_format($total,0,',','.') }}
 
 </div>
 
-<a href="{{ route('payment.index') }}"
+<a href="{{ route('checkout.index') }}"
 class="btn btn-payment mt-3">
 
-<i class="bi bi-credit-card me-2"></i>
+<i class="bi bi-cart-check me-2"></i>
 
-Lanjut ke Pembayaran
+Lanjut Checkout
 
 </a>
 

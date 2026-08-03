@@ -165,15 +165,54 @@
 
 
 .user-box{
-
     color:#fff;
-
     margin-right:15px;
-
     font-weight:500;
-
 }
 
+/* USER DROPDOWN */
+
+.user-dropdown .dropdown-toggle{
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-weight:500;
+    padding:0;
+    box-shadow:none !important;
+}
+
+.user-dropdown .dropdown-toggle:hover,
+.user-dropdown .dropdown-toggle:focus{
+    color:#F5E8C7;
+    background:transparent;
+}
+
+.user-dropdown .dropdown-toggle::after{
+    margin-left:8px;
+}
+
+.user-dropdown .dropdown-menu{
+    border:none;
+    border-radius:12px;
+    overflow:hidden;
+    min-width:220px;
+    margin-top:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.user-dropdown .dropdown-item{
+    padding:12px 18px;
+    transition:.25s;
+}
+
+.user-dropdown .dropdown-item:hover{
+    background:#F5E8C7;
+    color:#6A513B;
+}
+
+.user-dropdown .dropdown-item i{
+    width:22px;
+}
 
 
 
@@ -389,46 +428,53 @@ Daftar
 
 @else
 
-
-
 <div class="navbar-auth d-flex align-items-center">
 
+    <div class="dropdown user-dropdown me-3">
 
-<div class="user-box">
+        <button
+            class="btn dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
 
-<i class="bi bi-person-circle"></i>
+            <i class="bi bi-person-circle"></i>
+            {{ Auth::user()->name }}
 
-{{ Auth::user()->name }}
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+
+            <li>
+                <a class="dropdown-item" href="{{ route('customer.account') }}">
+                    <i class="bi bi-person me-2"></i>
+                    Akun Saya
+                </a>
+            </li>
+
+            <a class="dropdown-item" href="{{ route('customer.orders.index') }}">
+    <i class="bi bi-box-seam me-2"></i>
+    Pesanan Saya
+</a>
+            <a class="dropdown-item" href="{{ route('customer.address.index') }}">
+                <i class="bi bi-geo-alt me-2"></i>
+                Alamat
+            </a>
+
+        </ul>
+
+    </div>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button class="btn btn-logout">
+            Logout
+        </button>
+    </form>
 
 </div>
-
-
-
-
-<form action="{{ route('logout') }}"
-method="POST">
-
-
-@csrf
-
-
-<button class="btn btn-logout">
-
-Logout
-
-</button>
-
-
-</form>
-
-
-
-</div>
-
-
 
 @endguest
-
 
 
 

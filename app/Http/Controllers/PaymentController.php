@@ -35,13 +35,41 @@ class PaymentController extends Controller
         $total = collect($cart)->sum(fn($item) => $item['harga'] * $item['jumlah']);
 
         // buat order
-        $order = Order::create([
-            'user_id' => auth()->id(),
-            'tanggal' => now(),
-            'total'   => $total,
-            'status'  => 'pending',
-            'metode'  => $request->metode,
-        ]);
+       $address = auth()->user()
+    ->addresses()
+    ->where('utama', true)
+    ->first();
+
+$address = auth()->user()
+    ->addresses()
+    ->where('utama', true)
+    ->first();
+
+
+if(!$address){
+
+    return redirect()
+        ->back()
+        ->with('error','Silahkan pilih alamat utama terlebih dahulu');
+
+}
+
+
+$order = Order::create([
+
+    'user_id' => auth()->id(),
+
+    'address_id' => $address->id,
+
+    'tanggal' => now(),
+
+    'total' => $total,
+
+    'status' => 'pending',
+
+    'metode' => $request->metode,
+
+]);
 
         // buat order_details
         foreach ($cart as $item) {
