@@ -1,8 +1,8 @@
 <style>
 
 .navbar-bookstore {
-    background: #6A513B;
-    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    background: linear-gradient(90deg, #003A70 0%, #005BAA 100%);
+    box-shadow: 0 4px 20px rgba(0,58,112,.18);
     padding: 14px 0;
 }
 
@@ -20,9 +20,9 @@
     align-items:center;
     justify-content:center;
 
-    color:#F5E8C7;
+    color:#EAF4FF;
 
-    border:1px solid rgba(245,232,199,.5);
+    border:1px solid rgba(234,244,255,.5);
 
     margin-right:15px;
 
@@ -35,9 +35,11 @@
 
 .btn-back:hover{
 
-    background:#D4AF6A;
+    background:#D4AF37;
 
-    color:#5A4634;
+    color:#003A70;
+
+    border-color:#D4AF37;
 
 }
 
@@ -49,7 +51,7 @@
 
     font-size: 1.5rem;
     font-weight: 700;
-    color: #F5E8C7 !important;
+    color: #FFFFFF !important;
     letter-spacing: .5px;
 
 }
@@ -57,14 +59,14 @@
 
 .navbar-brand i{
 
-    color:#D4AF6A;
+    color:#D4AF37;
 
 }
 
 
 .navbar-nav .nav-link{
 
-    color:#F7F4EF !important;
+    color:#EAF4FF !important;
     font-weight:500;
     margin:0 10px;
     transition:.3s;
@@ -75,7 +77,7 @@
 
 .navbar-nav .nav-link:hover{
 
-    color:#E8C98B !important;
+    color:#F8E8A8 !important;
 
 }
 
@@ -94,7 +96,7 @@
 
     height:2px;
 
-    background:#D4AF6A;
+    background:#D4AF37;
 
     transition:.3s;
 
@@ -112,9 +114,9 @@
 
 .btn-login{
 
-    border:1px solid #E8C98B;
+    border:1px solid #F8E8A8;
 
-    color:#F7F4EF;
+    color:#FFFFFF;
 
     border-radius:30px;
 
@@ -127,9 +129,11 @@
 
 .btn-login:hover{
 
-    background:#E8C98B;
+    background:#F8E8A8;
 
-    color:#5A4634;
+    color:#003A70;
+
+    border-color:#F8E8A8;
 
 }
 
@@ -139,9 +143,9 @@
 
 .btn-register{
 
-    background:#A8844F;
+    background:#D4AF37;
 
-    color:white;
+    color:#003A70;
 
     border-radius:30px;
 
@@ -149,14 +153,18 @@
 
     border:none;
 
+    font-weight:700;
+
+    transition:.3s;
+
 }
 
 
 .btn-register:hover{
 
-    background:#8E6D3D;
+    background:#F8E8A8;
 
-    color:white;
+    color:#003A70;
 
 }
 
@@ -179,9 +187,9 @@
 
 .btn-logout{
 
-    background:#A8844F;
+    background:#D4AF37;
 
-    color:white;
+    color:#003A70;
 
     border:none;
 
@@ -189,14 +197,18 @@
 
     padding:8px 18px;
 
+    font-weight:700;
+
+    transition:.3s;
+
 }
 
 
 .btn-logout:hover{
 
-    background:#8E6D3D;
+    background:#F8E8A8;
 
-    color:white;
+    color:#003A70;
 
 }
 

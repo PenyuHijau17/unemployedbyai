@@ -9,7 +9,6 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-
     // ==========================
     // LOGIN PAGE
     // ==========================
@@ -17,8 +16,6 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-
-
 
     // ==========================
     // REGISTER PAGE
@@ -28,142 +25,70 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-
-
     // ==========================
     // REGISTER PROCESS
     // ==========================
     public function register(Request $request)
     {
-
         $request->validate([
-
-            'name' => [
-                'required'
-            ],
-
-            'email' => [
-                'required',
-                'email',
-                'unique:users'
-            ],
-
-            'password' => [
-                'required',
-                'min:6'
-            ],
-
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
         ]);
-
-
 
         User::create([
-
-            'name' => $request->name,
-
-            'email' => $request->email,
-
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-
-            'role' => 'customer',
-
+            'role'     => 'customer',
         ]);
-
-
 
         return redirect()
             ->route('login')
-            ->with(
-                'success',
-                'Register berhasil, silahkan login'
-            );
-
+            ->with('success', 'Register berhasil, silahkan login');
     }
-
-
-
 
     // ==========================
     // LOGIN PROCESS
     // ==========================
     public function login(Request $request)
     {
-
         $credentials = $request->validate([
-
-            'email' => [
-                'required',
-                'email'
-            ],
-
-            'password' => [
-                'required'
-            ],
-
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-
-
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
 
             $request->session()->regenerate();
 
+            $user = Auth::user();
 
-
-            // ADMIN
-            if(Auth::user()->role == 'admin')
-            {
-
-                return redirect()
-                    ->route('admin.dashboard');
-
+            // Redirect berdasarkan role
+            if ($user->role === 'admin') {
+                return redirect()->intended(route('admin.dashboard'));
             }
 
-
-
-            // CUSTOMER
-            return redirect()
-                ->route('home');
-
-
+            return redirect()->intended(route('home'));
         }
-
-
 
         return back()
             ->withErrors([
-
-                'email' => 'Email atau password salah.'
-
+                'email' => 'Email atau password salah.',
             ])
             ->onlyInput('email');
-
     }
-
-
-
 
     // ==========================
     // LOGOUT
     // ==========================
     public function logout(Request $request)
     {
-
         Auth::logout();
 
-
-
         $request->session()->invalidate();
-
-
         $request->session()->regenerateToken();
 
-
-
-        return redirect()
-            ->route('login');
-
+        return redirect()->route('login');
     }
-
 }

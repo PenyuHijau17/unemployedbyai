@@ -4,171 +4,207 @@
 
 @section('content')
 
-<div class="container-fluid">
+@if(session('success'))
+<div class="alert alert-success fade-up">
+    {{ session('success') }}
+</div>
+@endif
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+<div class="page-header fade-up">
 
-    <div class="card shadow">
+    <div>
+        <h2>Daftar Buku</h2>
+        <p>Kelola seluruh data buku yang tersedia.</p>
+    </div>
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+    <a href="{{ route('books.create') }}" class="btn btn-primary btn-modern">
+        <i class="bi bi-plus-circle-fill me-1"></i>
+        Tambah Buku
+    </a>
 
-            <h4 class="mb-0">
-                <i class="bi bi-book"></i>
-                Data Buku
-            </h4>
+</div>
 
-            <a href="{{ route('books.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i>
-                Tambah Buku
-            </a>
+<div class="table-card fade-up">
 
-        </div>
+    <form action="{{ route('books.index') }}" method="GET" class="mb-4">
 
-        <div class="card-body">
+        <div class="search-box">
 
-            <form action="{{ route('books.index') }}" method="GET" class="mb-4">
+            <i class="bi bi-search"></i>
 
-                <div class="input-group">
-
-                    <input
-                        type="text"
-                        name="search"
-                        class="form-control"
-                        placeholder="Cari judul, penulis, penerbit..."
-                        value="{{ request('search') }}">
-
-                    <button class="btn btn-primary">
-                        <i class="bi bi-search"></i>
-                        Cari
-                    </button>
-
-                </div>
-
-            </form>
-
-            <div class="table-responsive">
-
-                <table class="table table-bordered table-hover align-middle">
-
-                    <thead class="table-dark">
-
-                        <tr>
-
-                            <th width="70">Cover</th>
-                            <th>Judul</th>
-                            <th>Kategori</th>
-                            <th>Penulis</th>
-                            <th>Penerbit</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
-                            <th width="220">Aksi</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    @forelse($books as $book)
-
-                        <tr>
-
-                            <td class="text-center">
-
-                                @if($book->gambar)
-
-                                    <img src="{{ asset('storage/'.$book->gambar) }}"
-                                         width="60"
-                                         height="80"
-                                         style="object-fit:cover"
-                                         class="rounded">
-
-                                @else
-
-                                    <span class="text-muted">
-                                        -
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-                            <td>{{ $book->judul }}</td>
-
-                            <td>{{ $book->category->nama_kategori ?? '-' }}</td>
-
-                            <td>{{ $book->penulis }}</td>
-
-                            <td>{{ $book->penerbit }}</td>
-
-                            <td>
-                                Rp {{ number_format($book->harga,0,',','.') }}
-                            </td>
-
-                            <td>{{ $book->stok }}</td>
-
-                            <td>
-
-                                <a href="{{ route('books.show',$book->id) }}"
-                                   class="btn btn-info btn-sm">
-
-                                    <i class="bi bi-eye"></i>
-
-                                </a>
-
-                                <a href="{{ route('books.edit',$book->id) }}"
-                                   class="btn btn-warning btn-sm">
-
-                                    <i class="bi bi-pencil"></i>
-
-                                </a>
-
-                                <form action="{{ route('books.destroy',$book->id) }}"
-                                      method="POST"
-                                      class="d-inline">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Hapus buku ini?')">
-
-                                        <i class="bi bi-trash"></i>
-
-                                    </button>
-
-                                </form>
-
-                            </td>
-
-                        </tr>
-
-                    @empty
-
-                        <tr>
-
-                            <td colspan="8" class="text-center text-muted">
-
-                                Belum ada data buku.
-
-                            </td>
-
-                        </tr>
-
-                    @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari judul, penulis, penerbit..."
+                value="{{ request('search') }}">
 
         </div>
+
+    </form>
+
+    <div class="table-responsive">
+
+        <table class="table table-modern align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th width="80">Cover</th>
+                    <th>Judul</th>
+                    <th>Kategori</th>
+                    <th>Penulis</th>
+                    <th>Penerbit</th>
+                    <th>Harga</th>
+                    <th>Stok</th>
+                    <th width="180">Aksi</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            @forelse($books as $book)
+
+                <tr>
+
+                    <td>
+
+                        @if($book->gambar)
+
+                            <img
+                                src="{{ asset('storage/'.$book->gambar) }}"
+                                class="book-cover">
+
+                        @else
+
+                            <div class="book-placeholder">
+
+                                <i class="bi bi-book-half"></i>
+
+                            </div>
+
+                        @endif
+
+                    </td>
+
+                    <td>
+
+                        <strong>{{ $book->judul }}</strong>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge-category">
+
+                            {{ $book->category->nama_kategori ?? '-' }}
+
+                        </span>
+
+                    </td>
+
+                    <td>{{ $book->penulis }}</td>
+
+                    <td>{{ $book->penerbit }}</td>
+
+                    <td>
+
+                        <strong>
+
+                            Rp {{ number_format($book->harga,0,',','.') }}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        @if($book->stok > 10)
+
+                            <span class="badge-stock success">
+
+                                {{ $book->stok }}
+
+                            </span>
+
+                        @elseif($book->stok > 0)
+
+                            <span class="badge-stock warning">
+
+                                {{ $book->stok }}
+
+                            </span>
+
+                        @else
+
+                            <span class="badge-stock danger">
+
+                                Habis
+
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                    <td>
+
+                        <a href="{{ route('books.show',$book->id) }}"
+                           class="btn btn-info btn-sm">
+
+                            <i class="bi bi-eye"></i>
+
+                        </a>
+
+                        <a href="{{ route('books.edit',$book->id) }}"
+                           class="btn btn-warning btn-sm">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                        </a>
+
+                        <form
+                            action="{{ route('books.destroy',$book->id) }}"
+                            method="POST"
+                            class="d-inline">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Hapus buku ini?')">
+
+                                <i class="bi bi-trash-fill"></i>
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            @empty
+
+                <tr>
+
+                    <td colspan="8" class="text-center py-5">
+
+                        Belum ada data buku.
+
+                    </td>
+
+                </tr>
+
+            @endforelse
+
+            </tbody>
+
+        </table>
 
     </div>
 
