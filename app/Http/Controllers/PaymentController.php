@@ -29,8 +29,20 @@ class PaymentController extends Controller
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')
+            return redirect()
+                ->route('cart.index')
                 ->with('error', 'Keranjang kosong.');
+        }
+
+        $address = auth()->user()
+            ->addresses()
+            ->where('utama', true)
+            ->first();
+
+        if (!$address) {
+            return redirect()
+                ->back()
+                ->with('error', 'Silahkan pilih alamat utama terlebih dahulu.');
         }
 
         DB::beginTransaction();
@@ -42,11 +54,12 @@ class PaymentController extends Controller
             });
 
             $order = Order::create([
-                'user_id' => auth()->id(),
-                'tanggal' => now(),
-                'total'   => $total,
-                'status'  => 'pending',
-                'metode'  => $request->metode,
+                'user_id'    => auth()->id(),
+                'address_id' => $address->id,
+                'tanggal'    => now(),
+                'total'      => $total,
+                'status'     => 'pending',
+                'metode'     => $request->metode,
             ]);
 
             foreach ($cart as $item) {
@@ -58,6 +71,7 @@ class PaymentController extends Controller
                     'harga'    => $item['harga'],
                     'subtotal' => $item['harga'] * $item['jumlah'],
                 ]);
+
             }
 
             DB::commit();
@@ -73,7 +87,9 @@ class PaymentController extends Controller
 
             DB::rollBack();
 
-            dd($e->getMessage());
+            return redirect()
+                ->route('cart.index')
+                ->with('error', $e->getMessage());
         }
     }
 }

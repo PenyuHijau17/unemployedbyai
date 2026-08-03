@@ -449,7 +449,7 @@ body:not(.reveal-ready) .reveal-line{
                             <div class="total-price">
                                 Rp {{ number_format($total,0,',','.') }}
                             </div>
-                            <a href="{{ route('payment.index') }}" class="btn btn-payment mt-3">
+                            <a href="{{ route('checkout.index') }}" class="btn btn-payment mt-3">
                                 <i class="bi bi-credit-card me-2"></i>
                                 Lanjut ke Pembayaran
                             </a>
@@ -464,6 +464,7 @@ body:not(.reveal-ready) .reveal-line{
     </div>
 
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -493,3 +494,192 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 @endsection
+=======
+<div class="card-body p-4">
+
+@if(empty($cart) || count($cart)==0)
+
+<div class="empty-cart">
+
+<i class="bi bi-cart-x"></i>
+
+<h3>
+
+Keranjang Masih Kosong
+
+</h3>
+
+<p>
+
+Belum ada buku yang ditambahkan ke keranjang.
+
+</p>
+
+<a href="{{ route('books.customer') }}"
+class="btn btn-shop mt-3">
+
+<i class="bi bi-book-half me-2"></i>
+
+Mulai Belanja
+
+</a>
+
+</div>
+
+@else
+
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead>
+
+<tr>
+
+<th>Buku</th>
+
+<th>Harga</th>
+
+<th>Jumlah</th>
+
+<th>Subtotal</th>
+
+<th>Aksi</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+@php
+
+$total=0;
+
+@endphp
+
+@foreach($cart as $id=>$item)
+
+@php
+
+$subtotal=$item['harga']*$item['jumlah'];
+
+$total+=$subtotal;
+
+@endphp
+
+<tr>
+
+<td>
+
+<div class="book-title">
+
+{{ $item['judul'] }}
+
+</div>
+
+</td>
+
+<td class="price">
+
+Rp {{ number_format($item['harga'],0,',','.') }}
+
+</td>
+
+<td>
+
+{{ $item['jumlah'] }}
+
+</td>
+
+<td class="price">
+
+Rp {{ number_format($subtotal,0,',','.') }}
+
+</td>
+
+<td>
+
+<form action="{{ route('cart.remove',$id) }}"
+method="POST">
+
+@csrf
+
+@method('DELETE')
+
+<button class="btn btn-danger btn-delete">
+
+<i class="bi bi-trash"></i>
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+@endforeach
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="row mt-5">
+
+<div class="col-lg-6 mb-3">
+
+<a href="{{ route('books.customer') }}"
+class="btn btn-shop">
+
+<i class="bi bi-arrow-left me-2"></i>
+
+Lanjut Belanja
+
+</a>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="total-card text-end">
+
+<div class="total-label">
+
+Total Belanja
+
+</div>
+
+<div class="total-price">
+
+Rp {{ number_format($total,0,',','.') }}
+
+</div>
+
+<a href="{{ route('checkout.index') }}"
+class="btn btn-payment mt-3">
+
+<i class="bi bi-cart-check me-2"></i>
+
+Lanjut Checkout
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+@endif
+
+</div>
+
+</div>
+
+</div>
+
+@endsection
+>>>>>>> origin/feature/customer-account

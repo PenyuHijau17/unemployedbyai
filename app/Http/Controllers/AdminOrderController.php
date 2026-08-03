@@ -22,22 +22,18 @@ class AdminOrderController extends Controller
         return view('admin.orders.show', compact('order'));
     }
 
-    public function updateStatus(Request $request, Order $order)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,diproses,selesai'
-        ]);
+   public function updateStatus(Request $request, Order $order)
+{
+    $request->validate([
+        'status' => 'required|in:pending,processing,shipped,completed'
+    ]);
 
-        $order->update([
-            'status' => $request->status
-        ]);
+    $order->update([
+        'status' => $request->status
+    ]);
 
-        // kalau mau balik ke detail pesanan:
-        // return redirect()->route('orders.show', $order->id)
-        //                  ->with('success', 'Status pesanan berhasil diubah');
-
-        // kalau mau balik ke daftar pesanan:
-        return redirect()->route('orders.index')
-                         ->with('success', 'Status pesanan berhasil diubah');
-    }
+    return redirect()
+        ->route('orders.index')
+        ->with('success', 'Status pesanan berhasil diubah');
+}
 }

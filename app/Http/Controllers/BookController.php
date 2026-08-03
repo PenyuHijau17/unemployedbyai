@@ -19,21 +19,16 @@ class BookController extends Controller
 
         $books = Book::with('category')
             ->when($search, function ($query) use ($search) {
-
                 $query->where(function ($q) use ($search) {
-
                     $q->where('judul', 'like', '%' . $search . '%')
                       ->orWhere('penulis', 'like', '%' . $search . '%')
                       ->orWhere('penerbit', 'like', '%' . $search . '%');
-
                 });
-
             })
             ->get();
 
         return view('books.index', compact('books'));
     }
-
 
     // ==========================
     // CUSTOMER LIST BOOK
@@ -45,38 +40,22 @@ class BookController extends Controller
         $category = $request->category;
 
         $books = Book::with('category')
-
             ->when($search, function ($query) use ($search) {
-
                 $query->where(function ($q) use ($search) {
-
                     $q->where('judul', 'like', '%' . $search . '%')
                       ->orWhere('penulis', 'like', '%' . $search . '%')
                       ->orWhere('penerbit', 'like', '%' . $search . '%');
-
                 });
-
             })
-
             ->when($category, function ($query) use ($category) {
-
                 $query->where('category_id', $category);
-
             })
-
             ->get();
 
         $categories = Category::orderBy('nama_kategori')->get();
 
-        return view(
-            'books.customer',
-            compact(
-                'books',
-                'categories'
-            )
-        );
+        return view('books.customer', compact('books', 'categories'));
     }
-
 
     // ==========================
     // CUSTOMER DETAIL BOOK
@@ -84,12 +63,8 @@ class BookController extends Controller
 
     public function customerShow(Book $book)
     {
-        return view(
-            'books.customer-show',
-            compact('book')
-        );
+        return view('books.customer-show', compact('book'));
     }
-
 
     // ==========================
     // ADMIN CREATE
@@ -99,12 +74,8 @@ class BookController extends Controller
     {
         $categories = Category::all();
 
-        return view(
-            'books.create',
-            compact('categories')
-        );
+        return view('books.create', compact('categories'));
     }
-
 
     // ==========================
     // ADMIN STORE
@@ -127,8 +98,7 @@ class BookController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')
-                ->store('books', 'public');
+            $data['gambar'] = $request->file('gambar')->store('books', 'public');
         }
 
         Book::create($data);
@@ -138,19 +108,14 @@ class BookController extends Controller
             ->with('success', 'Buku berhasil ditambahkan');
     }
 
-
     // ==========================
     // ADMIN SHOW
     // ==========================
 
     public function show(Book $book)
     {
-        return view(
-            'books.show',
-            compact('book')
-        );
+        return view('books.show', compact('book'));
     }
-
 
     // ==========================
     // ADMIN EDIT
@@ -160,15 +125,8 @@ class BookController extends Controller
     {
         $categories = Category::all();
 
-        return view(
-            'books.edit',
-            compact(
-                'book',
-                'categories'
-            )
-        );
+        return view('books.edit', compact('book', 'categories'));
     }
-
 
     // ==========================
     // ADMIN UPDATE
@@ -209,7 +167,6 @@ class BookController extends Controller
             ->route('books.index')
             ->with('success', 'Buku berhasil diperbarui');
     }
-
 
     // ==========================
     // ADMIN DELETE
