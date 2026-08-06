@@ -64,6 +64,8 @@ class PaymentController extends Controller
 
             foreach ($cart as $item) {
 
+            
+
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'book_id'  => $item['id'],
@@ -92,4 +94,6 @@ class PaymentController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    
 }

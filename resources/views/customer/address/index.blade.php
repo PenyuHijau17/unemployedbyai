@@ -91,6 +91,39 @@
                     </p>
 
 
+                    <div class="d-flex gap-2 mt-3">
+
+                        @if(!$address->utama)
+
+                        <form action="{{ route('customer.address.setPrimary', $address) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit" class="btn btn-outline-warning btn-sm rounded-pill">
+                                <i class="bi bi-check-circle"></i>
+                                Jadikan Utama
+                            </button>
+
+                        </form>
+
+                        @endif
+
+
+                        <form action="{{ route('customer.address.destroy', $address) }}" method="POST"
+                              onsubmit="return confirm('Hapus alamat ini?');">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                                <i class="bi bi-trash"></i>
+                                Hapus
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
                 </div>
 
             </div>

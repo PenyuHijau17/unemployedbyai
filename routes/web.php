@@ -1,4 +1,9 @@
+
 <?php
+
+Route::get('/tes', function () {
+    return 'TES BERHASIL';
+});
 
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +21,7 @@ use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\AddressController;
 use App\Http\Controllers\CheckoutController;
+
 
 
 // ==========================
@@ -57,7 +63,11 @@ Route::middleware(['auth','role:admin'])->group(function(){
 
     Route::resource('users', UserController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('books', BookController::class);
+
+// Tambahkan ini
+    
+
+   Route::resource('books', BookController::class);
     Route::resource('orders', AdminOrderController::class);
 
     // route khusus update status pesanan
@@ -116,14 +126,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'index'])
         ->name('customer.account');
 
-    Route::get('/orders', [OrderController::class, 'index'])
-        ->name('customer.orders');
-
+    
     Route::get('/address', [AddressController::class, 'index'])
         ->name('customer.address');
 
-    Route::get('/orders/{id}', [OrderController::class, 'show'])
-    ->name('customer.orders.show');
 
     Route::put('/address/{address}/primary',
     [AddressController::class,'setPrimary']
@@ -171,6 +177,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/alamat',
         [AddressController::class, 'store']
     )->name('customer.address.store');
+
+
+    Route::put('/alamat/{address}/utama',
+        [AddressController::class, 'setPrimary']
+    )->name('customer.address.setPrimary');
+
+
+    Route::delete('/alamat/{address}',
+        [AddressController::class, 'destroy']
+    )->name('customer.address.destroy');
 
 });
 

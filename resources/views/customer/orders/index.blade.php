@@ -126,12 +126,12 @@
 
                         </div>
 
-                        <a href="#"
-                           class="btn btn-outline-warning rounded-pill">
+                        <a href="{{ route('customer.orders.show', $order) }}"
+                             class="btn btn-outline-warning rounded-pill">
 
-                            <i class="bi bi-eye"></i>
+                             <i class="bi bi-eye"></i>
 
-                            Detail
+                             Detail
 
                         </a>
 

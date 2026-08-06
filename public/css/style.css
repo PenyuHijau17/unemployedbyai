@@ -208,3 +208,41 @@ a:hover{
     font-weight:700;
 
 }
+
+/* Tombol Lanjut Pembayaran */
+.btn-payment{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+
+    width: 100%;
+    padding: 14px 20px;
+
+    background: #C9A227;
+    color: #fff;
+    border: 2px solid #C9A227;
+    border-radius: 999px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    text-decoration: none;
+    transition: all .3s ease;
+}
+
+.btn-payment:hover{
+    background: #B68F1E;
+    border-color: #B68F1E;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(201,162,39,.25);
+}
+
+.btn-payment:active{
+    transform: translateY(0);
+}
+
+.btn-payment i{
+    font-size: 1rem;
+}
