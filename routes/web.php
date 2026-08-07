@@ -21,6 +21,7 @@ use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\AddressController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -126,28 +127,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'index'])
         ->name('customer.account');
 
-    
     Route::get('/address', [AddressController::class, 'index'])
         ->name('customer.address');
 
-
     Route::put('/address/{address}/primary',
-    [AddressController::class,'setPrimary']
-    )
-    ->name('customer.address.primary');
-
-    Route::middleware('auth')->group(function(){
+        [AddressController::class, 'setPrimary']
+    )->name('customer.address.primary');
 
     Route::get('/account/edit',
-        [AccountController::class,'edit']
+        [AccountController::class, 'edit']
     )->name('customer.account.edit');
 
-
     Route::put('/account/update',
-        [AccountController::class,'update']
+        [AccountController::class, 'update']
     )->name('customer.account.update');
 
-});
+    // ==========================
+    // REVIEW
+    // ==========================
+
+    Route::post('/books/{book}/review',
+        [ReviewController::class, 'store']
+    )->name('reviews.store');
+
 });
 
 

@@ -203,6 +203,86 @@ body:not(.reveal-ready) .reveal-line{
     border-color:var(--primary-dark);
 }
 
+/* ===== Tombol CTA utama Hero (lebih menonjol) ===== */
+.btn-hero-cta{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    background-size:200% 200%;
+    color:#fff;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:.3px;
+    padding:17px 42px;
+    border:none;
+    border-radius:60px;
+    overflow:hidden;
+    isolation:isolate;
+    box-shadow:0 14px 30px rgba(0,91,170,.35), 0 0 0 0 rgba(212,175,55,.5);
+    transition:transform .35s cubic-bezier(.19,1,.22,1),
+               box-shadow .35s cubic-bezier(.19,1,.22,1),
+               background-position .6s ease;
+    animation:heroCtaPulse 2.8s ease-in-out infinite;
+}
+
+.btn-hero-cta::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-60%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:skewX(-20deg);
+    transition:left .75s ease;
+    z-index:1;
+}
+
+.btn-hero-cta span,
+.btn-hero-cta i{
+    position:relative;
+    z-index:2;
+}
+
+.btn-hero-cta .icon-arrow{
+    transition:transform .35s ease;
+}
+
+.btn-hero-cta:hover{
+    transform:translateY(-4px) scale(1.035);
+    background-position:100% 50%;
+    box-shadow:0 20px 40px rgba(0,91,170,.42), 0 0 0 8px rgba(212,175,55,.18);
+    color:#fff;
+}
+
+.btn-hero-cta:hover::before{
+    left:130%;
+}
+
+.btn-hero-cta:hover .icon-arrow{
+    transform:translateX(5px);
+}
+
+.btn-hero-cta:active{
+    transform:translateY(-1px) scale(.98);
+}
+
+@keyframes heroCtaPulse{
+    0%,100%{
+        box-shadow:0 14px 30px rgba(0,91,170,.35), 0 0 0 0 rgba(212,175,55,.45);
+    }
+    50%{
+        box-shadow:0 14px 30px rgba(0,91,170,.35), 0 0 0 10px rgba(212,175,55,0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .btn-hero-cta{ animation:none; }
+    .btn-hero-cta::before{ transition:none; }
+}
+
 .hero img{
     width:100%;
     border-radius:20px;
@@ -717,18 +797,10 @@ terjangkau dan kualitas terbaik.
 
 </p>
 
-<a href="{{ route('books.customer') }}" class="btn btn-shop">
-
-<i class="bi bi-book"></i>
-
-Jelajahi Buku
-
-</a>
-
-<a href="{{ route('books.customer') }}" class="btn btn-outline-shop">
-
-Lihat Koleksi
-
+<a href="{{ route('books.customer') }}" class="btn btn-hero-cta">
+    <i class="bi bi-book"></i>
+    <span>Jelajahi Buku</span>
+    <i class="bi bi-arrow-right icon-arrow"></i>
 </a>
 
 </div>

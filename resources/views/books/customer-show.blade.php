@@ -174,6 +174,35 @@ body:not(.reveal-ready) .reveal-line{
     font-size:16px;
 }
 
+.book-stats{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    margin:18px 0 10px;
+    flex-wrap:wrap;
+}
+
+.book-stat{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:15px;
+    font-weight:700;
+    color:var(--text);
+}
+
+.book-stat i{
+    font-size:18px;
+}
+
+.book-stat.rating i{
+    color:var(--gold);
+}
+
+.book-stat.sold i{
+    color:#2E7D32;
+}
+
 .price-row{
     display:flex;
     align-items:center;
@@ -385,20 +414,24 @@ body:not(.reveal-ready) .reveal-line{
 
                     <h1 class="book-title">{{ $book->judul }}</h1>
 
-                    <div class="info-list">
-                        <p>
-                            <i class="bi bi-person"></i>
-                            {{ $book->penulis }}
-                        </p>
-                        <p>
-                            <i class="bi bi-building"></i>
-                            {{ $book->penerbit }}
-                        </p>
-                        <p>
-                            <i class="bi bi-calendar"></i>
-                            {{ $book->tahun_terbit }}
-                        </p>
+                    <div class="book-stats">
+
+                        <div class="book-stat rating">
+                            <i class="bi bi-star-fill"></i>
+                            <span>
+                                {{ number_format($averageRating, 1) }}
+                                ({{ $totalReview }} Rating)
+                            </span>
+                        </div>
+
+                        <div class="book-stat sold">
+                            <i class="bi bi-bag-check-fill"></i>
+                            <span>{{ $totalTerjual }} Terjual</span>
+                        </div>
+
                     </div>
+
+                    <div class="info-list">
 
                     <div class="price-row">
                         <span class="price">
@@ -436,16 +469,160 @@ body:not(.reveal-ready) .reveal-line{
 
         {{-- DESKRIPSI --}}
         <div class="description-card reveal">
-            <h4>
-                <i class="bi bi-card-text me-2"></i>
-                Deskripsi Buku
-            </h4>
-            <p class="mb-0">
-                {{ $book->deskripsi ?? 'Belum ada deskripsi.' }}
-            </p>
+    <h4>
+        <i class="bi bi-card-text me-2"></i>
+        Deskripsi Buku
+    </h4>
+    <p class="mb-0">
+        {{ $book->deskripsi ?? 'Belum ada deskripsi.' }}
+    </p>
+</div>
+
+<div class="review-card reveal">
+
+    <h4 class="mb-4">
+        <i class="bi bi-star-fill text-warning me-2"></i>
+        Rating & Ulasan
+    </h4>
+
+    @auth
+
+        @if($canReview)
+
+        <form action="{{ route('reviews.store', $book) }}" method="POST">
+
+            @csrf
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Rating
+                </label>
+
+                <select name="rating" class="form-select">
+
+                    <option value="5">★★★★★ (5)</option>
+                    <option value="4">★★★★☆ (4)</option>
+                    <option value="3">★★★☆☆ (3)</option>
+                    <option value="2">★★☆☆☆ (2)</option>
+                    <option value="1">★☆☆☆☆ (1)</option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Ulasan
+                </label>
+
+                <textarea
+                    name="komentar"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Bagikan pengalamanmu membaca buku ini..."
+                    required></textarea>
+
+            </div>
+
+            <button type="submit" class="btn btn-cart">
+                <i class="bi bi-send"></i>
+                Kirim Ulasan
+            </button>
+
+        </form>
+
+        @else
+
+            <div class="alert alert-info">
+
+                Anda hanya dapat memberikan ulasan setelah membeli buku ini
+                dengan status <strong>selesai</strong>.
+
+            </div>
+
+        @endif
+
+    @else
+
+        <div class="alert alert-warning">
+
+            Silakan login terlebih dahulu untuk memberikan ulasan.
+
         </div>
 
-    </div>
+    @endauth
+
+    <hr class="my-4">
+
+    <h5 class="fw-bold mb-4">
+
+        Semua Ulasan
+
+    </h5>
+
+    @forelse($reviews as $review)
+
+        <div class="mb-4">
+
+            <div class="d-flex justify-content-between">
+
+                <strong>
+
+                    {{ $review->user->name }}
+
+                </strong>
+
+                <small class="text-muted">
+
+                    {{ $review->created_at->format('d M Y') }}
+
+                </small>
+
+            </div>
+
+            <div class="text-warning fs-5 my-2">
+
+                @for($i=1;$i<=5;$i++)
+
+                    @if($i <= $review->rating)
+
+                        ★
+
+                    @else
+
+                        ☆
+
+                    @endif
+
+                @endfor
+
+            </div>
+
+            <p class="mb-0">
+
+                {{ $review->komentar }}
+
+            </p>
+
+        </div>
+
+        <hr>
+
+    @empty
+
+        <div class="text-center text-muted py-3">
+
+            Belum ada ulasan untuk buku ini.
+
+        </div>
+
+    @endforelse
+
+</div>
+
+</div>
 
 </div>
 
@@ -455,23 +632,36 @@ document.addEventListener('DOMContentLoaded', function () {
     var revealEls = document.querySelectorAll('.reveal, .reveal-line');
 
     if (!('IntersectionObserver' in window)) {
-        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+        revealEls.forEach(function (el) {
+            el.classList.add('is-visible');
+        });
         return;
     }
 
-    var observer = new IntersectionObserver(function (entries, obs) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
+    var observer = new IntersectionObserver(function(entries, obs){
+
+        entries.forEach(function(entry){
+
+            if(entry.isIntersecting){
+
                 entry.target.classList.add('is-visible');
+
                 obs.unobserve(entry.target);
+
             }
+
         });
-    }, {
-        threshold: 0.12,
-        rootMargin: '0px 0px -60px 0px'
+
+    },{
+        threshold:.12,
+        rootMargin:'0px 0px -60px 0px'
     });
 
-    revealEls.forEach(function (el) { observer.observe(el); });
+    revealEls.forEach(function(el){
+
+        observer.observe(el);
+
+    });
 
 });
 </script>

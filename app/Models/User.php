@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Order;
+use App\Models\Address;
 
 class User extends Authenticatable
 {
@@ -40,5 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
-    
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

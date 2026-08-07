@@ -7,13 +7,32 @@
 
 <style>
 
+:root{
+
+    --primary:#005BAA;
+    --primary-dark:#003A70;
+    --primary-light:#EAF4FF;
+
+    --secondary:#0078D7;
+
+    --gold:#D4AF37;
+    --gold-light:#F8E8A8;
+
+    --background:#F5F8FC;
+    --border:#E5ECF3;
+
+    --text:#22324A;
+    --text-light:#718096;
+
+}
+
 .login-page{
 
     min-height:100vh;
 
     display:flex;
 
-    background:#F8F3E9;
+    background:var(--background);
 
 }
 
@@ -26,8 +45,8 @@
 
     background:
     linear-gradient(
-        rgba(92,64,51,.9),
-        rgba(92,64,51,.95)
+        rgba(0,58,112,.9),
+        rgba(0,58,112,.95)
     ),
     url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200');
 
@@ -59,7 +78,7 @@
 
     font-size:70px;
 
-    color:#D6B06A;
+    color:var(--gold);
 
 }
 
@@ -79,7 +98,7 @@
 
 .brand-text{
 
-    color:#EBDCC5;
+    color:var(--primary-light);
 
     font-size:18px;
 
@@ -97,7 +116,7 @@
 
     height:4px;
 
-    background:#D6B06A;
+    background:var(--gold);
 
     margin:25px 0;
 
@@ -147,7 +166,7 @@
 
 .login-card h2{
 
-    color:#5C4033;
+    color:var(--primary-dark);
 
     font-size:36px;
 
@@ -159,7 +178,7 @@
 
 .login-subtitle{
 
-    color:#777;
+    color:var(--text-light);
 
     margin-bottom:35px;
 
@@ -170,7 +189,7 @@
 
 .form-label{
 
-    color:#5C4033;
+    color:var(--primary-dark);
 
     font-weight:600;
 
@@ -184,7 +203,7 @@
 
     border-radius:15px;
 
-    border:1px solid #DED2C2;
+    border:1px solid var(--border);
 
     padding-left:18px;
 
@@ -194,10 +213,10 @@
 
 .form-control:focus{
 
-    border-color:#C19A5B;
+    border-color:var(--primary);
 
     box-shadow:
-    0 0 0 .2rem rgba(193,154,91,.2);
+    0 0 0 .2rem rgba(0,91,170,.2);
 
 }
 
@@ -210,7 +229,7 @@
 
     border-radius:30px;
 
-    background:#5C4033;
+    background:var(--primary);
 
     color:white;
 
@@ -224,7 +243,7 @@
 
 .btn-login:hover{
 
-    background:#3F2B20;
+    background:var(--primary-dark);
 
     color:white;
 
@@ -234,7 +253,7 @@
 
 .register-text{
 
-    color:#777;
+    color:var(--text-light);
 
 }
 
@@ -242,7 +261,7 @@
 
 .register-link{
 
-    color:#B08A4A;
+    color:var(--primary);
 
     font-weight:600;
 
@@ -254,7 +273,7 @@
 
 .register-link:hover{
 
-    color:#5C4033;
+    color:var(--primary-dark);
 
 }
 

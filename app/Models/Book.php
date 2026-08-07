@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-
     protected $fillable = [
-
         'category_id',
         'judul',
         'penulis',
@@ -18,13 +16,20 @@ class Book extends Model
         'stok',
         'gambar',
         'deskripsi'
-
     ];
-
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

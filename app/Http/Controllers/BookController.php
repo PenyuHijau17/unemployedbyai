@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    // ==========================
-    // ADMIN LIST BOOK
-    // ==========================
-
     public function index(Request $request)
     {
         $search = $request->search;
@@ -21,8 +19,8 @@ class BookController extends Controller
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', '%' . $search . '%')
-                      ->orWhere('penulis', 'like', '%' . $search . '%')
-                      ->orWhere('penerbit', 'like', '%' . $search . '%');
+                        ->orWhere('penulis', 'like', '%' . $search . '%')
+                        ->orWhere('penerbit', 'like', '%' . $search . '%');
                 });
             })
             ->get();
@@ -30,21 +28,21 @@ class BookController extends Controller
         return view('books.index', compact('books'));
     }
 
-    // ==========================
-    // CUSTOMER LIST BOOK
-    // ==========================
-
     public function customerIndex(Request $request)
     {
         $search = $request->search;
         $category = $request->category;
 
-        $books = Book::with('category')
+        $books = Book::with([
+            'category',
+            'orderDetails',
+            'reviews'
+        ])
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', '%' . $search . '%')
-                      ->orWhere('penulis', 'like', '%' . $search . '%')
-                      ->orWhere('penerbit', 'like', '%' . $search . '%');
+                        ->orWhere('penulis', 'like', '%' . $search . '%')
+                        ->orWhere('penerbit', 'like', '%' . $search . '%');
                 });
             })
             ->when($category, function ($query) use ($category) {
@@ -52,34 +50,91 @@ class BookController extends Controller
             })
             ->get();
 
+        foreach ($books as $book) {
+
+            $book->total_terjual = $book->orderDetails->sum('jumlah');
+
+            $book->average_rating = round(
+                $book->reviews->avg('rating') ?? 0,
+                1
+            );
+
+            $book->total_review = $book->reviews->count();
+        }
+
         $categories = Category::orderBy('nama_kategori')->get();
 
-        return view('books.customer', compact('books', 'categories'));
+        return view('books.customer', compact(
+            'books',
+            'categories'
+        ));
     }
-
-    // ==========================
-    // CUSTOMER DETAIL BOOK
-    // ==========================
 
     public function customerShow(Book $book)
-    {
-        return view('books.customer-show', compact('book'));
+{
+    $book->load([
+        'category',
+        'reviews.user'
+    ]);
+
+    // Hanya hitung buku yang benar-benar sudah selesai dibeli
+    $totalTerjual = $book->orderDetails()
+        ->whereHas('order', function ($query) {
+            $query->where('status', 'selesai');
+        })
+        ->sum('jumlah');
+
+    // Ambil semua review
+    $reviews = $book->reviews()
+        ->with('user')
+        ->latest()
+        ->get();
+
+    // Rating rata-rata
+    $averageRating = round($reviews->avg('rating') ?? 0, 1);
+
+    // Jumlah rating
+    $totalReview = $reviews->count();
+
+    $canReview = false;
+
+    if (Auth::check()) {
+
+        // User harus pernah membeli buku dengan status selesai
+        $canReview = $book->orderDetails()
+            ->whereHas('order', function ($query) {
+                $query->where('user_id', Auth::id())
+                      ->where('status', 'selesai');
+            })
+            ->exists();
+
+        // Cek apakah user sudah pernah review
+        if ($canReview) {
+
+            $sudahReview = Review::where('user_id', Auth::id())
+                ->where('book_id', $book->id)
+                ->exists();
+
+            $canReview = !$sudahReview;
+        }
     }
 
-    // ==========================
-    // ADMIN CREATE
-    // ==========================
+    return view('books.customer-show', compact(
+        'book',
+        'totalTerjual',
+        'averageRating',
+        'totalReview',
+        'reviews',
+        'canReview'
+    ));
+}
 
-    public function create()
+        public function create()
     {
         $categories = Category::all();
 
         return view('books.create', compact('categories'));
     }
-
-    // ==========================
-    // ADMIN STORE
-    // ==========================
 
     public function store(Request $request)
     {
@@ -108,29 +163,20 @@ class BookController extends Controller
             ->with('success', 'Buku berhasil ditambahkan');
     }
 
-    // ==========================
-    // ADMIN SHOW
-    // ==========================
-
     public function show(Book $book)
     {
         return view('books.show', compact('book'));
     }
 
-    // ==========================
-    // ADMIN EDIT
-    // ==========================
-
     public function edit(Book $book)
     {
         $categories = Category::all();
 
-        return view('books.edit', compact('book', 'categories'));
+        return view('books.edit', compact(
+            'book',
+            'categories'
+        ));
     }
-
-    // ==========================
-    // ADMIN UPDATE
-    // ==========================
 
     public function update(Request $request, Book $book)
     {
@@ -167,10 +213,6 @@ class BookController extends Controller
             ->route('books.index')
             ->with('success', 'Buku berhasil diperbarui');
     }
-
-    // ==========================
-    // ADMIN DELETE
-    // ==========================
 
     public function destroy(Book $book)
     {
