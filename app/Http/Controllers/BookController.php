@@ -35,7 +35,7 @@ class BookController extends Controller
 
         $books = Book::with([
             'category',
-            'orderDetails',
+            'orderDetails.order',
             'reviews'
         ])
             ->when($search, function ($query) use ($search) {
@@ -52,13 +52,21 @@ class BookController extends Controller
 
         foreach ($books as $book) {
 
-            $book->total_terjual = $book->orderDetails->sum('jumlah');
+            // Hanya menghitung buku dari order yang completed
+            $book->total_terjual = $book->orderDetails
+                ->filter(function ($detail) {
+                    return $detail->order &&
+                        $detail->order->status === 'completed';
+                })
+                ->sum('jumlah');
 
+            // Rating rata-rata
             $book->average_rating = round(
                 $book->reviews->avg('rating') ?? 0,
                 1
             );
 
+            // Jumlah review
             $book->total_review = $book->reviews->count();
         }
 
@@ -71,65 +79,71 @@ class BookController extends Controller
     }
 
     public function customerShow(Book $book)
-{
-    $book->load([
-        'category',
-        'reviews.user'
-    ]);
+    {
+        $book->load([
+            'category',
+            'reviews.user'
+        ]);
 
-    // Hanya hitung buku yang benar-benar sudah selesai dibeli
-    $totalTerjual = $book->orderDetails()
-        ->whereHas('order', function ($query) {
-            $query->where('status', 'selesai');
-        })
-        ->sum('jumlah');
-
-    // Ambil semua review
-    $reviews = $book->reviews()
-        ->with('user')
-        ->latest()
-        ->get();
-
-    // Rating rata-rata
-    $averageRating = round($reviews->avg('rating') ?? 0, 1);
-
-    // Jumlah rating
-    $totalReview = $reviews->count();
-
-    $canReview = false;
-
-    if (Auth::check()) {
-
-        // User harus pernah membeli buku dengan status selesai
-        $canReview = $book->orderDetails()
+        // Hanya menghitung buku yang terjual dari order completed
+        $totalTerjual = $book->orderDetails()
             ->whereHas('order', function ($query) {
-                $query->where('user_id', Auth::id())
-                      ->where('status', 'selesai');
+                $query->where('status', 'completed');
             })
-            ->exists();
+            ->sum('jumlah');
 
-        // Cek apakah user sudah pernah review
-        if ($canReview) {
+        // Ambil semua review
+        $reviews = $book->reviews()
+            ->with('user')
+            ->latest()
+            ->get();
 
-            $sudahReview = Review::where('user_id', Auth::id())
-                ->where('book_id', $book->id)
+        // Rating rata-rata
+        $averageRating = round(
+            $reviews->avg('rating') ?? 0,
+            1
+        );
+
+        // Jumlah rating
+        $totalReview = $reviews->count();
+
+        // Default: user belum bisa review
+        $canReview = false;
+
+        if (Auth::check()) {
+
+            // User harus pernah membeli buku
+            // dan order tersebut harus completed
+            $canReview = $book->orderDetails()
+                ->whereHas('order', function ($query) {
+                    $query->where('user_id', Auth::id())
+                        ->where('status', 'completed');
+                })
                 ->exists();
 
-            $canReview = !$sudahReview;
+            // Cek apakah user sudah pernah review
+            if ($canReview) {
+
+                $sudahReview = Review::where('user_id', Auth::id())
+                    ->where('book_id', $book->id)
+                    ->exists();
+
+                // Kalau sudah review, form tidak ditampilkan
+                $canReview = !$sudahReview;
+            }
         }
+
+        return view('books.customer-show', compact(
+            'book',
+            'totalTerjual',
+            'averageRating',
+            'totalReview',
+            'reviews',
+            'canReview'
+        ));
     }
 
-    return view('books.customer-show', compact(
-        'book',
-        'totalTerjual',
-        'averageRating',
-        'totalReview',
-        'reviews',
-        'canReview'
-    ));
-}
-
-        public function create()
+    public function create()
     {
         $categories = Category::all();
 
@@ -153,7 +167,8 @@ class BookController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('books', 'public');
+            $data['gambar'] = $request->file('gambar')
+                ->store('books', 'public');
         }
 
         Book::create($data);

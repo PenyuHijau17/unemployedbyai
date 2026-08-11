@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
     public function index()
     {
         // Ambil semua pesanan beserta user
-        $orders = Order::with('user')->latest()->get();
+        $orders = Order::with('user')
+            ->latest()
+            ->get();
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -29,12 +32,82 @@ class AdminOrderController extends Controller
             'status' => 'required|in:pending,processing,shipped,completed,cancelled',
         ]);
 
-        $order->update([
-            'status' => $request->status,
-        ]);
+        $statusLama = $order->status;
+        $statusBaru = $request->status;
 
-        return redirect()
-            ->route('orders.index')
-            ->with('success', 'Status pesanan berhasil diubah.');
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Jika status berubah menjadi completed
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $statusLama !== 'completed' &&
+                $statusBaru === 'completed'
+            ) {
+
+                // Ambil semua detail pesanan beserta bukunya
+                $order->load('orderDetails.book');
+
+                foreach ($order->orderDetails as $detail) {
+
+                    $book = $detail->book;
+
+                    // Pastikan bukunya masih ada
+                    if (!$book) {
+                        throw new \Exception(
+                            'Buku pada pesanan tidak ditemukan.'
+                        );
+                    }
+
+                    // Cek stok
+                    if ($detail->jumlah > $book->stok) {
+                        throw new \Exception(
+                            'Stok buku "' .
+                            $book->judul .
+                            '" tidak mencukupi.'
+                        );
+                    }
+
+                    // Kurangi stok
+                    $book->decrement(
+                        'stok',
+                        $detail->jumlah
+                    );
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update status order
+            |--------------------------------------------------------------------------
+            */
+
+            $order->update([
+                'status' => $statusBaru,
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('orders.index')
+                ->with(
+                    'success',
+                    'Status pesanan berhasil diubah.'
+                );
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()->with(
+                'error',
+                $e->getMessage()
+            );
+        }
     }
 }

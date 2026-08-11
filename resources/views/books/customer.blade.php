@@ -244,22 +244,71 @@ body:not(.reveal-ready) .reveal-line{
 }
 
 /* ==========================================================
-   BOOK CARD
+   BOOK CARD — versi elegan, senada dengan .btn-hero-cta
+   (gradasi navy→biru, aksen emas tipis, kilau halus saat hover)
 ========================================================== */
 
 .book-card{
+    position:relative;
     background:var(--white);
-    border:none;
+    border:1px solid var(--border);
     border-radius:var(--radius);
     overflow:hidden;
     height:100%;
     box-shadow:var(--shadow);
-    transition:var(--transition);
+    isolation:isolate;
+    transition:transform .45s cubic-bezier(.19,1,.22,1),
+               box-shadow .45s cubic-bezier(.19,1,.22,1),
+               border-color .45s ease;
+}
+
+/* garis aksen tipis di atas card, mekar jadi gradasi navy-emas saat hover */
+.book-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--primary), var(--secondary));
+    transform:scaleX(.3);
+    transform-origin:left center;
+    opacity:.55;
+    transition:transform .5s cubic-bezier(.19,1,.22,1),
+               background .5s ease,
+               opacity .5s ease;
+    z-index:2;
+}
+
+/* kilau tipis yang menyapu diagonal, sangat halus, bukan norak */
+.book-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(115deg, transparent 40%, rgba(212,175,55,.10) 50%, transparent 60%);
+    background-size:220% 220%;
+    background-position:-140% -140%;
+    opacity:0;
+    transition:opacity .45s ease, background-position .8s ease;
+    pointer-events:none;
+    z-index:1;
 }
 
 .book-card:hover{
     transform:translateY(-10px);
-    box-shadow:var(--shadow-hover);
+    border-color:var(--primary);
+    box-shadow:0 26px 50px rgba(0,58,112,.18), 0 0 0 1px rgba(212,175,55,.25);
+}
+
+.book-card:hover::before{
+    transform:scaleX(1);
+    background:linear-gradient(90deg, var(--primary-dark), var(--primary), var(--gold));
+    opacity:1;
+}
+
+.book-card:hover::after{
+    opacity:1;
+    background-position:140% 140%;
 }
 
 .book-image{
@@ -268,6 +317,7 @@ body:not(.reveal-ready) .reveal-line{
     background:var(--primary-light);
     padding:20px;
     overflow:hidden;
+    z-index:1;
 }
 
 .book-image-link{
@@ -320,6 +370,7 @@ body:not(.reveal-ready) .reveal-line{
     font-size:.85rem;
     transform:translateY(10px);
     transition:var(--transition);
+    box-shadow:0 10px 22px rgba(212,175,55,.35);
 }
 
 .book-card:hover .book-quickview span{
@@ -327,7 +378,14 @@ body:not(.reveal-ready) .reveal-line{
 }
 
 .book-body{
+    position:relative;
     padding:25px;
+    z-index:1;
+    transition:background .45s ease;
+}
+
+.book-card:hover .book-body{
+    background:linear-gradient(180deg, transparent 0%, rgba(234,244,255,.55) 100%);
 }
 
 .book-title{
@@ -335,6 +393,11 @@ body:not(.reveal-ready) .reveal-line{
     font-size:18px;
     font-weight:700;
     min-height:55px;
+    transition:color .35s ease;
+}
+
+.book-card:hover .book-title{
+    color:var(--primary);
 }
 
 .book-author{
@@ -346,6 +409,11 @@ body:not(.reveal-ready) .reveal-line{
     color:var(--primary-dark);
     font-size:22px;
     font-weight:800;
+    transition:color .35s ease;
+}
+
+.book-card:hover .book-price{
+    color:var(--secondary);
 }
 
 .category-tag{
@@ -357,6 +425,11 @@ body:not(.reveal-ready) .reveal-line{
     border-radius:20px;
     display:inline-block;
     margin-bottom:10px;
+    transition:var(--transition);
+}
+
+.book-card:hover .category-tag{
+    background:var(--gold);
 }
 
 .result-info{
@@ -393,6 +466,19 @@ body:not(.reveal-ready) .reveal-line{
 .empty-state p{
     color:var(--text-light);
     margin:0;
+}
+
+@media (prefers-reduced-motion: reduce){
+    .book-card,
+    .book-card::before,
+    .book-card::after,
+    .book-image img,
+    .book-body,
+    .book-title,
+    .book-price,
+    .category-tag{
+        transition:none!important;
+    }
 }
 
 </style>
