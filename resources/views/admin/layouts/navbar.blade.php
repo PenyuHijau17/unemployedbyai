@@ -1,32 +1,178 @@
 <nav class="top-navbar">
 
-    <div>
+    {{-- =====================================================
+        LEFT SIDE
+    ====================================================== --}}
+    <div class="navbar-left">
 
-        <h4 class="page-title">
-            @yield('title', 'Dashboard')
-        </h4>
+        {{-- Mobile Menu --}}
+        <button
+            type="button"
+            class="mobile-sidebar-toggle"
+            id="mobileSidebarToggle"
+            aria-label="Buka menu"
+        >
+            <i class="bi bi-list"></i>
+        </button>
 
-        <small class="page-subtitle">
-            Selamat datang kembali 👋
-        </small>
+
+        {{-- Page Heading --}}
+        <div class="page-heading">
+
+            <div class="page-title">
+                @yield('title', 'Dashboard')
+            </div>
+
+            <small class="page-subtitle">
+                Selamat datang kembali 👋
+            </small>
+
+        </div>
 
     </div>
 
-    <div class="user-box">
 
-        <div class="user-avatar">
-            {{ strtoupper(substr(Auth::user()->name,0,1)) }}
-        </div>
+    {{-- =====================================================
+        RIGHT SIDE
+    ====================================================== --}}
+    <div class="navbar-right">
 
-        <div>
+        {{-- =================================================
+            USER PROFILE
+        ================================================== --}}
+        <div class="navbar-user-wrapper">
 
-            <div class="user-name">
-                {{ Auth::user()->name }}
+            <button
+                type="button"
+                class="navbar-user"
+                id="profileButton"
+            >
+
+                {{-- Avatar --}}
+                <div class="user-avatar">
+
+                    {{ strtoupper(
+                        substr(Auth::user()->name, 0, 1)
+                    ) }}
+
+                </div>
+
+
+                {{-- User Info --}}
+                <div class="user-info">
+
+                    <div class="user-name">
+                        {{ Auth::user()->name }}
+                    </div>
+
+                    <small class="user-role">
+                        Administrator
+                    </small>
+
+                </div>
+
+
+                {{-- Chevron --}}
+                <i class="bi bi-chevron-down user-chevron"></i>
+
+            </button>
+
+
+            {{-- =================================================
+                PROFILE DROPDOWN
+            ================================================== --}}
+            <div
+                class="navbar-dropdown profile-dropdown"
+                id="profileDropdown"
+            >
+
+                {{-- Profile Header --}}
+                <div class="profile-dropdown-header">
+
+                    <div class="user-avatar large">
+
+                        {{ strtoupper(
+                            substr(Auth::user()->name, 0, 1)
+                        ) }}
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {{ Auth::user()->name }}
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dropdown-divider"></div>
+
+
+                {{-- Profile --}}
+                <a
+                    href="#"
+                    class="dropdown-item"
+                >
+
+                    <i class="bi bi-person"></i>
+
+                    <span>
+                        Profil
+                    </span>
+
+                </a>
+
+
+                {{-- Settings --}}
+                <a
+                    href="#"
+                    class="dropdown-item"
+                >
+
+                    <i class="bi bi-gear"></i>
+
+                    <span>
+                        Pengaturan
+                    </span>
+
+                </a>
+
+
+                <div class="dropdown-divider"></div>
+
+
+                {{-- Logout --}}
+                <form
+                    action="{{ route('logout') }}"
+                    method="POST"
+                >
+
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="dropdown-item dropdown-logout"
+                    >
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        <span>
+                            Logout
+                        </span>
+
+                    </button>
+
+                </form>
+
             </div>
-
-            <small class="user-role">
-                Administrator
-            </small>
 
         </div>
 

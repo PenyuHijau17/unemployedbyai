@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
+    /**
+     * Daftar semua pesanan
+     */
     public function index()
     {
-        // Ambil semua pesanan beserta user
         $orders = Order::with('user')
             ->latest()
             ->get();
@@ -18,18 +20,23 @@ class AdminOrderController extends Controller
         return view('admin.orders.index', compact('orders'));
     }
 
+    /**
+     * Detail pesanan
+     */
     public function show(Order $order)
     {
-        // Ambil detail pesanan beserta user dan buku
         $order->load('user', 'orderDetails.book');
 
         return view('admin.orders.show', compact('order'));
     }
 
+    /**
+     * Update status pesanan
+     */
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,cancelled',
+            'status' => 'required|in:pending,diproses,dikirim,selesai,dibatalkan',
         ]);
 
         $statusLama = $order->status;
@@ -41,23 +48,22 @@ class AdminOrderController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Jika status berubah menjadi completed
+            | Jika order berubah menjadi SELESAI
             |--------------------------------------------------------------------------
             */
 
             if (
-                $statusLama !== 'completed' &&
-                $statusBaru === 'completed'
+                $statusLama !== 'selesai' &&
+                $statusBaru === 'selesai'
             ) {
 
-                // Ambil semua detail pesanan beserta bukunya
                 $order->load('orderDetails.book');
 
                 foreach ($order->orderDetails as $detail) {
 
                     $book = $detail->book;
 
-                    // Pastikan bukunya masih ada
+                    // Buku tidak ditemukan
                     if (!$book) {
                         throw new \Exception(
                             'Buku pada pesanan tidak ditemukan.'
@@ -83,7 +89,7 @@ class AdminOrderController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Update status order
+            | Update status
             |--------------------------------------------------------------------------
             */
 
@@ -94,20 +100,20 @@ class AdminOrderController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('orders.index')
+                ->route('orders.show', $order->id)
                 ->with(
                     'success',
-                    'Status pesanan berhasil diubah.'
+                    'Status pesanan berhasil diubah menjadi ' .
+                    ucfirst($statusBaru) . '.'
                 );
 
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            return back()->with(
-                'error',
-                $e->getMessage()
-            );
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
         }
     }
 }
