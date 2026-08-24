@@ -37,7 +37,7 @@
 }
 
 
-/* LEFT SIDE */
+/* LEFT SIDE — TETAP PUNYA KAMU */
 
 .login-brand{
 
@@ -126,7 +126,7 @@
 
 
 
-/* RIGHT SIDE */
+/* RIGHT SIDE — DIKASIH DESAIN BIAR GAK POLOS */
 
 
 .login-area{
@@ -140,6 +140,106 @@
     justify-content:center;
 
     padding:40px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 8%,
+            rgba(0,91,170,.07),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 8% 92%,
+            rgba(212,175,55,.10),
+            transparent 45%
+        ),
+        var(--background);
+
+}
+
+
+.login-area::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+        radial-gradient(
+            rgba(0,58,112,.10) 1.5px,
+            transparent 1.5px
+        );
+
+    background-size:26px 26px;
+
+    -webkit-mask-image:radial-gradient(
+        circle at 75% 15%,
+        black,
+        transparent 55%
+    );
+
+    mask-image:radial-gradient(
+        circle at 75% 15%,
+        black,
+        transparent 55%
+    );
+
+    pointer-events:none;
+
+}
+
+
+.login-area::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:-90px;
+
+    right:-90px;
+
+    width:280px;
+
+    height:280px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        rgba(0,91,170,.10),
+        rgba(212,175,55,.14)
+    );
+
+    filter:blur(10px);
+
+    pointer-events:none;
+
+}
+
+
+.login-shape{
+
+    position:absolute;
+
+    bottom:-60px;
+
+    left:-60px;
+
+    width:200px;
+
+    height:200px;
+
+    border-radius:50%;
+
+    border:2px dashed rgba(0,91,170,.15);
+
+    pointer-events:none;
 
 }
 
@@ -160,6 +260,35 @@
     box-shadow:
     0 20px 50px rgba(0,0,0,.12);
 
+    position:relative;
+
+    z-index:2;
+
+    border-top:4px solid var(--gold);
+
+}
+
+
+.login-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:14px;
+
+    left:14px;
+
+    right:-14px;
+
+    bottom:-14px;
+
+    border:1.5px solid rgba(0,91,170,.12);
+
+    border-radius:30px;
+
+    z-index:-1;
+
 }
 
 
@@ -171,6 +300,17 @@
     font-size:36px;
 
     font-weight:700;
+
+}
+
+
+.login-card h2 i{
+
+    color:var(--gold);
+
+    font-size:28px;
+
+    margin-left:6px;
 
 }
 
@@ -223,19 +363,35 @@
 
 
 
+/* =========================================================
+   TOMBOL MASUK — EFEK GLOW SAAT DIKLIK
+   ========================================================= */
+
 .btn-login{
 
     height:55px;
 
     border-radius:30px;
 
-    background:var(--primary);
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
 
     color:white;
 
     font-weight:600;
 
-    transition:.3s;
+    transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
+
+    position:relative;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    box-shadow:0 10px 25px rgba(0,91,170,.25);
 
 }
 
@@ -246,6 +402,112 @@
     background:var(--primary-dark);
 
     color:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 14px 32px rgba(0,91,170,.35);
+
+}
+
+
+.btn-login:active{
+
+    transform:translateY(0) scale(.98);
+
+}
+
+
+.btn-login::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-60%;
+
+    width:40%;
+
+    height:100%;
+
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.55),
+        transparent
+    );
+
+    transform:skewX(-20deg);
+
+    transition:left .6s ease;
+
+    z-index:1;
+
+}
+
+
+.btn-login:hover::before{
+
+    left:130%;
+
+}
+
+
+.btn-login .btn-ripple{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.55);
+
+    transform:scale(0);
+
+    animation:btnRipple .6s ease-out forwards;
+
+    pointer-events:none;
+
+    z-index:1;
+
+}
+
+
+@keyframes btnRipple{
+
+    to{
+
+        transform:scale(2.8);
+
+        opacity:0;
+
+    }
+
+}
+
+
+.btn-login span,
+.btn-login i{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+.btn-login.is-loading{
+
+    animation:btnGlowPulse .9s ease-in-out infinite;
+
+}
+
+
+@keyframes btnGlowPulse{
+
+    0%{ box-shadow:0 0 0 0 rgba(212,175,55,.55), 0 14px 32px rgba(0,91,170,.35); }
+    70%{ box-shadow:0 0 0 16px rgba(212,175,55,0), 0 14px 32px rgba(0,91,170,.35); }
+    100%{ box-shadow:0 0 0 0 rgba(212,175,55,0), 0 14px 32px rgba(0,91,170,.35); }
 
 }
 
@@ -267,6 +529,31 @@
 
     text-decoration:none;
 
+    position:relative;
+
+    transition:color .25s ease;
+
+}
+
+
+.register-link::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-2px;
+
+    width:0%;
+
+    height:2px;
+
+    background:var(--gold);
+
+    transition:width .3s ease;
+
 }
 
 
@@ -274,6 +561,103 @@
 .register-link:hover{
 
     color:var(--primary-dark);
+
+}
+
+
+.register-link:hover::after{
+
+    width:100%;
+
+}
+
+
+
+
+/* =========================================================
+   OVERLAY TRANSISI HALAMAN — MENYALA SAAT PINDAH KE LOGIN/REGISTER
+   ========================================================= */
+
+.page-transition-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    pointer-events:none;
+
+    opacity:0;
+
+    background:radial-gradient(
+        circle at var(--tx,50%) var(--ty,50%),
+        rgba(212,175,55,.9) 0%,
+        rgba(0,91,170,.85) 35%,
+        rgba(0,58,112,.98) 70%
+    );
+
+    transition:opacity .5s ease;
+
+}
+
+
+.page-transition-overlay.active{
+
+    opacity:1;
+
+    pointer-events:all;
+
+}
+
+
+.page-transition-overlay::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:radial-gradient(
+        circle at var(--tx,50%) var(--ty,50%),
+        rgba(255,255,255,.9),
+        transparent 18%
+    );
+
+    opacity:0;
+
+    transition:opacity .4s ease .1s;
+
+}
+
+
+.page-transition-overlay.active::before{
+
+    opacity:1;
+
+}
+
+
+body.page-fading-out .login-page,
+body.page-fading-out .register-page{
+
+    animation:pageFadeOut .45s ease forwards;
+
+}
+
+
+@keyframes pageFadeOut{
+
+    to{
+
+        opacity:0;
+
+        transform:scale(.98);
+
+        filter:blur(4px);
+
+    }
 
 }
 
@@ -338,6 +722,9 @@
 
 
 
+<div class="page-transition-overlay" id="pageTransitionOverlay"></div>
+
+
 
 <div class="login-page">
 
@@ -387,12 +774,15 @@ berkarya, dan berkembang.
 <div class="login-area">
 
 
+<div class="login-shape"></div>
+
+
 <div class="login-card">
 
 
 <h2>
 
-Selamat Datang
+Selamat Datang <i class="bi bi-stars"></i>
 
 </h2>
 
@@ -420,7 +810,7 @@ Silakan masuk untuk melanjutkan.
 
 
 
-<form action="{{ route('login') }}" method="POST">
+<form action="{{ route('login') }}" method="POST" id="loginForm">
 
 @csrf
 
@@ -484,11 +874,11 @@ required>
 
 
 
-<button class="btn btn-login w-100">
+<button type="submit" class="btn btn-login w-100" id="loginBtn">
 
 <i class="bi bi-box-arrow-in-right me-2"></i>
 
-Masuk
+<span>Masuk</span>
 
 </button>
 
@@ -511,7 +901,8 @@ Belum memiliki akun?
 
 
 <a href="{{ route('register') }}"
-class="register-link">
+class="register-link"
+id="goToRegister">
 
 Daftar sekarang
 
@@ -529,6 +920,90 @@ Daftar sekarang
 
 
 </div>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const overlay = document.getElementById("pageTransitionOverlay");
+
+
+    function playTransition(x, y, callback) {
+
+        overlay.style.setProperty("--tx", x + "px");
+        overlay.style.setProperty("--ty", y + "px");
+
+        overlay.classList.add("active");
+
+        document.body.classList.add("page-fading-out");
+
+        setTimeout(callback, 480);
+    }
+
+
+    const loginBtn = document.getElementById("loginBtn");
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginBtn && loginForm) {
+
+        loginBtn.addEventListener("click", function (event) {
+
+            const rect = loginBtn.getBoundingClientRect();
+
+            const ripple = document.createElement("span");
+            ripple.className = "btn-ripple";
+
+            const size = Math.max(rect.width, rect.height);
+
+            ripple.style.width = size + "px";
+            ripple.style.height = size + "px";
+            ripple.style.left = (event.clientX - rect.left - size / 2) + "px";
+            ripple.style.top = (event.clientY - rect.top - size / 2) + "px";
+
+            loginBtn.appendChild(ripple);
+
+            setTimeout(function () {
+                ripple.remove();
+            }, 650);
+
+            loginBtn.classList.add("is-loading");
+
+            if (loginForm.checkValidity()) {
+
+                event.preventDefault();
+
+                playTransition(event.clientX, event.clientY, function () {
+                    loginForm.submit();
+                });
+
+            }
+
+        });
+    }
+
+
+    const goToRegister = document.getElementById("goToRegister");
+
+    if (goToRegister) {
+
+        goToRegister.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            const href = goToRegister.getAttribute("href");
+
+            playTransition(event.clientX, event.clientY, function () {
+                window.location.href = href;
+            });
+
+        });
+    }
+
+});
+
+</script>
 
 
 @endsection

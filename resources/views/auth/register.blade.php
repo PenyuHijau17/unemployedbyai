@@ -33,10 +33,12 @@
 
     background:var(--background);
 
+    position:relative;
+
 }
 
 
-/* LEFT */
+/* LEFT — TETAP PUNYA KAMU */
 
 .register-brand{
 
@@ -120,7 +122,7 @@
 
 
 
-/* RIGHT */
+/* RIGHT — DIKASIH DESAIN SENADA DENGAN LOGIN */
 
 .register-area{
 
@@ -134,7 +136,111 @@
 
     padding:40px;
 
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 88% 10%,
+            rgba(0,91,170,.07),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 6% 90%,
+            rgba(212,175,55,.10),
+            transparent 45%
+        ),
+        var(--background);
+
 }
+
+
+/* pola titik halus */
+.register-area::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+        radial-gradient(
+            rgba(0,58,112,.10) 1.5px,
+            transparent 1.5px
+        );
+
+    background-size:26px 26px;
+
+    -webkit-mask-image:radial-gradient(
+        circle at 78% 18%,
+        black,
+        transparent 55%
+    );
+
+    mask-image:radial-gradient(
+        circle at 78% 18%,
+        black,
+        transparent 55%
+    );
+
+    pointer-events:none;
+
+}
+
+
+/* blob dekoratif pojok kanan atas */
+.register-area::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:-90px;
+
+    right:-90px;
+
+    width:280px;
+
+    height:280px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        rgba(0,91,170,.10),
+        rgba(212,175,55,.14)
+    );
+
+    filter:blur(10px);
+
+    pointer-events:none;
+
+}
+
+
+/* aksen lingkaran dashed pojok kiri bawah */
+.register-shape{
+
+    position:absolute;
+
+    bottom:-60px;
+
+    left:-60px;
+
+    width:200px;
+
+    height:200px;
+
+    border-radius:50%;
+
+    border:2px dashed rgba(0,91,170,.15);
+
+    pointer-events:none;
+
+}
+
 
 
 .register-card{
@@ -152,6 +258,37 @@
     box-shadow:
     0 20px 50px rgba(0,0,0,.12);
 
+    position:relative;
+
+    z-index:2;
+
+    border-top:4px solid var(--gold);
+
+    transition:box-shadow .4s ease, transform .4s ease;
+
+}
+
+
+.register-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:14px;
+
+    left:14px;
+
+    right:-14px;
+
+    bottom:-14px;
+
+    border:1.5px solid rgba(0,91,170,.12);
+
+    border-radius:30px;
+
+    z-index:-1;
+
 }
 
 
@@ -162,6 +299,17 @@
     font-size:36px;
 
     font-weight:700;
+
+}
+
+
+.register-card h2 i{
+
+    color:var(--gold);
+
+    font-size:28px;
+
+    margin-left:6px;
 
 }
 
@@ -195,6 +343,8 @@
 
     border:1px solid var(--border);
 
+    transition:.25s;
+
 }
 
 
@@ -210,11 +360,19 @@
 
 
 
+/* =========================================================
+   TOMBOL DAFTAR — EFEK GLOW SAAT DIKLIK
+   ========================================================= */
+
 .btn-register{
 
     height:55px;
 
-    background:var(--primary);
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
 
     color:white;
 
@@ -223,6 +381,16 @@
     font-weight:600;
 
     border:none;
+
+    position:relative;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    box-shadow:0 10px 25px rgba(0,91,170,.25);
+
+    transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
 
 }
 
@@ -233,6 +401,119 @@
     background:var(--primary-dark);
 
     color:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 14px 32px rgba(0,91,170,.35);
+
+}
+
+
+.btn-register:active{
+
+    transform:translateY(0) scale(.98);
+
+}
+
+
+/* lapisan shine yang lewat saat hover */
+.btn-register::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-60%;
+
+    width:40%;
+
+    height:100%;
+
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.55),
+        transparent
+    );
+
+    transform:skewX(-20deg);
+
+    transition:left .6s ease;
+
+    z-index:1;
+
+}
+
+
+.btn-register:hover::before{
+
+    left:130%;
+
+}
+
+
+/* ripple/glow saat diklik */
+.btn-register .btn-ripple{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.55);
+
+    transform:scale(0);
+
+    animation:btnRipple .6s ease-out forwards;
+
+    pointer-events:none;
+
+    z-index:1;
+
+}
+
+
+@keyframes btnRipple{
+
+    to{
+
+        transform:scale(2.8);
+
+        opacity:0;
+
+    }
+
+}
+
+
+.btn-register span,
+.btn-register i{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+/* halo cahaya sekitar tombol saat loading transisi */
+.btn-register.is-loading{
+
+    box-shadow:
+        0 0 0 0 rgba(0,91,170,.5),
+        0 14px 32px rgba(0,91,170,.35);
+
+    animation:btnGlowPulse .9s ease-in-out infinite;
+
+}
+
+
+@keyframes btnGlowPulse{
+
+    0%{ box-shadow:0 0 0 0 rgba(212,175,55,.55), 0 14px 32px rgba(0,91,170,.35); }
+    70%{ box-shadow:0 0 0 16px rgba(212,175,55,0), 0 14px 32px rgba(0,91,170,.35); }
+    100%{ box-shadow:0 0 0 0 rgba(212,175,55,0), 0 14px 32px rgba(0,91,170,.35); }
 
 }
 
@@ -246,13 +527,133 @@
 
     font-weight:600;
 
+    position:relative;
+
+    transition:color .25s ease;
+
 }
 
+
+.login-link::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-2px;
+
+    width:0%;
+
+    height:2px;
+
+    background:var(--gold);
+
+    transition:width .3s ease;
+
+}
 
 
 .login-link:hover{
 
     color:var(--primary-dark);
+
+}
+
+
+.login-link:hover::after{
+
+    width:100%;
+
+}
+
+
+
+/* =========================================================
+   OVERLAY TRANSISI HALAMAN — MENYALA SAAT PINDAH KE LOGIN/REGISTER
+   ========================================================= */
+
+.page-transition-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    pointer-events:none;
+
+    opacity:0;
+
+    background:radial-gradient(
+        circle at var(--tx,50%) var(--ty,50%),
+        rgba(212,175,55,.9) 0%,
+        rgba(0,91,170,.85) 35%,
+        rgba(0,58,112,.98) 70%
+    );
+
+    transition:opacity .5s ease;
+
+}
+
+
+.page-transition-overlay.active{
+
+    opacity:1;
+
+    pointer-events:all;
+
+}
+
+
+.page-transition-overlay::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:radial-gradient(
+        circle at var(--tx,50%) var(--ty,50%),
+        rgba(255,255,255,.9),
+        transparent 18%
+    );
+
+    opacity:0;
+
+    transition:opacity .4s ease .1s;
+
+}
+
+
+.page-transition-overlay.active::before{
+
+    opacity:1;
+
+}
+
+
+body.page-fading-out .register-page,
+body.page-fading-out .login-page{
+
+    animation:pageFadeOut .45s ease forwards;
+
+}
+
+
+@keyframes pageFadeOut{
+
+    to{
+
+        opacity:0;
+
+        transform:scale(.98);
+
+        filter:blur(4px);
+
+    }
 
 }
 
@@ -309,6 +710,10 @@
 
 
 
+<div class="page-transition-overlay" id="pageTransitionOverlay"></div>
+
+
+
 <div class="register-page">
 
 
@@ -356,12 +761,15 @@ di Pustaka Nusantara.
 <div class="register-area">
 
 
+<div class="register-shape"></div>
+
+
 <div class="register-card">
 
 
 <h2>
 
-Buat Akun
+Buat Akun <i class="bi bi-stars"></i>
 
 </h2>
 
@@ -397,7 +805,7 @@ Daftar untuk mulai menjelajahi koleksi buku kami.
 
 
 
-<form action="{{ route('register') }}" method="POST">
+<form action="{{ route('register') }}" method="POST" id="registerForm">
 
 @csrf
 
@@ -524,11 +932,11 @@ required>
 
 
 
-<button class="btn btn-register w-100">
+<button type="submit" class="btn btn-register w-100" id="registerBtn">
 
 <i class="bi bi-person-plus me-2"></i>
 
-Daftar Sekarang
+<span>Daftar Sekarang</span>
 
 </button>
 
@@ -551,7 +959,8 @@ Sudah punya akun?
 
 
 <a href="{{ route('login') }}"
-class="login-link">
+class="login-link"
+id="goToLogin">
 
 Masuk
 
@@ -569,6 +978,93 @@ Masuk
 
 
 </div>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const overlay = document.getElementById("pageTransitionOverlay");
+
+
+    function playTransition(x, y, callback) {
+
+        overlay.style.setProperty("--tx", x + "px");
+        overlay.style.setProperty("--ty", y + "px");
+
+        overlay.classList.add("active");
+
+        document.body.classList.add("page-fading-out");
+
+        setTimeout(callback, 480);
+    }
+
+
+    /* ripple efek saat tombol Daftar diklik */
+    const registerBtn = document.getElementById("registerBtn");
+    const registerForm = document.getElementById("registerForm");
+
+    if (registerBtn && registerForm) {
+
+        registerBtn.addEventListener("click", function (event) {
+
+            const rect = registerBtn.getBoundingClientRect();
+
+            const ripple = document.createElement("span");
+            ripple.className = "btn-ripple";
+
+            const size = Math.max(rect.width, rect.height);
+
+            ripple.style.width = size + "px";
+            ripple.style.height = size + "px";
+            ripple.style.left = (event.clientX - rect.left - size / 2) + "px";
+            ripple.style.top = (event.clientY - rect.top - size / 2) + "px";
+
+            registerBtn.appendChild(ripple);
+
+            setTimeout(function () {
+                ripple.remove();
+            }, 650);
+
+            registerBtn.classList.add("is-loading");
+
+            /* biarkan submit form berjalan normal setelah efek muncul sebentar */
+            if (registerForm.checkValidity()) {
+
+                event.preventDefault();
+
+                playTransition(event.clientX, event.clientY, function () {
+                    registerForm.submit();
+                });
+
+            }
+
+        });
+    }
+
+
+    /* transisi menyala saat pindah ke halaman Masuk */
+    const goToLogin = document.getElementById("goToLogin");
+
+    if (goToLogin) {
+
+        goToLogin.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            const href = goToLogin.getAttribute("href");
+
+            playTransition(event.clientX, event.clientY, function () {
+                window.location.href = href;
+            });
+
+        });
+    }
+
+});
+
+</script>
 
 
 @endsection
