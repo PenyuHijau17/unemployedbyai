@@ -15,7 +15,6 @@
             <i class="bi bi-list"></i>
         </button>
 
-
         {{-- Page Heading --}}
         <div class="page-heading">
 
@@ -37,15 +36,14 @@
     ====================================================== --}}
     <div class="navbar-right">
 
-        {{-- =================================================
-            USER PROFILE
-        ================================================== --}}
+        {{-- USER PROFILE --}}
         <div class="navbar-user-wrapper">
 
             <button
                 type="button"
                 class="navbar-user"
                 id="profileButton"
+                aria-label="Buka menu administrator"
             >
 
                 {{-- Avatar --}}
@@ -78,9 +76,7 @@
             </button>
 
 
-            {{-- =================================================
-                PROFILE DROPDOWN
-            ================================================== --}}
+            {{-- PROFILE DROPDOWN --}}
             <div
                 class="navbar-dropdown profile-dropdown"
                 id="profileDropdown"
@@ -97,7 +93,6 @@
 
                     </div>
 
-
                     <div>
 
                         <strong>
@@ -111,39 +106,6 @@
                     </div>
 
                 </div>
-
-
-                <div class="dropdown-divider"></div>
-
-
-                {{-- Profile --}}
-                <a
-                    href="#"
-                    class="dropdown-item"
-                >
-
-                    <i class="bi bi-person"></i>
-
-                    <span>
-                        Profil
-                    </span>
-
-                </a>
-
-
-                {{-- Settings --}}
-                <a
-                    href="#"
-                    class="dropdown-item"
-                >
-
-                    <i class="bi bi-gear"></i>
-
-                    <span>
-                        Pengaturan
-                    </span>
-
-                </a>
 
 
                 <div class="dropdown-divider"></div>
