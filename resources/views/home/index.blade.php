@@ -106,6 +106,77 @@ body:not(.reveal-ready) .reveal-line{
     }
 }
 
+/* ==========================================================
+   FLOATING FLOWERS (dekorasi kiri-kanan, mekar saat discroll)
+========================================================== */
+
+.flower-decor{
+    position:fixed;
+    top:0;
+    height:100%;
+    width:130px;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+}
+
+.flower-decor.left{ left:0; }
+.flower-decor.right{ right:0; }
+
+.flower{
+    position:absolute;
+    opacity:0;
+    transform:scale(.2) rotate(-25deg);
+    transition:opacity 1s cubic-bezier(.19,1,.22,1),
+               transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+
+.flower.is-visible{
+    opacity:.85;
+    transform:scale(1) rotate(0deg);
+    animation:flowerSway 5.5s ease-in-out infinite;
+}
+
+.flower svg{
+    width:100%;
+    height:100%;
+    display:block;
+    filter:drop-shadow(0 6px 14px rgba(0,58,112,.15));
+}
+
+.flower-decor.left .flower:nth-child(1){ top:5%;  left:-14px; width:66px; height:66px; transition-delay:.05s; animation-delay:.2s; }
+.flower-decor.left .flower:nth-child(2){ top:20%; left:22px;  width:42px; height:42px; transition-delay:.22s; animation-delay:1.1s; }
+.flower-decor.left .flower:nth-child(3){ top:36%; left:-20px; width:80px; height:80px; transition-delay:.10s; animation-delay:.6s; }
+.flower-decor.left .flower:nth-child(4){ top:54%; left:16px;  width:50px; height:50px; transition-delay:.32s; animation-delay:1.6s; }
+.flower-decor.left .flower:nth-child(5){ top:70%; left:-8px;  width:60px; height:60px; transition-delay:.16s; animation-delay:.4s; }
+.flower-decor.left .flower:nth-child(6){ top:87%; left:26px;  width:38px; height:38px; transition-delay:.40s; animation-delay:1.3s; }
+
+.flower-decor.right .flower:nth-child(1){ top:8%;  right:-10px; width:58px; height:58px; transition-delay:.12s; animation-delay:.7s; }
+.flower-decor.right .flower:nth-child(2){ top:25%; right:24px;  width:76px; height:76px; transition-delay:.28s; animation-delay:.1s; }
+.flower-decor.right .flower:nth-child(3){ top:44%; right:-18px; width:46px; height:46px; transition-delay:.06s; animation-delay:1.4s; }
+.flower-decor.right .flower:nth-child(4){ top:62%; right:12px;  width:66px; height:66px; transition-delay:.24s; animation-delay:.5s; }
+.flower-decor.right .flower:nth-child(5){ top:79%; right:-12px; width:52px; height:52px; transition-delay:.38s; animation-delay:1.2s; }
+.flower-decor.right .flower:nth-child(6){ top:94%; right:20px;  width:36px; height:36px; transition-delay:.18s; animation-delay:.9s; }
+
+@keyframes flowerSway{
+    0%,100%{ transform:scale(1) rotate(0deg) translateY(0); }
+    50%{ transform:scale(1) rotate(5deg) translateY(-10px); }
+}
+
+@media (max-width:1300px){
+    .flower-decor{ display:none; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .flower{
+        transition:opacity .01s linear!important;
+    }
+    .flower.is-visible{
+        animation:none!important;
+        transform:none!important;
+    }
+}
+
 /* ===== Hero ===== */
 .hero{
     position:relative;
@@ -771,6 +842,49 @@ body:not(.reveal-ready) .reveal-line{
 
 <script>document.body.classList.add('reveal-ready');</script>
 
+{{-- Dekorasi bunga mekar kiri & kanan, warna navy-gold senada tema --}}
+<div class="flower-decor left" aria-hidden="true">
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--gold)"><circle cx="50" cy="25" r="18"/><circle cx="50" cy="75" r="18"/><circle cx="25" cy="50" r="18"/><circle cx="75" cy="50" r="18"/></g><circle cx="50" cy="50" r="16" fill="var(--primary)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--primary)"><ellipse cx="50" cy="24" rx="13" ry="20"/><ellipse cx="50" cy="76" rx="13" ry="20"/><ellipse cx="24" cy="50" rx="20" ry="13"/><ellipse cx="76" cy="50" rx="20" ry="13"/></g><circle cx="50" cy="50" r="12" fill="var(--gold)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--secondary)"><circle cx="50" cy="22" r="16"/><circle cx="78" cy="38" r="16"/><circle cx="78" cy="64" r="16"/><circle cx="50" cy="80" r="16"/><circle cx="22" cy="64" r="16"/><circle cx="22" cy="38" r="16"/></g><circle cx="50" cy="52" r="15" fill="var(--gold)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--gold)"><ellipse cx="50" cy="24" rx="12" ry="19"/><ellipse cx="50" cy="76" rx="12" ry="19"/><ellipse cx="24" cy="50" rx="19" ry="12"/><ellipse cx="76" cy="50" rx="19" ry="12"/></g><circle cx="50" cy="50" r="11" fill="var(--primary-dark)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--primary-dark)"><circle cx="50" cy="25" r="18"/><circle cx="50" cy="75" r="18"/><circle cx="25" cy="50" r="18"/><circle cx="75" cy="50" r="18"/></g><circle cx="50" cy="50" r="16" fill="var(--gold-light)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--secondary)"><ellipse cx="50" cy="24" rx="13" ry="20"/><ellipse cx="50" cy="76" rx="13" ry="20"/><ellipse cx="24" cy="50" rx="20" ry="13"/><ellipse cx="76" cy="50" rx="20" ry="13"/></g><circle cx="50" cy="50" r="12" fill="var(--gold)"/></svg>
+    </div>
+</div>
+
+<div class="flower-decor right" aria-hidden="true">
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--primary)"><circle cx="50" cy="25" r="18"/><circle cx="50" cy="75" r="18"/><circle cx="25" cy="50" r="18"/><circle cx="75" cy="50" r="18"/></g><circle cx="50" cy="50" r="16" fill="var(--gold)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--gold)"><circle cx="50" cy="22" r="16"/><circle cx="78" cy="38" r="16"/><circle cx="78" cy="64" r="16"/><circle cx="50" cy="80" r="16"/><circle cx="22" cy="64" r="16"/><circle cx="22" cy="38" r="16"/></g><circle cx="50" cy="52" r="15" fill="var(--primary-dark)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--secondary)"><ellipse cx="50" cy="24" rx="12" ry="19"/><ellipse cx="50" cy="76" rx="12" ry="19"/><ellipse cx="24" cy="50" rx="19" ry="12"/><ellipse cx="76" cy="50" rx="19" ry="12"/></g><circle cx="50" cy="50" r="11" fill="var(--gold)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--primary-dark)"><ellipse cx="50" cy="24" rx="13" ry="20"/><ellipse cx="50" cy="76" rx="13" ry="20"/><ellipse cx="24" cy="50" rx="20" ry="13"/><ellipse cx="76" cy="50" rx="20" ry="13"/></g><circle cx="50" cy="50" r="12" fill="var(--gold-light)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--gold)"><circle cx="50" cy="25" r="18"/><circle cx="50" cy="75" r="18"/><circle cx="25" cy="50" r="18"/><circle cx="75" cy="50" r="18"/></g><circle cx="50" cy="50" r="16" fill="var(--primary)"/></svg>
+    </div>
+    <div class="flower reveal-flower">
+        <svg viewBox="0 0 100 100"><g fill="var(--primary)"><ellipse cx="50" cy="24" rx="13" ry="20"/><ellipse cx="50" cy="76" rx="13" ry="20"/><ellipse cx="24" cy="50" rx="20" ry="13"/><ellipse cx="76" cy="50" rx="20" ry="13"/></g><circle cx="50" cy="50" r="12" fill="var(--gold-light)"/></svg>
+    </div>
+</div>
+
 <div class="hero mb-5 reveal">
 
 <div class="row align-items-center">
@@ -972,12 +1086,10 @@ class="img-fluid shadow">
 
 </div>
 
-@include('partials.footer')
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    var revealEls = document.querySelectorAll('.reveal, .reveal-line');
+    var revealEls = document.querySelectorAll('.reveal, .reveal-line, .reveal-flower');
 
     if (!('IntersectionObserver' in window)) {
         revealEls.forEach(function (el) {

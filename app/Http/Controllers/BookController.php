@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\Review;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
+    /**
+     * ==============================
+     * ADMIN - DAFTAR BUKU
+     * ==============================
+     */
     public function index(Request $request)
     {
         $search = $request->search;
@@ -23,126 +26,18 @@ class BookController extends Controller
                         ->orWhere('penerbit', 'like', '%' . $search . '%');
                 });
             })
+            ->latest()
             ->get();
 
         return view('books.index', compact('books'));
     }
 
-    public function customerIndex(Request $request)
-    {
-        $search = $request->search;
-        $category = $request->category;
 
-        $books = Book::with([
-            'category',
-            'orderDetails.order',
-            'reviews'
-        ])
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('judul', 'like', '%' . $search . '%')
-                        ->orWhere('penulis', 'like', '%' . $search . '%')
-                        ->orWhere('penerbit', 'like', '%' . $search . '%');
-                });
-            })
-            ->when($category, function ($query) use ($category) {
-                $query->where('category_id', $category);
-            })
-            ->get();
-
-        foreach ($books as $book) {
-
-            // Hanya menghitung buku dari order yang completed
-            $book->total_terjual = $book->orderDetails
-                ->filter(function ($detail) {
-                    return $detail->order &&
-                        $detail->order->status === 'completed';
-                })
-                ->sum('jumlah');
-
-            // Rating rata-rata
-            $book->average_rating = round(
-                $book->reviews->avg('rating') ?? 0,
-                1
-            );
-
-            // Jumlah review
-            $book->total_review = $book->reviews->count();
-        }
-
-        $categories = Category::orderBy('nama_kategori')->get();
-
-        return view('books.customer', compact(
-            'books',
-            'categories'
-        ));
-    }
-
-    public function customerShow(Book $book)
-    {
-        $book->load([
-            'category',
-            'reviews.user'
-        ]);
-
-        // Hanya menghitung buku yang terjual dari order completed
-        $totalTerjual = $book->orderDetails()
-            ->whereHas('order', function ($query) {
-                $query->where('status', 'completed');
-            })
-            ->sum('jumlah');
-
-        // Ambil semua review
-        $reviews = $book->reviews()
-            ->with('user')
-            ->latest()
-            ->get();
-
-        // Rating rata-rata
-        $averageRating = round(
-            $reviews->avg('rating') ?? 0,
-            1
-        );
-
-        // Jumlah rating
-        $totalReview = $reviews->count();
-
-        // Default: user belum bisa review
-        $canReview = false;
-
-        if (Auth::check()) {
-
-            // User harus pernah membeli buku
-            // dan order tersebut harus completed
-            $canReview = $book->orderDetails()
-                ->whereHas('order', function ($query) {
-                    $query->where('user_id', Auth::id())
-                        ->where('status', 'completed');
-                })
-                ->exists();
-
-            // Cek apakah user sudah pernah review
-            if ($canReview) {
-
-                $sudahReview = Review::where('user_id', Auth::id())
-                    ->where('book_id', $book->id)
-                    ->exists();
-
-                // Kalau sudah review, form tidak ditampilkan
-                $canReview = !$sudahReview;
-            }
-        }
-
-        return view('books.customer-show', compact(
-            'book',
-            'totalTerjual',
-            'averageRating',
-            'totalReview',
-            'reviews',
-            'canReview'
-        ));
-    }
-
+    /**
+     * ==============================
+     * ADMIN - FORM TAMBAH BUKU
+     * ==============================
+     */
     public function create()
     {
         $categories = Category::all();
@@ -150,24 +45,40 @@ class BookController extends Controller
         return view('books.create', compact('categories'));
     }
 
+
+    /**
+     * ==============================
+     * ADMIN - SIMPAN BUKU
+     * ==============================
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
-            'judul' => 'required',
-            'penulis' => 'required',
-            'penerbit' => 'required',
+            'category_id'  => 'required',
+            'judul'        => 'required',
+            'penulis'      => 'required',
+            'penerbit'     => 'required',
             'tahun_terbit' => 'required',
-            'harga' => 'required|numeric',
-            'stok' => 'required|integer',
-            'deskripsi' => 'nullable',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'harga'        => 'required|numeric',
+            'stok'         => 'required|integer',
+            'deskripsi'    => 'nullable',
+            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = [
+            'category_id'  => $request->category_id,
+            'judul'        => $request->judul,
+            'penulis'      => $request->penulis,
+            'penerbit'     => $request->penerbit,
+            'tahun_terbit' => $request->tahun_terbit,
+            'harga'        => $request->harga,
+            'stok'         => $request->stok,
+            'deskripsi'    => $request->deskripsi,
+        ];
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')
+            $data['gambar'] = $request
+                ->file('gambar')
                 ->store('books', 'public');
         }
 
@@ -175,50 +86,79 @@ class BookController extends Controller
 
         return redirect()
             ->route('books.index')
-            ->with('success', 'Buku berhasil ditambahkan');
+            ->with('success', 'Buku berhasil ditambahkan.');
     }
 
+
+    /**
+     * ==============================
+     * ADMIN - DETAIL BUKU
+     * ==============================
+     */
     public function show(Book $book)
     {
+        $book->load('category');
+
         return view('books.show', compact('book'));
     }
 
+
+    /**
+     * ==============================
+     * ADMIN - FORM EDIT BUKU
+     * ==============================
+     */
     public function edit(Book $book)
     {
         $categories = Category::all();
 
-        return view('books.edit', compact(
-            'book',
-            'categories'
-        ));
+        return view(
+            'books.edit',
+            compact('book', 'categories')
+        );
     }
 
+
+    /**
+     * ==============================
+     * ADMIN - UPDATE BUKU
+     * ==============================
+     */
     public function update(Request $request, Book $book)
     {
         $request->validate([
-            'category_id' => 'required',
-            'judul' => 'required',
-            'penulis' => 'required',
-            'penerbit' => 'required',
+            'category_id'  => 'required',
+            'judul'        => 'required',
+            'penulis'      => 'required',
+            'penerbit'     => 'required',
             'tahun_terbit' => 'required',
-            'harga' => 'required|numeric',
-            'stok' => 'required|integer',
-            'deskripsi' => 'nullable',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:2048',
+            'harga'        => 'required|numeric',
+            'stok'         => 'required|integer',
+            'deskripsi'    => 'nullable',
+            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = [
+            'category_id'  => $request->category_id,
+            'judul'        => $request->judul,
+            'penulis'      => $request->penulis,
+            'penerbit'     => $request->penerbit,
+            'tahun_terbit' => $request->tahun_terbit,
+            'harga'        => $request->harga,
+            'stok'         => $request->stok,
+            'deskripsi'    => $request->deskripsi,
+        ];
 
         if ($request->hasFile('gambar')) {
 
-            if (
-                $book->gambar &&
-                Storage::disk('public')->exists($book->gambar)
-            ) {
+            // Hapus gambar lama
+            if ($book->gambar) {
                 Storage::disk('public')->delete($book->gambar);
             }
 
-            $data['gambar'] = $request->file('gambar')
+            // Simpan gambar baru
+            $data['gambar'] = $request
+                ->file('gambar')
                 ->store('books', 'public');
         }
 
@@ -226,15 +166,18 @@ class BookController extends Controller
 
         return redirect()
             ->route('books.index')
-            ->with('success', 'Buku berhasil diperbarui');
+            ->with('success', 'Buku berhasil diperbarui.');
     }
 
+
+    /**
+     * ==============================
+     * ADMIN - HAPUS BUKU
+     * ==============================
+     */
     public function destroy(Book $book)
     {
-        if (
-            $book->gambar &&
-            Storage::disk('public')->exists($book->gambar)
-        ) {
+        if ($book->gambar) {
             Storage::disk('public')->delete($book->gambar);
         }
 
@@ -242,6 +185,119 @@ class BookController extends Controller
 
         return redirect()
             ->route('books.index')
-            ->with('success', 'Buku berhasil dihapus');
+            ->with('success', 'Buku berhasil dihapus.');
+    }
+
+
+    /**
+     * ==============================
+     * CUSTOMER - KOLEKSI BUKU
+     * ==============================
+     */
+    public function customerIndex(Request $request)
+    {
+        $search = $request->search;
+        $category = $request->category;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | BUKU TERLARIS
+        |--------------------------------------------------------------------------
+        | Menghitung jumlah buku yang benar-benar terjual.
+        |
+        | Status:
+        | - completed
+        | - selesai
+        |
+        | Dua status dipakai karena database kamu saat ini
+        | memang mempunyai kedua jenis status tersebut.
+        |--------------------------------------------------------------------------
+        */
+
+        $bestSellers = Book::with('category')
+            ->withSum([
+                'orderDetails as total_sold' => function ($query) {
+                    $query->whereHas('order', function ($orderQuery) {
+                        $orderQuery->whereIn('status', [
+                            'completed',
+                            'selesai'
+                        ]);
+                    });
+                }
+            ], 'jumlah')
+            ->orderByDesc('total_sold')
+            ->orderBy('id')
+            ->take(3)
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SEMUA BUKU
+        |--------------------------------------------------------------------------
+        */
+
+        $books = Book::with('category')
+            ->when($search, function ($query) use ($search) {
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('judul', 'like', '%' . $search . '%')
+                        ->orWhere('penulis', 'like', '%' . $search . '%')
+                        ->orWhere('penerbit', 'like', '%' . $search . '%');
+
+                });
+
+            })
+            ->when($category, function ($query) use ($category) {
+
+                $query->where('category_id', $category);
+
+            })
+            ->latest()
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SEMUA KATEGORI
+        |--------------------------------------------------------------------------
+        */
+
+        $categories = Category::all();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIEW CUSTOMER
+        |--------------------------------------------------------------------------
+        |
+        | File:
+        | resources/views/books/customer.blade.php
+        |
+        */
+
+        return view('books.customer', compact(
+            'books',
+            'categories',
+            'bestSellers'
+        ));
+    }
+
+
+    /**
+     * ==============================
+     * CUSTOMER - DETAIL BUKU
+     * ==============================
+     */
+    public function customerShow(Book $book)
+    {
+        $book->load('category');
+
+        return view(
+            'books.customer-show',
+            compact('book')
+        );
     }
 }

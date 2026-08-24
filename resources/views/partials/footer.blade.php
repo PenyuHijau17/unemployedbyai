@@ -1,13 +1,14 @@
 <style>
 .footer-bookstore{
+    width:100%;
     margin-top:80px;
-    background:#6A513B;
-    color:#F5F2ED;
+    background:#003A70;
+    color:#F5F9FF;
     padding:60px 0 20px;
 }
 
 .footer-bookstore h5{
-    color:#E7C98B;
+    color:#FFFFFF;
     font-weight:600;
     margin-bottom:18px;
 }
@@ -15,7 +16,7 @@
 .footer-bookstore p,
 .footer-bookstore li,
 .footer-bookstore a{
-    color:#F5F2ED;
+    color:#DCEEFF;
     text-decoration:none;
     font-size:15px;
 }
@@ -35,24 +36,26 @@
 }
 
 .footer-bookstore ul li a:hover{
-    color:#E7C98B;
+    color:#FFFFFF;
     padding-left:5px;
 }
 
 .footer-brand{
     font-size:28px;
     font-weight:700;
-    color:#E7C98B;
+    color:#FFFFFF;
 }
 
 .footer-brand i{
     margin-right:8px;
+    color:#EAF4FF;
 }
 
 .footer-desc{
     margin-top:18px;
     line-height:1.8;
     max-width:360px;
+    color:#DCEEFF;
 }
 
 .social-icon{
@@ -62,16 +65,18 @@
     align-items:center;
     justify-content:center;
     border-radius:50%;
-    background:rgba(255,255,255,.08);
-    color:white;
+    background:rgba(255,255,255,.10);
+    color:#FFFFFF;
     margin-right:8px;
     transition:.3s;
     font-size:18px;
+    border:1px solid rgba(255,255,255,.12);
 }
 
 .social-icon:hover{
-    background:#A8844F;
-    color:white;
+    background:#0078D7;
+    color:#FFFFFF;
+    transform:translateY(-3px);
 }
 
 .footer-divider{
@@ -81,16 +86,21 @@
 }
 
 .footer-bottom{
-    color:#DDD;
+    color:#BFD9EF;
     font-size:14px;
+}
+
+.footer-bottom strong{
+    color:#FFFFFF;
 }
 
 .contact-item{
     margin-bottom:15px;
+    color:#DCEEFF;
 }
 
 .contact-item i{
-    color:#E7C98B;
+    color:#FFFFFF;
     margin-right:10px;
 }
 
@@ -98,12 +108,21 @@
 
     .footer-bookstore{
         text-align:center;
+        padding:50px 20px 20px;
     }
 
     .footer-desc{
         margin:auto;
         margin-top:18px;
         margin-bottom:25px;
+    }
+
+    .social-icon{
+        margin:0 4px;
+    }
+
+    .footer-bookstore h5{
+        margin-top:10px;
     }
 
 }
@@ -200,7 +219,7 @@
 
                 <div class="contact-item">
                     <i class="bi bi-geo-alt-fill"></i>
-                    Yogyakarta, Indonesia
+                    Klaten, Indonesia
                 </div>
 
                 <div class="contact-item">
@@ -210,7 +229,7 @@
 
                 <div class="contact-item">
                     <i class="bi bi-telephone-fill"></i>
-                    (0274) 123456
+                    (+62)8123-456-789
                 </div>
 
                 <div class="contact-item">
@@ -225,7 +244,9 @@
         <div class="footer-divider text-center">
 
             <div class="footer-bottom">
-                © {{ date('Y') }} <strong>Pustaka Nusantara</strong>. All Rights Reserved.
+                © {{ date('Y') }}
+                <strong>Pustaka Nusantara</strong>.
+                All Rights Reserved.
             </div>
 
         </div>
