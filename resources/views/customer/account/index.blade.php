@@ -45,26 +45,28 @@
 .profile-avatar{
     width:72px;
     height:72px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     border-radius:50%;
-
+    overflow:hidden;
     background:
         linear-gradient(
             135deg,
             #005BAA,
             #0078D7
         );
-
     color:white;
-
     font-size:30px;
-
     box-shadow:
         0 10px 25px rgba(0,91,170,.25);
+}
+
+.profile-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
 }
 
 
@@ -341,9 +343,20 @@
 
             <div class="profile-avatar">
 
-                <i class="bi bi-person-fill"></i>
+    @if($user->profile_photo)
 
-            </div>
+        <img
+            src="{{ asset('storage/' . $user->profile_photo) }}"
+            alt="Foto Profil"
+        >
+
+    @else
+
+        <i class="bi bi-person-fill"></i>
+
+    @endif
+
+</div>
 
 
             <div class="profile-info">

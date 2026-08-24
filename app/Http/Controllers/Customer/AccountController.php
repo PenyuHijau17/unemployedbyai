@@ -4,42 +4,28 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AccountController extends Controller
 {
+    /**
+     * =========================================================
+     * AKUN SAYA
+     * =========================================================
+     */
     public function index()
     {
         $user = auth()->user();
 
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL PESANAN
-        |--------------------------------------------------------------------------
-        */
-
+        // TOTAL PESANAN
         $totalOrders = $user->orders()->count();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | PENDING
-        |--------------------------------------------------------------------------
-        */
-
+        // PENDING
         $pending = $user->orders()
             ->where('status', 'pending')
             ->count();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | DIPROSES
-        |--------------------------------------------------------------------------
-        |
-        | processing dan packed sama-sama dianggap sedang diproses.
-        |
-        */
-
+        // DIPROSES
         $processing = $user->orders()
             ->whereIn('status', [
                 'processing',
@@ -47,32 +33,12 @@ class AccountController extends Controller
             ])
             ->count();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | DIKIRIM
-        |--------------------------------------------------------------------------
-        */
-
+        // DIKIRIM
         $shipped = $user->orders()
             ->where('status', 'shipped')
             ->count();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | SELESAI
-        |--------------------------------------------------------------------------
-        |
-        | Database kamu sekarang punya dua kemungkinan status:
-        |
-        | completed
-        | selesai
-        |
-        | Jadi keduanya dihitung sebagai pesanan selesai.
-        |
-        */
-
+        // SELESAI
         $completed = $user->orders()
             ->whereIn('status', [
                 'completed',
@@ -80,24 +46,24 @@ class AccountController extends Controller
             ])
             ->count();
 
-
-        return view('customer.account.index', compact(
-            'user',
-            'totalOrders',
-            'pending',
-            'processing',
-            'shipped',
-            'completed'
-        ));
+        return view(
+            'customer.account.index',
+            compact(
+                'user',
+                'totalOrders',
+                'pending',
+                'processing',
+                'shipped',
+                'completed'
+            )
+        );
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | EDIT PROFILE
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * =========================================================
+     * EDIT PROFIL
+     * =========================================================
+     */
     public function edit()
     {
         $user = auth()->user();
@@ -108,35 +74,108 @@ class AccountController extends Controller
         );
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE PROFILE
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * =========================================================
+     * UPDATE PROFIL
+     * =========================================================
+     */
     public function update(Request $request)
     {
-        $request->validate([
-            'name'  => 'required',
-            'email' => 'required|email',
-        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
 
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+            ],
+
+            'profile_photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
+        ]);
 
         $user = auth()->user();
 
+        /*
+        |--------------------------------------------------------------------------
+        | DATA PROFIL
+        |--------------------------------------------------------------------------
+        */
 
-        $user->update([
-            'name'  => $request->name,
+        $data = [
+            'name' => $request->name,
             'email' => $request->email,
-        ]);
+        ];
 
+        /*
+        |--------------------------------------------------------------------------
+        | UPLOAD FOTO PROFIL
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('profile_photo')) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | HAPUS FOTO LAMA
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $user->profile_photo &&
+                Storage::disk('public')->exists(
+                    $user->profile_photo
+                )
+            ) {
+                Storage::disk('public')->delete(
+                    $user->profile_photo
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | SIMPAN FOTO BARU
+            |--------------------------------------------------------------------------
+            */
+
+            $data['profile_photo'] = $request
+                ->file('profile_photo')
+                ->store('profile', 'public');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE USER
+        |--------------------------------------------------------------------------
+        */
+
+        $user->update($data);
+
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()
             ->route('customer.account')
             ->with(
                 'success',
-                'Profil berhasil diperbarui'
+                'Profil berhasil diperbarui.'
             );
     }
 }
